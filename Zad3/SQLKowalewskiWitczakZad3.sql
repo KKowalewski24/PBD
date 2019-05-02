@@ -19,7 +19,7 @@ where placa = (select min(placa) from dbo.pracownicy)
 
 -- PODPUNKT 7 --
 select nazwisko, placa, stanowisko from dbo.pracownicy 
-where placa<(select avg(placa) from dbo.pracownicy
+where placa<(select avg(placa) from dbo.pracownicy)
 
 -- PODPUNKT 8 --
 select id_dzialu, count(*) as liczba_pracownikow from pracownicy
@@ -47,8 +47,8 @@ select nazwisko, placa, round(placa-(select avg(placa) from dbo.pracownicy),2)
 as roznica from dbo.pracownicy
 
 -- PODPUNKT 14 --
-select nazwa, round(avg(placa),2) as sred_placa
-from pracownicy p join dzialy d on p.id_dzialu=d.id_dzialu
+select nazwa, avg (placa) as srednia
+from pracownicy, dzialy where pracownicy.id_dzialu = dzialy.id_dzialu
 group by nazwa
 
 -- PODPUNKT 15 --
@@ -57,15 +57,12 @@ where placa > (select avg(placa) from dbo.pracownicy
 where pp.id_dzialu = pracownicy.id_dzialu)
 
 -- PODPUNKT 16 --
-select p.nazwisko as pracownik, s.nazwisko as szef
-from pracownicy p join pracownicy s on p.kierownik = s.nr_akt
+select prac2.nazwisko, prac1.nazwisko as nazwisko_szefa
+from pracownicy prac1, pracownicy prac2 where prac1.nr_akt = prac2.kierownik
 
 -- PODPUNKT 17 --
-select id_dzialu, (select count(id_dzialu)
-from pracownicy where dzialy.id_dzialu = pracownicy.id_dzialu) from dzialy
-where (select count(id_dzialu) from pracownicy
-where dzialy.id_dzialu = pracownicy.id_dzialu = 0)
-group by id_dzialu
+select nazwa, id_dzialu from dzialy where id_dzialu
+not in (select  ISNULL(id_dzialu,0) from pracownicy)
 
 
 
