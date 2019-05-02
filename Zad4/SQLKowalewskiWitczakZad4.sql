@@ -41,58 +41,101 @@ delete from pracownicy where stanowisko = 'LOGISTYK'
 and data_zatr = (select max(data_zatr) from pracownicy where stanowisko = 'LOGISTYK')
 
 -- PODPUNKT 8 --
+create table pracownice(
+    nr_akt int,
+	nazwisko	VARCHAR(20),
+	stanowisko VARCHAR(18),
+	kierownik int CONSTRAINT praco_self_key REFERENCES pracownicy (nr_akt),
+	data_zatr	DATETIME,
+	data_zwol	DATETIME,
+	placa MONEY,
+	dod_funkcyjny MONEY,
+	prowizja MONEY,
+	id_dzialu	INT,
+	CONSTRAINT praco_primary_key PRIMARY KEY (nr_akt),
+	CONSTRAINT praco_foreign_key FOREIGN KEY (id_dzialu) REFERENCES dzialy (id_dzialu)
+);
 
+insert into pracownice (nr_akt, nazwisko, stanowisko, kierownik, data_zatr, data_zwol,
+placa, dod_funkcyjny, prowizja, id_dzialu)
+
+select nr_akt, nazwisko, stanowisko, kierownik, data_zatr, data_zwol,
+placa, dod_funkcyjny, prowizja, id_dzialu
+from pracownicy where nazwisko like '%SKA'
+
+select * from pracownice
 
 -- PODPUNKT 9 --
-
+drop table pracownice
 
 -- PODPUNKT 10 --
-
+create table projekty(
+    id_projektu int,
+    nazwa varchar(100),
+    budzet float,
+    termin_zak datatime,
+    nr_kierownika int constraint proj_self_key references pracownicy (nr_akt)
+    constraint proj_id_projektu_unique unique (id_projektu)
+);
 
 -- PODPUNKT 11 --
-
+alter table projekty add typ varchar(20) not null, opis varchar(500), data_roz datatime
 
 -- PODPUNKT 12 --
-
+alter table projekty add default getdate() for data_roz
 
 -- PODPUNKT 13 --
-
+alter table projekty drop constraint proj_id_projektu_unique
+alter table projekty alter column id_projektu int not null
+alter table projekty add constraint proj_primary_key primary key (id_projektu)
 
 -- PODPUNKT 14 --
-
+alter table projekty add constraint check_data check (data_roz < termin_zak)
 
 -- PODPUNKT 15 --
-
+exec sp_rename 'projekty.opis','harmonogram','COLUMN';
 
 -- PODPUNKT 16 --
+alter table pracownicy drop column prowizja
+
 
 
 -- PODPUNKT 17 --
+use test_pracownicy
 
+alter table pracownicy drop constraint prac_foreign_key;
+alter table pracownicy add constraint prac_foreign_key foreign key (id_dzialu)
+references dzialy (id_dzialu) on delete cascade
 
 -- PODPUNKT 18 --
-
+delete from dzialy where id_dzialu = 30
 
 -- PODPUNKT 19 --
-
+--OPERACJA NIEDOZWOLONA NIE MOZNA USUNAC KIEROWNIKA--
+--delete from pracownicy where nr_akt = 8902
 
 -- PODPUNKT 20 --
+update pracownicy set data_zwol = getdate() where nr_akt = 8902
 
+insert into prac_archiw select * from pracownicy where nr_akt = 8902
 
 -- PODPUNKT 21 --
-
+alter table pracownicy nocheck constraint prac_self_key
+update pracownicy set kierownik = 8903 where kierownik = 8902
+alter table pracownicy check constraint prac_self_key
 
 -- PODPUNKT 22 --
-
+delete from pracownicy where nr_akt = 8902
 
 -- PODPUNKT 23 --
-
+create index prac_nazw_index on pracownicy (nazwisko)
 
 -- PODPUNKT 24 --
-
+create index prac_nazw_index on stanowiska (placa_min, placa_max)
 
 -- PODPUNKT 25 --
-
+drop index prac_nazw_index on pracownicy
+drop index stan_plac_index on stanowiska
 
 
 
