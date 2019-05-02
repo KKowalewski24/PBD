@@ -2,9 +2,7 @@ create database biblioteka
 
 use biblioteka;
 
-
-create table Czytelnicy
-(
+create table Czytelnicy (
 	id			char(5) primary key not null,
 	constraint id_test check (id like '[a-Z][a-Z][0-9][0-9][0-9]'),
 	nazwisko	varchar(15) not null,
@@ -16,8 +14,7 @@ create table Czytelnicy
 );
 
 
-create table Wypozyczenia
-(
+create table Wypozyczenia (
 	id_w		int	IDENTITY(1, 1)	primary key,
 	id_cz		char(5),
 	foreign key(id_cz) references Czytelnicy(id),				
@@ -29,8 +26,7 @@ create table Wypozyczenia
 	constraint data_test_w check(data_w < data_z)
 );
 
-create table Pracownicy
-(
+create table Pracownicy (
 	id			int identity(1,1) primary key,
 	nazwisko	varchar(15) not null,
 	imie		varchar(15) not null,
@@ -39,16 +35,14 @@ create table Pracownicy
 	constraint data_test_p check(data_ur < data_zatr),
 )
 
-create table wydawnictwa
-(
+create table wydawnictwa (
 	id			int identity(1,1) primary key not null,
 	nazwa		varchar(50) not null,
 	miasto		varchar(50) not null,
 	telefon		varchar(15) not null
 );
 
-create table ksiazki
-(
+create table ksiazki (
 	sygn		varchar(5) primary key unique,
 	id_wyd		int,
 	foreign key(id_wyd) references Wydawnictwa(id),
