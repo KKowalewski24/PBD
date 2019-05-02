@@ -34,7 +34,7 @@ update pracownicy set dod_funkcyjny = dod_funkcyjny + ((select min(placa)from pr
 where id_dzialu = 10
 
 -- PODPUNKT 6 --
-delete from stanowiska where stanowisko = 'PRAKTYKANT'
+delete from dbo.stanowiska where stanowisko = 'PRAKTYKANT'
 
 -- PODPUNKT 7 --
 delete from pracownicy where stanowisko = 'LOGISTYK'
@@ -131,11 +131,11 @@ delete from pracownicy where nr_akt = 8902
 create index prac_nazw_index on pracownicy (nazwisko)
 
 -- PODPUNKT 24 --
-create index prac_nazw_index on stanowiska (placa_min, placa_max)
+create index prac_nazw_index on dbo.stanowiska (placa_min, placa_max)
 
 -- PODPUNKT 25 --
 drop index prac_nazw_index on pracownicy
-drop index stan_plac_index on stanowiska
+drop index stan_plac_index on dbo.stanowiska
 
 
 
