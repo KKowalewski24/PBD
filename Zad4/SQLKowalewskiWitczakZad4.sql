@@ -136,15 +136,3 @@ create index prac_nazw_index on dbo.stanowiska (placa_min, placa_max)
 -- PODPUNKT 25 --
 drop index prac_nazw_index on pracownicy
 drop index stan_plac_index on dbo.stanowiska
-
-
-
-
-
-
-
-
-
-
-
-
