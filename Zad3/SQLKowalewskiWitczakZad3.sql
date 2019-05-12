@@ -63,7 +63,3 @@ from pracownicy prac1, pracownicy prac2 where prac1.nr_akt = prac2.kierownik
 -- PODPUNKT 17 --
 select nazwa, id_dzialu from dzialy where id_dzialu
 not in (select  ISNULL(id_dzialu,0) from pracownicy)
-
-
-
-
