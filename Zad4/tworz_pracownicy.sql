@@ -6,6 +6,13 @@
 --DROP TABLE taryfikator CASCADE CONSTRAINTS;
 
 --CREATE DATABASE test_pracownicy;
+
+--USUWANIE CALEJ BAZY
+--USE master;  
+--GO  
+--DROP DATABASE test_pracownicy;  
+--GO
+
 GO
 create TABLE test_pracownicy.dbo.dzialy (
 id_dzialu	int, 

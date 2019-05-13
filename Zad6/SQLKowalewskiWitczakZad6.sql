@@ -27,17 +27,31 @@ where B.location_id=C.location_id and A.job_id=D.job_id
 and D.job_title!='sales representative' and B.department_id is not null
 
 -- PODPUNKT 6A --
-
+select B.department_id,B.department_name, count (*) as employ_num 
+from employees A, departments B where A.department_id=B.department_id
+group by B.department_id, B.department_name
+having count (*)=(select top 1 count (*) as employ_num 
+from employees A, departments B where A.department_id=B.department_id
+group by B.department_id, B.department_name order by employ_num desc)
 
 -- PODPUNKT 6B --
-
+select B.department_id,B.department_name, count (*) as employ_num 
+from employees A, departments B where A.department_id=B.department_id
+group by B.department_id, B.department_name
+having count (*)=(select top 1 count (*) as employ_num 
+from employees A, departments B where A.department_id=B.department_id
+group by B.department_id, B.department_name order by employ_num asc)
 
 -- PODPUNKT 6C --
-
+select B.department_id,B.department_name, count (*) as employ_num 
+from employees A, departments B where A.department_id=B.department_id
+group by B.department_id, B.department_name
+having count (*)<3
 
 -- PODPUNKT 7 --
-
+select count (*) as employ, datename(yyyy,hire_date) as years 
+from employees group by datename(yyyy,hire_date)
 
 -- PODPUNKT 8 --
-select E.country_name, count(*) as location_number from locations C, countries E
+select E.country_name, count (*) as location_number from locations C, countries E
 where C.country_id=E.country_id group by E.country_name
