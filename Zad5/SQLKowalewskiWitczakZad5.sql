@@ -56,3 +56,18 @@ from employees group by datename(dw, hire_date) order by count (*) desc)
 -- PODPUNKT 13 --
 select top 3 last_name, first_name, salary from employees order by salary desc
 
+-- PODPUNKT 14 --
+create table DEPT(
+department_id decimal(7,0) primary key not null,
+department_name varchar(25)
+);
+
+-- PODPUNKT 15 --
+insert into DEPT (department_id,department_name)
+select department_id,department_name from departments
+
+
+--#########################--
+--select * from DEPT
+--drop table DEPT
+--#########################--
