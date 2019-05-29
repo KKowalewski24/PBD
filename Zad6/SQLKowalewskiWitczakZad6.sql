@@ -16,15 +16,19 @@ from employees A, departments B, locations C
 where A.department_id=B.department_id and B.location_id=C.location_id
 group by B.department_name, city
 
+select B.department_name from departments B
+
 -- PODPUNKT 4 --
 select A.first_name,A.last_name, A.department_id,A.hire_date,A.salary,A.manager_id 
 from employees A where datename(dd,A.hire_date)<16
 
 -- PODPUNKT 5 --
-select distinct B.department_id,B.department_name,C.city 
-from employees A, departments B, locations C, jobs D
-where B.location_id=C.location_id and A.job_id=D.job_id 
-and D.job_title!='sales representative' and B.department_id is not null
+select B.department_id,B.department_name,C.city 
+from departments B, locations C
+where B.location_id=C.location_id and department_id not in
+(select department_id from employees A, jobs D 
+where A.job_id=D.job_id and D.job_title='sales representative'
+and A.department_id is not null group by A.department_id)
 
 -- PODPUNKT 6A --
 select B.department_id,B.department_name, count (*) as employ_num 
