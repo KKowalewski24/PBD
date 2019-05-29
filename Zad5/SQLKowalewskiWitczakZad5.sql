@@ -1,5 +1,4 @@
 
-
 -- PODPUNKT 1 --
 use HR
 
