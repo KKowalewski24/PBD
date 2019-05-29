@@ -1,4 +1,5 @@
 
+
 -- PODPUNKT 1 --
 use HR
 
@@ -19,8 +20,10 @@ where last_name='Matos' or last_name='Taylor' order by hire_date, last_name
 select last_name, hire_date, dateadd(MONTH,6,hire_date) as kiedy from employees
 
 -- PODPUNKT 5 --
-select last_name, job_id, employees.department_id, department_name,city 
-from employees, departments, locations where city='Toronto' 
+select A.last_name, A.job_id, A.department_id, B.department_name,C.city 
+from employees A, departments B, locations C 
+where A.department_id=B.department_id 
+and B.location_id=C.location_id and city='Toronto' 
 
 -- PODPUNKT 6 --
 select A.last_name, A.department_id, B.last_name as coworker
@@ -30,18 +33,22 @@ order by department_id
 
 -- PODPUNKT 7 --
 select A.first_name, A.last_name, B.last_name as manager_name 
-from employees A, employees B where B.employee_id=A.manager_id and B.last_name='King'
+from employees A, employees B 
+where B.employee_id=A.manager_id and B.last_name='King'
 
 -- PODPUNKT 8 --
 select A.last_name, A.salary,A.commission_pct 
 from employees A where A.commission_pct is not null
 
 -- PODPUNKT 9 --
-select (first_name+' '+last_name) "Pracownicy" from employees where last_name like '__a%' 
+select (first_name+' '+last_name) "Pracownicy" 
+from employees where last_name like '__a%' 
 
 -- PODPUNKT 10 --
-select first_name, last_name, employees.department_id, job_id, city
-from employees, departments, locations where city='Seattle'
+select A.first_name, A.last_name, A.department_id, A.job_id, C.city
+from employees A, departments B, locations C
+where A.department_id=B.department_id 
+and B.location_id=C.location_id and city='Seattle'
 
 -- PODPUNKT 11 --
 select department_id, min(salary) as min_salary from employees 
@@ -71,3 +78,4 @@ select department_id,department_name from departments
 --select * from DEPT
 --drop table DEPT
 --#########################--
+
