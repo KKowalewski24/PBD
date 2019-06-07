@@ -46,3 +46,4 @@ and hire_date=(select min(hire_date) from employees)
 6.Jakie stanowisko zajmowal pierwszy zatrudniony pracownik(na podstawie tabeli employees)
 */
 --------------------------------------------------------------------------
+
