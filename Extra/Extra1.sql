@@ -38,12 +38,18 @@ group by D.country_name,E.city
 order by D.country_name
 
 --PODPUNKT 7 --
-/*TODO*/
---select D.country_name from regions C, countries D, locations E
---where C.region_id=D.region_id and C.region_id is null --and D.country_id=E.country_id 
---and C.region_name='Europe'
+select D.country_name from countries D, regions C
+where C.region_id=D.region_id and C.region_name='Europe' 
+and D.country_name not in (
+select countries.country_name from departments
+join locations on departments.location_id=locations.location_id
+join countries on locations.country_id=countries.country_id)
 
 --PODPUNKT 8 --
+select F.department_name from employees A, departments F 
+where A.department_id=F.department_id 
+and A.salary<(select avg(salary) as average from employees)
+group by F.department_name
 
 --------------------------------------------------------------------------
 /*
