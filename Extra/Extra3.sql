@@ -12,6 +12,7 @@ select A.last_name,A.first_name,A.salary from employees A,employees B, jobs C
 where B.employee_id=A.manager_id and B.job_id=C.job_id 
 and C.max_salary*0.9<B.salary 
 order by A.salary
+
 --PODPUNKT 3 --
 select A.last_name, A.salary, B.last_name,B.salary from employees A, employees B
 where A.manager_id=B.employee_id and B.salary*0.25>A.salary
