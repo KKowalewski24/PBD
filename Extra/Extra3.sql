@@ -19,7 +19,7 @@ where A.manager_id=B.employee_id and B.salary*0.25>A.salary
 
 --PODPUNKT 4 --
 select C.city, C.state_province from locations C
-where substring(C.city,1,2)= substring(C.state_province,1,2)
+where substring(C.city,1,2)=substring(C.state_province,1,2)
 order by C.city,C.state_province
 
 --PODPUNKT 5 --

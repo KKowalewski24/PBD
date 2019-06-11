@@ -5,12 +5,12 @@ select  A.last_name, A.first_name,A.salary, B.job_title from employees A, jobs B
 where A.job_id=B.job_id and A.salary=B.min_salary
 
 --PODPUNKT 2 --
-select D.country_name from countries D, regions C
-where C.region_id=D.region_id and C.region_name='Europe' 
-and D.country_name not in (
-select countries.country_name from departments
-join locations on departments.location_id=locations.location_id
-join countries on locations.country_id=countries.country_id)
+select D.country_name from regions C, countries D
+where C.region_id=D.region_id and C.region_name='Europe'
+and D.country_name not in(
+select country_name from departments
+join locations on locations.location_id=departments.location_id
+join countries on countries.country_id=locations.country_id)
 
 --PODPUNKT 3 --
 select C.country_name,C.country_id from countries C

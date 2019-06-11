@@ -2,26 +2,13 @@ use HR
 
 --PODPUNKT 1 --
 select A.last_name, B.last_name from employees A, employees B, jobs C
-where A.manager_id=B.employee_id and C.job_id=A.job_id
-group by C.max_salary,C.min_salary,A.last_name,B.last_name
-having C.max_salary-C.min_salary=(select min(max_salary-min_salary))
-
-/*TODO*/
-SELECT A.last_name, A.hire_date, j.job_title FROM employees A
-JOIN jobs as j ON j.job_id=A.job_id
-WHERE j.max_salary-j.min_salary = (select MIN(max_salary-min_salary)
-from jobs)
+where A.manager_id=B.employee_id and A.job_id=C.job_id
+and A.job_id in (select job_id from jobs 
+where max_salary-min_salary=(select min(max_salary-min_salary) from jobs))
 
 --PODPUNKT 2 --
-select C.job_title from employees A, job_history B,jobs C
-where A.job_id=C.job_id 
-and C.job_title not in(
-select from 
-join on 
-)
-order by C.job_title
-
-select  C.job_title from jobs C
+select C.job_title from jobs C
+where C.job_id not in (select job_id from job_history)
 
 --PODPUNKT 3 --
 select D.country_name,E.city, count(E.city) as LiczbaDepartamentow
@@ -41,8 +28,13 @@ select distinct A.first_name, A.last_name from employees A, job_history j
 where j.employee_id=A.employee_id and j.department_id=A.department_id
 
 --PODPUNKT 6 --
-select D.department_name from employees A, departments D
-where A.department_id=D.department_id and A.salary is null
+select D.department_name from departments D
+where D.department_name not in (
+select department_name from employees
+join departments on employees.department_id=departments.department_id)
+
+/*select D.department_name from employees A, departments D
+where A.department_id=D.department_id and A.salary is null*/
 
 --------------------------------------------------------------------------
 /*
@@ -59,3 +51,4 @@ where A.department_id=D.department_id and A.salary is null
 6.Podaj nazwy odddzialow w ktorych sa zatrudnieni pracownicy nie majacy pensji.
 */
 --------------------------------------------------------------------------
+
