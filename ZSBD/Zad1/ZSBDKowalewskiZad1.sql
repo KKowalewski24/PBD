@@ -1,0 +1,3 @@
+-- KAMIL KOWALEWSKI 216806 --
+
+-- PODPUNKT  --
