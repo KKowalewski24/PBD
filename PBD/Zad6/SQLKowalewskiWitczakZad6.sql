@@ -1,61 +1,82 @@
 -- UZYCIE BAZY HR--
-use HR
+USE hr
 
 -- PODPUNKT 1 --
-select A.last_name, B.department_name, C.city, D.job_title,A.salary 
-from employees A,departments B,locations C,jobs D
-where city='Toronto' and A.department_id=B.department_id 
-and B.location_id=C.location_id and A.job_id=D.job_id
+SELECT a.last_name, b.department_name, c.city, d.job_title, a.salary
+FROM employees a, departments b, locations c, jobs d
+WHERE city = 'Toronto'
+  AND a.department_id = b.department_id
+  AND b.location_id = c.location_id
+  AND a.job_id = d.job_id
 
 -- PODPUNKT 2 --
-select count (*) as n_employ from employees where last_name like '%n'
+SELECT count(*) AS n_employ
+FROM employees
+WHERE last_name LIKE '%n'
 
 -- PODPUNKT 3 --
-select B.department_name, C.city, count (*) as employ_num 
-from employees A, departments B, locations C
-where A.department_id=B.department_id and B.location_id=C.location_id
-group by B.department_name, city
+SELECT b.department_name, c.city, count(*) AS employ_num
+FROM employees a, departments b, locations c
+WHERE a.department_id = b.department_id
+  AND b.location_id = c.location_id
+GROUP BY b.department_name, city
 
-select B.department_name from departments B
+SELECT b.department_name
+FROM departments b
 
 -- PODPUNKT 4 --
-select A.first_name,A.last_name, A.department_id,A.hire_date,A.salary,A.manager_id 
-from employees A where datename(dd,A.hire_date)<16
+SELECT a.first_name, a.last_name, a.department_id, a.hire_date, a.salary, a.manager_id
+FROM employees a
+WHERE datename(DD, a.hire_date) < 16
 
 -- PODPUNKT 5 --
-select B.department_id,B.department_name,C.city 
-from departments B, locations C
-where B.location_id=C.location_id and department_id not in
-(select department_id from employees A, jobs D 
-where A.job_id=D.job_id and D.job_title='sales representative'
-and A.department_id is not null group by A.department_id)
+SELECT b.department_id, b.department_name, c.city
+FROM departments b, locations c
+WHERE b.location_id = c.location_id
+  AND department_id NOT IN
+      (SELECT department_id
+       FROM employees a, jobs d
+       WHERE a.job_id = d.job_id
+         AND d.job_title = 'sales representative'
+         AND a.department_id IS NOT NULL
+       GROUP BY a.department_id)
 
 -- PODPUNKT 6A --
-select B.department_id,B.department_name, count (*) as employ_num 
-from employees A, departments B where A.department_id=B.department_id
-group by B.department_id, B.department_name
-having count (*)=(select top 1 count (*) as employ_num 
-from employees A, departments B where A.department_id=B.department_id
-group by B.department_id, B.department_name order by employ_num desc)
+SELECT b.department_id, b.department_name, count(*) AS employ_num
+FROM employees a, departments b
+WHERE a.department_id = b.department_id
+GROUP BY b.department_id, b.department_name
+HAVING count(*) = (SELECT TOP 1 count(*) AS employ_num
+                   FROM employees a, departments b
+                   WHERE a.department_id = b.department_id
+                   GROUP BY b.department_id, b.department_name
+                   ORDER BY employ_num DESC)
 
 -- PODPUNKT 6B --
-select B.department_id,B.department_name, count (*) as employ_num 
-from employees A, departments B where A.department_id=B.department_id
-group by B.department_id, B.department_name
-having count (*)=(select top 1 count (*) as employ_num 
-from employees A, departments B where A.department_id=B.department_id
-group by B.department_id, B.department_name order by employ_num asc)
+SELECT b.department_id, b.department_name, count(*) AS employ_num
+FROM employees a, departments b
+WHERE a.department_id = b.department_id
+GROUP BY b.department_id, b.department_name
+HAVING count(*) = (SELECT TOP 1 count(*) AS employ_num
+                   FROM employees a, departments b
+                   WHERE a.department_id = b.department_id
+                   GROUP BY b.department_id, b.department_name
+                   ORDER BY employ_num ASC)
 
 -- PODPUNKT 6C --
-select B.department_id,B.department_name, count (*) as employ_num 
-from employees A, departments B where A.department_id=B.department_id
-group by B.department_id, B.department_name
-having count (*)<3
+SELECT b.department_id, b.department_name, count(*) AS employ_num
+FROM employees a, departments b
+WHERE a.department_id = b.department_id
+GROUP BY b.department_id, b.department_name
+HAVING count(*) < 3
 
 -- PODPUNKT 7 --
-select count (*) as employ, datename(yyyy,hire_date) as years 
-from employees group by datename(yyyy,hire_date)
+SELECT count(*) AS employ, datename(YYYY, hire_date) AS years
+FROM employees
+GROUP BY datename(YYYY, hire_date)
 
 -- PODPUNKT 8 --
-select E.country_name, count (*) as location_number from locations C, countries E
-where C.country_id=E.country_id group by E.country_name
+SELECT e.country_name, count(*) AS location_number
+FROM locations c, countries e
+WHERE c.country_id = e.country_id
+GROUP BY e.country_name

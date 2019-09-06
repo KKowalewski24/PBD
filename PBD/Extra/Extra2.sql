@@ -1,36 +1,47 @@
-use HR
+USE hr
 
 --PODPUNKT 1 --
-select  A.last_name, A.first_name,A.salary, B.job_title from employees A, jobs B
-where A.job_id=B.job_id and A.salary=B.min_salary
+SELECT a.last_name, a.first_name, a.salary, b.job_title
+FROM employees a, jobs b
+WHERE a.job_id = b.job_id
+  AND a.salary = b.min_salary
 
 --PODPUNKT 2 --
-select D.country_name from regions C, countries D
-where C.region_id=D.region_id and C.region_name='Europe'
-and D.country_name not in(
-select country_name from departments
-join locations on locations.location_id=departments.location_id
-join countries on countries.country_id=locations.country_id)
+SELECT d.country_name
+FROM regions c, countries d
+WHERE c.region_id = d.region_id
+  AND c.region_name = 'Europe'
+  AND d.country_name NOT IN (
+    SELECT country_name
+    FROM departments
+             JOIN locations ON locations.location_id = departments.location_id
+             JOIN countries ON countries.country_id = locations.country_id)
 
 --PODPUNKT 3 --
-select C.country_name,C.country_id from countries C
-where C.country_id=substring(C.country_name,1,2)
+SELECT c.country_name, c.country_id
+FROM countries c
+WHERE c.country_id = substring(c.country_name, 1, 2)
 
 --PODPUNKT 4 --
-select B.job_title, count(*) as employNum from employees A, jobs B
-where A.job_id=B.job_id and B.job_title not like '%Sales%' 
-and B.job_title not like '%Clerk%'
-group by B.job_title
-order by employNum desc
+SELECT b.job_title, count(*) AS employnum
+FROM employees a, jobs b
+WHERE a.job_id = b.job_id
+  AND b.job_title NOT LIKE '%Sales%'
+  AND b.job_title NOT LIKE '%Clerk%'
+GROUP BY b.job_title
+ORDER BY employnum DESC
 
 --PODPUNKT 5 --
-select A.first_name+' '+ A.last_name as pracownicy from employees A
-where A.last_name like '%a%' and A.last_name like '%e%'
+SELECT a.first_name + ' ' + a.last_name AS pracownicy
+FROM employees a
+WHERE a.last_name LIKE '%a%'
+  AND a.last_name LIKE '%e%'
 
 --PODPUNKT 6 --
-select B.job_title,A.hire_date from employees A, jobs B
-where A.job_id=B.job_id 
-and hire_date=(select min(hire_date) from employees)
+SELECT b.job_title, a.hire_date
+FROM employees a, jobs b
+WHERE a.job_id = b.job_id
+  AND hire_date = (SELECT min(hire_date) FROM employees)
 
 --------------------------------------------------------------------------
 /*

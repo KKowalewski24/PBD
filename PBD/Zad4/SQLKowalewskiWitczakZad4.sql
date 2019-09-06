@@ -1,137 +1,171 @@
 -- UZYCIE BAZY TEST_PRACOWNICY --
-use test_pracownicy
+USE test_pracownicy
 
 -- PODPUNKT 1 --
-insert into pracownicy 
-values(9781,'PARMOWSKI','AKWIZYTOR',9235,GETDATE(),null,1150,null,null,70)
+INSERT INTO pracownicy
+VALUES (9781, 'PARMOWSKI', 'AKWIZYTOR', 9235, GETDATE(), NULL, 1150, NULL, NULL, 70)
 
 -- PODPUNKT 2 --
-insert into pracownicy 
-values(9782,'CIESZKOWSKI','LABORANT',9332,GETDATE()+12,null,1200,null,null,null)
+INSERT INTO pracownicy
+VALUES (9782, 'CIESZKOWSKI', 'LABORANT', 9332, GETDATE() + 12, NULL, 1200, NULL, NULL, NULL)
 
 -- PODPUNKT 3 --
-insert into dbo.stanowiska 
-values ('GLOWNY' + (select stanowisko from dbo.stanowiska where stanowisko = 'OPERATOR'),
-  500 + (select placa_min from dbo.stanowiska where stanowisko = 'OPERATOR'),
-  1000 + (select placa_max from dbo.stanowiska where stanowisko = 'OPERATOR'))
+INSERT INTO dbo.stanowiska
+VALUES ('GLOWNY' + (SELECT stanowisko FROM dbo.stanowiska WHERE stanowisko = 'OPERATOR'),
+        500 + (SELECT placa_min FROM dbo.stanowiska WHERE stanowisko = 'OPERATOR'),
+        1000 + (SELECT placa_max FROM dbo.stanowiska WHERE stanowisko = 'OPERATOR'))
 
-insert into dbo.stanowiska 
-values ('GLOWNY' + (select stanowisko from dbo.stanowiska where stanowisko = 'LOGISTYK'),
-  500 + (select placa_min from dbo.stanowiska where stanowisko = 'LOGISTYK'),
-  1000 + (select placa_max from dbo.stanowiska where stanowisko = 'LOGISTYK'))
+INSERT INTO dbo.stanowiska
+VALUES ('GLOWNY' + (SELECT stanowisko FROM dbo.stanowiska WHERE stanowisko = 'LOGISTYK'),
+        500 + (SELECT placa_min FROM dbo.stanowiska WHERE stanowisko = 'LOGISTYK'),
+        1000 + (SELECT placa_max FROM dbo.stanowiska WHERE stanowisko = 'LOGISTYK'))
 
-insert into dbo.stanowiska 
-values ('GLOWNY' + (select stanowisko from dbo.stanowiska where stanowisko = 'TECHNOLOG'),
-  500 + (select placa_min from dbo.stanowiska where stanowisko = 'TECHNOLOG'),
-  1000 + (select placa_max from dbo.stanowiska where stanowisko = 'TECHNOLOG'))
+INSERT INTO dbo.stanowiska
+VALUES ('GLOWNY' + (SELECT stanowisko FROM dbo.stanowiska WHERE stanowisko = 'TECHNOLOG'),
+        500 + (SELECT placa_min FROM dbo.stanowiska WHERE stanowisko = 'TECHNOLOG'),
+        1000 + (SELECT placa_max FROM dbo.stanowiska WHERE stanowisko = 'TECHNOLOG'))
 
 -- PODPUNKT 4 --
-update pracownicy set stanowisko = 'LABORANT', placa = placa*1.1
-where stanowisko = 'PRAKTYKANT' and id_dzialu = 50
+UPDATE pracownicy
+SET stanowisko = 'LABORANT',
+    placa      = placa * 1.1
+WHERE stanowisko = 'PRAKTYKANT'
+  AND id_dzialu = 50
 
 -- PODPUNKT 5 --
-update pracownicy set dod_funkcyjny = dod_funkcyjny + ((select min(placa)from pracownicy) * 0.1)
-where id_dzialu = 10
+UPDATE pracownicy
+SET dod_funkcyjny = dod_funkcyjny + ((SELECT min(placa) FROM pracownicy) * 0.1)
+WHERE id_dzialu = 10
 
 -- PODPUNKT 6 --
-delete from dbo.stanowiska where stanowisko = 'PRAKTYKANT'
+DELETE
+FROM dbo.stanowiska
+WHERE stanowisko = 'PRAKTYKANT'
 
 -- PODPUNKT 7 --
-delete from pracownicy where stanowisko = 'LOGISTYK'
-and data_zatr = (select max(data_zatr) from pracownicy where stanowisko = 'LOGISTYK')
+DELETE
+FROM pracownicy
+WHERE stanowisko = 'LOGISTYK'
+  AND data_zatr = (SELECT max(data_zatr) FROM pracownicy WHERE stanowisko = 'LOGISTYK')
 
 -- PODPUNKT 8 --
-create table pracownice(
-    nr_akt int,
-	nazwisko	VARCHAR(20),
-	stanowisko VARCHAR(18),
-	kierownik int CONSTRAINT praco_self_key REFERENCES pracownicy (nr_akt),
-	data_zatr	DATETIME,
-	data_zwol	DATETIME,
-	placa MONEY,
-	dod_funkcyjny MONEY,
-	prowizja MONEY,
-	id_dzialu	INT,
-	CONSTRAINT praco_primary_key PRIMARY KEY (nr_akt),
-	CONSTRAINT praco_foreign_key FOREIGN KEY (id_dzialu) REFERENCES dzialy (id_dzialu)
+CREATE TABLE pracownice (
+    nr_akt        INT,
+    nazwisko      VARCHAR(20),
+    stanowisko    VARCHAR(18),
+    kierownik     INT
+        CONSTRAINT praco_self_key REFERENCES pracownicy (nr_akt),
+    data_zatr     DATETIME,
+    data_zwol     DATETIME,
+    placa         MONEY,
+    dod_funkcyjny MONEY,
+    prowizja      MONEY,
+    id_dzialu     INT,
+    CONSTRAINT praco_primary_key PRIMARY KEY (nr_akt),
+    CONSTRAINT praco_foreign_key FOREIGN KEY (id_dzialu) REFERENCES dzialy (id_dzialu)
 );
 
-insert into pracownice (nr_akt, nazwisko, stanowisko, kierownik, data_zatr, data_zwol,
-placa, dod_funkcyjny, prowizja, id_dzialu)
+INSERT INTO pracownice (nr_akt, nazwisko, stanowisko, kierownik, data_zatr, data_zwol,
+                        placa, dod_funkcyjny, prowizja, id_dzialu)
 
-select nr_akt, nazwisko, stanowisko, kierownik, data_zatr, data_zwol,placa, dod_funkcyjny, prowizja, id_dzialu
-from pracownicy where nazwisko like '%SKA'
+SELECT nr_akt, nazwisko, stanowisko, kierownik, data_zatr, data_zwol, placa, dod_funkcyjny,
+       prowizja, id_dzialu
+FROM pracownicy
+WHERE nazwisko LIKE '%SKA'
 
-select * from pracownice
+SELECT *
+FROM pracownice
 
 -- PODPUNKT 9 --
-drop table pracownice
+DROP TABLE pracownice
 
 -- PODPUNKT 10 --
-create table projekty(
-    id_projektu int,
-    nazwa varchar(100),
-    budzet float,
-    termin_zak datetime,
-    nr_kierownika int constraint proj_self_key references pracownicy (nr_akt)
-    constraint proj_id_projektu_unique unique (id_projektu)
+CREATE TABLE projekty (
+    id_projektu   INT,
+    nazwa         VARCHAR(100),
+    budzet        FLOAT,
+    termin_zak    DATETIME,
+    nr_kierownika INT
+        CONSTRAINT proj_self_key REFERENCES pracownicy (nr_akt)
+        CONSTRAINT proj_id_projektu_unique UNIQUE (id_projektu)
 );
 
 -- PODPUNKT 11 --
-alter table projekty add typ varchar(20) not null, opis varchar(500), data_roz datetime
+ALTER TABLE projekty
+    ADD typ VARCHAR(20) NOT NULL, opis VARCHAR(500), data_roz DATETIME
 
 -- PODPUNKT 12 --
-alter table projekty add default getdate() for data_roz
+ALTER TABLE projekty
+    ADD DEFAULT getdate() FOR data_roz
 
 -- PODPUNKT 13 --
-alter table projekty drop constraint proj_id_projektu_unique
-alter table projekty alter column id_projektu int not null
-alter table projekty add constraint proj_primary_key primary key (id_projektu)
+ALTER TABLE projekty
+    DROP CONSTRAINT proj_id_projektu_unique
+ALTER TABLE projekty
+    ALTER COLUMN id_projektu INT NOT NULL
+ALTER TABLE projekty
+    ADD CONSTRAINT proj_primary_key PRIMARY KEY (id_projektu)
 
 -- PODPUNKT 14 --
-alter table projekty add constraint check_data check (data_roz < termin_zak)
+ALTER TABLE projekty
+    ADD CONSTRAINT check_data CHECK (data_roz < termin_zak)
 
 -- PODPUNKT 15 --
-exec sp_rename 'projekty.opis','harmonogram','COLUMN';
+EXEC sp_rename 'projekty.opis', 'harmonogram', 'COLUMN';
 
 -- PODPUNKT 16 --
-alter table pracownicy drop column prowizja
-
+ALTER TABLE pracownicy
+    DROP COLUMN prowizja
 
 
 -- PODPUNKT 17 --
-use test_pracownicy
+USE test_pracownicy
 
-alter table pracownicy drop constraint prac_foreign_key;
-alter table pracownicy add constraint prac_foreign_key foreign key (id_dzialu)
-references dzialy (id_dzialu) on delete cascade
+ALTER TABLE pracownicy
+    DROP CONSTRAINT prac_foreign_key;
+ALTER TABLE pracownicy
+    ADD CONSTRAINT prac_foreign_key FOREIGN KEY (id_dzialu)
+        REFERENCES dzialy (id_dzialu) ON DELETE CASCADE
 
 -- PODPUNKT 18 --
-delete from dzialy where id_dzialu = 30
+DELETE
+FROM dzialy
+WHERE id_dzialu = 30
 
 -- PODPUNKT 19 --
 --OPERACJA NIEDOZWOLONA NIE MOZNA USUNAC KIEROWNIKA--
 --delete from pracownicy where nr_akt = 8902
 
 -- PODPUNKT 20 --
-update pracownicy set data_zwol = getdate() where nr_akt = 8902
+UPDATE pracownicy
+SET data_zwol = getdate()
+WHERE nr_akt = 8902
 
-insert into prac_archiw select * from pracownicy where nr_akt = 8902
+INSERT INTO prac_archiw
+SELECT *
+FROM pracownicy
+WHERE nr_akt = 8902
 
 -- PODPUNKT 21 --
-alter table pracownicy nocheck constraint prac_self_key
-update pracownicy set kierownik = 8903 where kierownik = 8902
-alter table pracownicy check constraint prac_self_key
+ALTER TABLE pracownicy
+    NOCHECK CONSTRAINT prac_self_key
+UPDATE pracownicy
+SET kierownik = 8903
+WHERE kierownik = 8902
+ALTER TABLE pracownicy
+    CHECK CONSTRAINT prac_self_key
 
 -- PODPUNKT 22 --
-delete from pracownicy where nr_akt = 8902
+DELETE
+FROM pracownicy
+WHERE nr_akt = 8902
 
 -- PODPUNKT 23 --
-create index prac_nazw_index on pracownicy (nazwisko)
+CREATE INDEX prac_nazw_index ON pracownicy (nazwisko)
 
 -- PODPUNKT 24 --
-create index prac_nazw_index on dbo.stanowiska (placa_min, placa_max)
+CREATE INDEX prac_nazw_index ON dbo.stanowiska (placa_min, placa_max)
 
 -- PODPUNKT 25 --
-drop index prac_nazw_index on pracownicy
-drop index stan_plac_index on dbo.stanowiska
+DROP INDEX prac_nazw_index ON pracownicy
+DROP INDEX stan_plac_index ON dbo.stanowiska

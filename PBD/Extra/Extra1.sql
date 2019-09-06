@@ -1,55 +1,76 @@
-use HR
+USE hr
 
 --PODPUNKT 1 --
-select A.last_name,B.job_title, A.salary from employees A, jobs B 
-where B.job_title not like 's%' and  B.job_title not like '%d%' 
-and A.job_id=B.job_id and (A.salary<2600 or A.salary>11000) order by A.salary
+SELECT a.last_name, b.job_title, a.salary
+FROM employees a, jobs b
+WHERE b.job_title NOT LIKE 's%'
+  AND b.job_title NOT LIKE '%d%'
+  AND a.job_id = b.job_id
+  AND (a.salary < 2600 OR a.salary > 11000)
+ORDER BY a.salary
 
 --PODPUNKT 2 --
-select count(*) as przedzial_100_107 from employees A
-where A.manager_id>=100 and A.manager_id<=107 order by przedzial_100_107
+SELECT count(*) AS przedzial_100_107
+FROM employees a
+WHERE a.manager_id >= 100
+  AND a.manager_id <= 107
+ORDER BY przedzial_100_107
 
-select count(*) as bezManagera from employees A
-where A.manager_id is null order by bezManagera
+SELECT count(*) AS bezmanagera
+FROM employees a
+WHERE a.manager_id IS NULL
+ORDER BY bezmanagera
 
 --PODPUNKT 3 --
-select B.job_title, count(*) as liczbaPrac from employees A,jobs B
-where A.job_id=B.job_id and B.job_title not like'%Clerk%' 
-and datename(yyyy,A.hire_date)>=1997 and datename(yyyy,A.hire_date)<=1999
-group by B.job_title order by liczbaPrac desc
+SELECT b.job_title, count(*) AS liczbaprac
+FROM employees a, jobs b
+WHERE a.job_id = b.job_id
+  AND b.job_title NOT LIKE '%Clerk%'
+  AND datename(YYYY, a.hire_date) >= 1997
+  AND datename(YYYY, a.hire_date) <= 1999
+GROUP BY b.job_title
+ORDER BY liczbaprac DESC
 
 --PODPUNKT 4 --
-select E.city from regions C, countries D, locations E 
-where C.region_id=D.region_id and D.country_id=E.country_id 
-and C.region_name='Asia' and E.state_province is null
+SELECT e.city
+FROM regions c, countries d, locations e
+WHERE c.region_id = d.region_id
+  AND d.country_id = e.country_id
+  AND c.region_name = 'Asia'
+  AND e.state_province IS NULL
 
 --PODPUNKT 5 --
-select top 5 F.department_name, sum(A.salary) as departSalary 
-from employees A, departments F 
-where A.department_id=F.department_id 
-group by F.department_name 
-order by departSalary desc
+SELECT TOP 5 f.department_name, sum(a.salary) AS departsalary
+FROM employees a, departments f
+WHERE a.department_id = f.department_id
+GROUP BY f.department_name
+ORDER BY departsalary DESC
 
 --PODPUNKT 6 --
-select D.country_name,E.city, count(E.city) as departNum
-from countries D, locations E, departments F 
-where D.country_id=E.country_id and E.location_id=F.location_id
-group by D.country_name,E.city
-order by D.country_name
+SELECT d.country_name, e.city, count(e.city) AS departnum
+FROM countries d, locations e, departments f
+WHERE d.country_id = e.country_id
+  AND e.location_id = f.location_id
+GROUP BY d.country_name, e.city
+ORDER BY d.country_name
 
 --PODPUNKT 7 --
-select D.country_name from countries D, regions C
-where C.region_id=D.region_id and C.region_name='Europe' 
-and D.country_name not in (
-select countries.country_name from departments
-join locations on departments.location_id=locations.location_id
-join countries on locations.country_id=countries.country_id)
+SELECT d.country_name
+FROM countries d, regions c
+WHERE c.region_id = d.region_id
+  AND c.region_name = 'Europe'
+  AND d.country_name NOT IN (
+    SELECT countries.country_name
+    FROM departments
+             JOIN locations ON departments.location_id = locations.location_id
+             JOIN countries ON locations.country_id = countries.country_id)
 
 --PODPUNKT 8 --
-select F.department_name from employees A, departments F 
-where A.department_id=F.department_id 
-and A.salary<(select avg(salary) as average from employees)
-group by F.department_name
+SELECT f.department_name
+FROM employees a, departments f
+WHERE a.department_id = f.department_id
+  AND a.salary < (SELECT avg(salary) AS average FROM employees)
+GROUP BY f.department_name
 
 --------------------------------------------------------------------------
 /*

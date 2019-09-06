@@ -1,54 +1,59 @@
-create database test1_Kowalewski_Witczak
+CREATE DATABASE test1_kowalewski_witczak
 
 --/////////////// TWORZENIE TABEL ///////////////--
-create table osoby(
-nr_osoby int primary key,
-imie varchar(40),
-nazwisko varchar(40),
-adres varchar(500),
-wiek int
+CREATE TABLE osoby (
+    nr_osoby INT PRIMARY KEY,
+    imie     VARCHAR(40),
+    nazwisko VARCHAR(40),
+    adres    VARCHAR(500),
+    wiek     INT
 );
 
-create table dzieci(
-nr_osoby int,
-nr_dziecka int IDENTITY (100,1),
-imie varchar(40)
+CREATE TABLE dzieci (
+    nr_osoby   INT,
+    nr_dziecka INT IDENTITY (100,1),
+    imie       VARCHAR(40)
 );
 
 --DODAWANIE REKORDOW--
-insert into osoby (nr_osoby,imie,nazwisko,adres,wiek)
-values(1,'Baba', 'Jaga', 'Domek z Piernika 100',154)
+INSERT INTO osoby (nr_osoby, imie, nazwisko, adres, wiek)
+VALUES (1, 'Baba', 'Jaga', 'Domek z Piernika 100', 154)
 
-insert into dzieci(nr_osoby,imie)
-values(1,'Jas')
+INSERT INTO dzieci(nr_osoby, imie)
+VALUES (1, 'Jas')
 
-insert into dzieci(nr_osoby,imie)
-values(2,'Malgosia')
+INSERT INTO dzieci(nr_osoby, imie)
+VALUES (2, 'Malgosia')
 
 --DODANIE OPCJI AKTUALNEJ DATY--
-alter table osoby add data_wpisu DATE DEFAULT GETDATE()
+ALTER TABLE osoby
+    ADD data_wpisu DATE DEFAULT GETDATE()
 
-insert into osoby(nr_osoby,imie,nazwisko,adres,wiek)
-values(2, 'Matka', 'Chrzestna', 'Wrozkolandia',105)
+INSERT INTO osoby(nr_osoby, imie, nazwisko, adres, wiek)
+VALUES (2, 'Matka', 'Chrzestna', 'Wrozkolandia', 105)
 
 --MOZLIWOSC DODANIA WLASNEGO IDENTYFIKATORA--
 SET IDENTITY_INSERT dzieci ON
 
-insert into dzieci(nr_osoby,nr_dziecka,imie)
-values(3,10,'Kopciuszek')
+INSERT INTO dzieci(nr_osoby, nr_dziecka, imie)
+VALUES (3, 10, 'Kopciuszek')
 
 --USTAWIENIA OGRANICZENIA NA WPISYWANE DANE--
-alter table osoby with nocheck add constraint wiek check(wiek<100)
-
+ALTER TABLE osoby
+    WITH NOCHECK ADD CONSTRAINT wiek CHECK (wiek < 100)
 
 
 --/////////////// NARZEDZIA ULATWIAJACE OBSLUGE ///////////////--
 
 -- WYSWIETLANIE --
-select * from osoby
-select * from dzieci
+SELECT *
+FROM osoby
+SELECT *
+FROM dzieci
 
 --CZYSZCZENIE TABEL--
 
-delete from osoby
-delete from dzieci
+DELETE
+FROM osoby
+DELETE
+FROM dzieci

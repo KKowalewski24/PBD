@@ -1,38 +1,47 @@
-use HR
+USE hr
 
 --PODPUNKT 1 --
-select B.department_name, count(*) as employNum from employees A, departments B
-where A.department_id=B.department_id
-group by B.department_name
-having count(*)>10
-order by employNum
+SELECT b.department_name, count(*) AS employnum
+FROM employees a, departments b
+WHERE a.department_id = b.department_id
+GROUP BY b.department_name
+HAVING count(*) > 10
+ORDER BY employnum
 
 --PODPUNKT 2 --
-select A.last_name,A.first_name,A.salary from employees A,employees B, jobs C
-where B.employee_id=A.manager_id and B.job_id=C.job_id 
-and C.max_salary*0.9<B.salary 
-order by A.salary
+SELECT a.last_name, a.first_name, a.salary
+FROM employees a, employees b, jobs c
+WHERE b.employee_id = a.manager_id
+  AND b.job_id = c.job_id
+  AND c.max_salary * 0.9 < b.salary
+ORDER BY a.salary
 
 --PODPUNKT 3 --
-select A.last_name, A.salary, B.last_name,B.salary from employees A, employees B
-where A.manager_id=B.employee_id and B.salary*0.25>A.salary
+SELECT a.last_name, a.salary, b.last_name, b.salary
+FROM employees a, employees b
+WHERE a.manager_id = b.employee_id
+  AND b.salary * 0.25 > a.salary
 
 --PODPUNKT 4 --
-select C.city, C.state_province from locations C
-where substring(C.city,1,2)=substring(C.state_province,1,2)
-order by C.city,C.state_province
+SELECT c.city, c.state_province
+FROM locations c
+WHERE substring(c.city, 1, 2) = substring(c.state_province, 1, 2)
+ORDER BY c.city, c.state_province
 
 --PODPUNKT 5 --
-select B.job_title, avg(A.salary) as average from employees A, jobs B
-where A.job_id=B.job_id
-group by B.job_title
-order by average desc
+SELECT b.job_title, avg(a.salary) AS average
+FROM employees a, jobs b
+WHERE a.job_id = b.job_id
+GROUP BY b.job_title
+ORDER BY average DESC
 
 --PODPUNKT 6 --
-select B.last_name, count(*) as employNum from employees A, employees B
-where A.manager_id=B.employee_id 
-group by B.last_name
-having count(*)<5 or count(*)>10
+SELECT b.last_name, count(*) AS employnum
+FROM employees a, employees b
+WHERE a.manager_id = b.employee_id
+GROUP BY b.last_name
+HAVING count(*) < 5
+    OR count(*) > 10
 
 --------------------------------------------------------------------------
 /*
@@ -45,7 +54,7 @@ having count(*)<5 or count(*)>10
 i prowincji sa takie same. Posortuj wyniki rosnaco wedlug miasta i prowincji
 5.Podaj nazwy stanowisk i srednie zarobki pracownikow na nich pracujacych w kolejnosci
  malejacych zarobkow
-6.Podaj nazwiska oraz liczbe podw³adnych dla tych managerow ktorzy ich maja wiecej niz 
+6.Podaj nazwiska oraz liczbe podwï¿½adnych dla tych managerow ktorzy ich maja wiecej niz 
  dziesieciu lub mniej niz 5
 */
 --------------------------------------------------------------------------
