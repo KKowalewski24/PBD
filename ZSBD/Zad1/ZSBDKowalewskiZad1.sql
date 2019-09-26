@@ -76,22 +76,39 @@ WHERE kraje.id_kraju = skocznie.id_kraju
   AND skocznie.id_skoczni = zawody.id_skoczni
 
 -- PODPUNKT 12 --
--- SELECT nazwisko, kraj, count(*) AS "ile"
--- FROM zawodnicy, kraje
--- WHERE zawodnicy.id_kraju = kraje.id_kraju
--- GROUP BY nazwisko,kraj
+SELECT nazwisko, kraj, count(*) AS "ile"
+FROM kraje, skocznie, zawodnicy, zawody, uczestnictwa_w_zawodach
+WHERE kraje.id_kraju = skocznie.id_kraju
+  AND kraje.id_kraju = zawodnicy.id_kraju
+  AND skocznie.id_skoczni = zawody.id_skoczni
+  AND zawodnicy.id_skoczka = uczestnictwa_w_zawodach.id_skoczka
+  AND zawody.id_zawodow = uczestnictwa_w_zawodach.id_zawodow
+GROUP BY nazwisko, kraj
+ORDER BY nazwisko
 
 -- PODPUNKT 13 --
-
+INSERT INTO trenerzy
+VALUES (7, 'Corby', 'Fisher', '1975-07-20')
 
 -- PODPUNKT 14 --
-
+ALTER TABLE zawodnicy
+    ADD trener INT
 
 -- PODPUNKT 15 --
-
+UPDATE zawodnicy
+SET zawodnicy.trener=id_kraju
 
 -- PODPUNKT 16 --
-
+ALTER TABLE zawodnicy
+    ADD CONSTRAINT fkzawodnicytrenerzy FOREIGN KEY (trener) REFERENCES trenerzy (id_trenera)
 
 -- PODPUNKT 17 --
-
+UPDATE trenerzy
+SET data_ur_t = (
+                SELECT
+                TOP 1
+                dateadd(YEAR, -5, data_ur)
+                FROM zawodnicy
+                ORDER BY data_ur DESC
+                )
+WHERE data_ur_t IS NULL
