@@ -3,39 +3,39 @@
 USE biuro
 GO
 
-SELECT * FROM biura
+SELECT * FROM biuro.dbo.biura
 
-SELECT * FROM personel
+SELECT * FROM biuro.dbo.personel
 
-SELECT * FROM wlasciciele
+SELECT * FROM biuro.dbo.wlasciciele
 
-SELECT * FROM nieruchomosci
+SELECT * FROM biuro.dbo.nieruchomosci
 
-SELECT * FROM klienci
+SELECT * FROM biuro.dbo.klienci
 
-SELECT * FROM wynajecia
+SELECT * FROM biuro.dbo.wynajecia
 
-SELECT * FROM wizyty
+SELECT * FROM biuro.dbo.wizyty
 
-SELECT * FROM rejestracje
+SELECT * FROM biuro.dbo.rejestracje
 
-SELECT * FROM biura2
+SELECT * FROM biuro.dbo.biura2
 
-SELECT * FROM nieruchomosci2
+SELECT * FROM biuro.dbo.nieruchomosci2
 
 -- PODPUNKT 1 --
 SELECT nieruchomoscnr,
        (
            SELECT count(*)
-           FROM wizyty
-           WHERE wizyty.nieruchomoscnr = nieruchomosci.nieruchomoscnr
+           FROM biuro.dbo.wizyty
+           WHERE biuro.dbo.wizyty.nieruchomoscnr = biuro.dbo.nieruchomosci.nieruchomoscnr
        ) AS ile_wizyt,
        (
            SELECT count(*)
-           FROM wynajecia
-           WHERE wynajecia.nieruchomoscnr = nieruchomosci.nieruchomoscnr
+           FROM biuro.dbo.wynajecia
+           WHERE biuro.dbo.wynajecia.nieruchomoscnr = biuro.dbo.nieruchomosci.nieruchomoscnr
        ) AS ile_wynajmow
-FROM nieruchomosci
+FROM biuro.dbo.nieruchomosci
 
 -- PODPUNKT 2 --
 SELECT nieruchomoscnr,
@@ -43,86 +43,89 @@ SELECT nieruchomoscnr,
                 (czynsz * 100 / (
                                     SELECT
                                     TOP 1
-                                    wynajecia.czynsz
-                                    FROM wynajecia
-                                    WHERE wynajecia.nieruchomoscnr = nieruchomosci.nieruchomoscnr
+                                    biuro.dbo.wynajecia.czynsz
+                                    FROM biuro.dbo.wynajecia
+                                    WHERE biuro.dbo.wynajecia.nieruchomoscnr =
+                                          biuro.dbo.nieruchomosci.nieruchomoscnr
                                     ORDER BY od_kiedy
                                 ) - 100)) + '%'
            ) AS podwyzka
-FROM nieruchomosci
+FROM biuro.dbo.nieruchomosci
 
 -- PODPUNKT 3 --
-SELECT nieruchomosci.nieruchomoscnr,
-       sum(wynajecia.czynsz * (datediff(MM, od_kiedy, do_kiedy) + 1)) AS ile
-FROM nieruchomosci, wynajecia
-WHERE nieruchomosci.nieruchomoscnr = wynajecia.nieruchomoscnr
-GROUP BY nieruchomosci.nieruchomoscnr
+SELECT biuro.dbo.nieruchomosci.nieruchomoscnr,
+       sum(biuro.dbo.wynajecia.czynsz * (datediff(MM, od_kiedy, do_kiedy) + 1)) AS ile
+FROM biuro.dbo.nieruchomosci, biuro.dbo.wynajecia
+WHERE biuro.dbo.nieruchomosci.nieruchomoscnr = biuro.dbo.wynajecia.nieruchomoscnr
+GROUP BY biuro.dbo.nieruchomosci.nieruchomoscnr
 
 -- PODPUNKT 4 --
 SELECT DISTINCT biuronr,
                 (
                     SELECT sum(0.3 * wyn.czynsz * (datediff(MM, od_kiedy, do_kiedy) + 1)) AS suma
-                    FROM wynajecia wyn, nieruchomosci nieru
+                    FROM biuro.dbo.wynajecia wyn, biuro.dbo.nieruchomosci nieru
                     WHERE wyn.nieruchomoscnr = nieru.nieruchomoscnr
                       AND nieru.biuronr = nieru_zew.biuronr
                 )
-FROM nieruchomosci nieru_zew
+FROM biuro.dbo.nieruchomosci nieru_zew
 
 -- PODPUNKT 5A --
 SELECT TOP 1 miasto, count(*) AS suma
-FROM nieruchomosci, wynajecia
-WHERE nieruchomosci.nieruchomoscnr = wynajecia.nieruchomoscnr
+FROM biuro.dbo.nieruchomosci, biuro.dbo.wynajecia
+WHERE biuro.dbo.nieruchomosci.nieruchomoscnr = biuro.dbo.wynajecia.nieruchomoscnr
 GROUP BY miasto
 ORDER BY suma DESC
 
 -- PODPUNKT 5B --
-SELECT TOP 1 miasto, sum(wynajecia.czynsz * (datediff(MM, od_kiedy, do_kiedy) + 1)) AS suma
-FROM nieruchomosci, wynajecia
-WHERE nieruchomosci.nieruchomoscnr = wynajecia.nieruchomoscnr
+SELECT TOP 1 miasto,
+sum(biuro.dbo.wynajecia.czynsz * (datediff(MM, od_kiedy, do_kiedy) + 1)) AS suma
+FROM biuro.dbo.nieruchomosci, biuro.dbo.wynajecia
+WHERE biuro.dbo.nieruchomosci.nieruchomoscnr = biuro.dbo.wynajecia.nieruchomoscnr
 GROUP BY miasto
 ORDER BY suma DESC
 
 -- PODPUNKT 6 --
-SELECT DISTINCT wizyty.klientnr, wizyty.nieruchomoscnr
-FROM klienci, wynajecia, wizyty
-WHERE klienci.klientnr = wynajecia.klientnr
-  AND wynajecia.klientnr = wizyty.klientnr
-  AND wynajecia.nieruchomoscnr = wizyty.nieruchomoscnr
+SELECT DISTINCT biuro.dbo.wizyty.klientnr, biuro.dbo.wizyty.nieruchomoscnr
+FROM biuro.dbo.klienci, biuro.dbo.wynajecia, biuro.dbo.wizyty
+WHERE biuro.dbo.klienci.klientnr = biuro.dbo.wynajecia.klientnr
+  AND biuro.dbo.wynajecia.klientnr = biuro.dbo.wizyty.klientnr
+  AND biuro.dbo.wynajecia.nieruchomoscnr = biuro.dbo.wizyty.nieruchomoscnr
 
 -- PODPUNKT 7 --
-SELECT DISTINCT wynajecia.klientnr, count(DISTINCT wizyty.nieruchomoscnr)
-FROM wynajecia, wizyty
-WHERE wizyty.klientnr = wynajecia.klientnr
+SELECT DISTINCT biuro.dbo.wynajecia.klientnr, count(DISTINCT biuro.dbo.wizyty.nieruchomoscnr)
+FROM biuro.dbo.wynajecia, biuro.dbo.wizyty
+WHERE biuro.dbo.wizyty.klientnr = biuro.dbo.wynajecia.klientnr
   AND data_wizyty < od_kiedy
-  AND wizyty.nieruchomoscnr <> wynajecia.nieruchomoscnr -- OPERATOR <> MEANS NOT EQUAL TO
-GROUP BY wynajecia.klientnr
+  AND biuro.dbo.wizyty.nieruchomoscnr <>
+      biuro.dbo.wynajecia.nieruchomoscnr -- OPERATOR <> MEANS NOT EQUAL TO
+GROUP BY biuro.dbo.wynajecia.klientnr
 
 -- PODPUNKT 8 --
-SELECT DISTINCT klienci.klientnr
-FROM klienci, wynajecia
-WHERE klienci.klientnr = wynajecia.klientnr
-  AND klienci.max_czynsz < wynajecia.czynsz
+SELECT DISTINCT biuro.dbo.klienci.klientnr
+FROM biuro.dbo.klienci, biuro.dbo.wynajecia
+WHERE biuro.dbo.klienci.klientnr = biuro.dbo.wynajecia.klientnr
+  AND biuro.dbo.klienci.max_czynsz < biuro.dbo.wynajecia.czynsz
 
 -- PODPUNKT 9 --
 SELECT biuronr
-FROM biura
-WHERE biura.biuronr NOT IN (SELECT biuronr FROM nieruchomosci)
+FROM biuro.dbo.biura
+WHERE biuro.dbo.biura.biuronr NOT IN (SELECT biuronr FROM biuro.dbo.nieruchomosci)
 
 -- WERSJA Z LEFT JOIN, NIE USUWAC
 -- SELECT biu.biuronr
--- FROM biura biu
---          LEFT JOIN nieruchomosci nieru ON biu.biuronr = nieru.biuronr
+-- FROM biuro.dbo.biura biu
+--          LEFT JOIN biuro.dbo.nieruchomosci nieru ON biu.biuronr = nieru.biuronr
 -- WHERE nieru.biuronr IS NULL
 
 -- PODPUNKT 10A --
 SELECT (
            SELECT count(*)
-           FROM personel
+           FROM biuro.dbo.personel
            WHERE plec = 'k'
        ) AS kobiety,
        (
            SELECT count(*)
-           FROM personel
+           FROM biuro.dbo.personel
            WHERE plec = 'M'
        ) AS mezczyzni
 
@@ -130,53 +133,53 @@ SELECT (
 SELECT DISTINCT biu.biuronr,
                 (
                     SELECT count(*)
-                    FROM personel per
+                    FROM biuro.dbo.personel per
                     WHERE plec = 'k'
                       AND biu.biuronr = biuronr
                 ) AS kobiety,
                 (
                     SELECT count(*)
-                    FROM personel per
+                    FROM biuro.dbo.personel per
                     WHERE plec = 'M'
                       AND biu.biuronr = biuronr
                 ) AS mezczyzni
-FROM biura biu, personel
-WHERE biu.biuronr = personel.biuronr
+FROM biuro.dbo.biura biu, biuro.dbo.personel
+WHERE biu.biuronr = biuro.dbo.personel.biuronr
 
 -- PODPUNKT 10C --
 SELECT DISTINCT miasto,
                 (
                     SELECT count(*)
-                    FROM biura, personel
+                    FROM biuro.dbo.biura, biuro.dbo.personel
                     WHERE plec = 'k'
-                      AND biura.biuronr = personel.biuronr
-                      AND biura.miasto = biu.miasto
+                      AND biuro.dbo.biura.biuronr = biuro.dbo.personel.biuronr
+                      AND biuro.dbo.biura.miasto = biu.miasto
                 ) AS kobiety,
                 (
                     SELECT count(*)
-                    FROM biura, personel
+                    FROM biuro.dbo.biura, biuro.dbo.personel
                     WHERE plec = 'M'
-                      AND biura.biuronr = personel.biuronr
-                      AND biura.miasto = biu.miasto
+                      AND biuro.dbo.biura.biuronr = biuro.dbo.personel.biuronr
+                      AND biuro.dbo.biura.miasto = biu.miasto
                 ) AS mezczyzni
-FROM biura biu, personel
-WHERE biu.biuronr = personel.biuronr
+FROM biuro.dbo.biura biu, biuro.dbo.personel
+WHERE biu.biuronr = biuro.dbo.personel.biuronr
 
 -- PODPUNKT 10D --
 SELECT DISTINCT stanowisko,
                 (
                     SELECT count(*)
-                    FROM biura, personel
+                    FROM biuro.dbo.biura, biuro.dbo.personel
                     WHERE plec = 'k'
-                      AND biura.biuronr = personel.biuronr
-                      AND personel.stanowisko = per.stanowisko
+                      AND biuro.dbo.biura.biuronr = biuro.dbo.personel.biuronr
+                      AND biuro.dbo.personel.stanowisko = per.stanowisko
                 ) AS kobiety,
                 (
                     SELECT count(*)
-                    FROM biura, personel
+                    FROM biuro.dbo.biura, biuro.dbo.personel
                     WHERE plec = 'M'
-                      AND biura.biuronr = personel.biuronr
-                      AND personel.stanowisko = per.stanowisko
+                      AND biuro.dbo.biura.biuronr = biuro.dbo.personel.biuronr
+                      AND biuro.dbo.personel.stanowisko = per.stanowisko
                 ) AS mezczyzni
-FROM biura biu, personel per
+FROM biuro.dbo.biura biu, biuro.dbo.personel per
 WHERE biu.biuronr = per.biuronr
