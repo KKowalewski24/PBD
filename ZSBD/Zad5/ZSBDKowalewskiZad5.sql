@@ -144,37 +144,83 @@ GO
 
 -- PODPUNKT 7 --
 
-DROP PROCEDURE zmien_place
+-- TODO, ISSUE WITH CONVERTING MONEY TO INT
+-- DROP PROCEDURE zmien_place
 CREATE PROCEDURE zmien_place(@numer_dzialu INT = 3, @procent INT = 10) AS
 BEGIN
-    DECLARE @suma INT, @podwyzka DECIMAL(3, 2)
-    SET @podwyzka = @procent * 0.01
+    DECLARE @suma INT, @podwyzka DECIMAL(3, 2)= @procent * 0.01
 
     IF (@numer_dzialu = 0)
         BEGIN
-            UPDATE pracownicy SET placa = placa + placa * @procent
-            SET @suma = (SELECT COUNT(*) FROM pracownicy)
+            UPDATE test_pracownicy.dbo.pracownicy SET placa += placa * @procent
+            SET @suma = (SELECT COUNT(*) FROM test_pracownicy.dbo.pracownicy)
         END
     ELSE
         BEGIN
-            SET @suma = (SELECT COUNT(*) FROM pracownicy WHERE id_dzialu = @numer_dzialu)
-            UPDATE pracownicy SET placa = placa + placa * @procent WHERE id_dzialu = @numer_dzialu
+            SET @suma = (
+                            SELECT COUNT(*)
+                            FROM test_pracownicy.dbo.pracownicy
+                            WHERE id_dzialu = @numer_dzialu
+                        )
+            UPDATE test_pracownicy.dbo.pracownicy
+            SET placa += placa * @procent
+            WHERE id_dzialu = @numer_dzialu
         END
 
     IF (@suma <> 0)
-        INSERT INTO dziennik
+        INSERT INTO test_pracownicy.dbo.dziennik
         VALUES ('pracownicy', GETDATE(), @suma,
-                'Wprowadzono podwyzke o ' + CONVERT(VARCHAR(4), @procent) + ' procent');
+                'Wprowadzono podwyzke o ' + CONVERT(VARCHAR(4), @procent) + ' %');
 END
 GO
 
 EXEC zmien_place 20, 11
 SELECT *
-FROM dziennik
+FROM test_pracownicy.dbo.dziennik
 GO
 
 -- PODPUNKT 8 --
 
+-- drop FUNCTION procentowy_budzet_firmy
+CREATE FUNCTION procentowy_budzet_firmy(@numer_dzialu INT) RETURNS DECIMAL(10, 2)
+BEGIN
+    DECLARE @suma_dzial INT, @suma INT, @laczna_suma INT;
+
+    SET @suma_dzial =
+            (SELECT sum(placa) FROM test_pracownicy.dbo.pracownicy WHERE id_dzialu = @numer_dzialu)
+    SET @suma = (SELECT sum(placa) FROM test_pracownicy.dbo.pracownicy)
+    SET @laczna_suma = @suma_dzial * 10000 / @suma * 0.01
+
+    RETURN @laczna_suma
+END
+GO
+
+SELECT DISTINCT id_dzialu, dbo.procentowy_budzet_firmy(id_dzialu)
+FROM test_pracownicy.dbo.pracownicy
+GO
 
 -- PODPUNKT 9 --
+CREATE TRIGGER do_archiwum
+    ON test_pracownicy.dbo.pracownicy
+    FOR DELETE AS
+BEGIN
+    ROLLBACK
+    INSERT INTO test_pracownicy.dbo.prac_archiw
+    SELECT nr_akt, nazwisko, stanowisko, kierownik, data_zatr, data_zwol, placa, dod_funkcyjny,
+           prowizja, id_dzialu
+    FROM deleted
 
+    INSERT INTO test_pracownicy.dbo.dziennik
+    VALUES ('pracownicy', getdate(), 1,
+            'Zwolniono pracownika numer: ' +
+            convert(VARCHAR(4), (SELECT nr_akt FROM deleted)))
+END;
+GO
+
+DELETE
+FROM test_pracownicy.dbo.pracownicy
+WHERE nr_akt = 9731
+
+SELECT *
+FROM test_pracownicy.dbo.dziennik;
+GO
