@@ -13,7 +13,7 @@ SELECT * FROM wydawnictwa;
 
 SELECT * FROM wypozyczenia
 
--- PODPUNKT 1 --
+-- PODPUNKT 1. Przepisz i wykonaj poszczególne bloki. Sprawdź rezultaty wykonania. Część bloków działa w oparciu o baze biblioteka (skrypty: biblioteka_schemat.sql oraz biblioteka_dane.sql). --
 DECLARE @x INT, @s VARCHAR(10)
 
 SET @x = 10
@@ -22,6 +22,7 @@ SET @s = 'napis'
 PRINT @x + 2
 PRINT @s
 
+-- Z którego wiersza zostaną przepisane dane? --
 DECLARE @imiep VARCHAR(20), @nazwiskop VARCHAR(20)
 SELECT @imiep = imie, @nazwiskop = nazwisko
 FROM pracownicy
@@ -30,7 +31,7 @@ PRINT @imiep + ' ' + @nazwiskop
 
 -- ODP. Z WIERSZA OSTATNIEJ OSOBY W BAZIE
 
--- PODPUNKT 2 --
+-- PODPUNKT 2. Co zostanie zwrócone? --
 DECLARE @imiep VARCHAR(20), @nazwiskop VARCHAR(20)
 SET @imiep = 'Teofil'
 SET @nazwiskop = 'Szczerbaty'
@@ -53,7 +54,7 @@ WHERE id = 20
 PRINT @imiep + ' ' + @nazwiskop
 -- ODP. BAZA DANYCH NIE POSIADA 20 OSOBY WIEC ZOSTANIE WYPISANE TEOFIL SZCZERBATY
 
--- PODPUNKT 3 --
+-- PODPUNKT 3. WAITFOR --
 CREATE TABLE liczby (
     licz1 INT,
     czas  DATETIME DEFAULT getdate()
@@ -75,7 +76,7 @@ VALUES (@x + 2);
 SELECT *
 FROM liczby;
 
--- PODPUNKT 4 --
+-- PODPUNKT 4. IF..ELSE --
 IF exists(SELECT *
           FROM wypozyczenia)
     PRINT ('Byly wyporzyczania')
@@ -83,7 +84,7 @@ ELSE
     PRINT ('Nie bylo zadnych wypozyczen')
 
 
--- PODPUNKT 5 --
+-- PODPUNKT 5. WHILE --
 DECLARE @y INT
 SET @y = 0
 WHILE (@y < 10)
@@ -93,7 +94,7 @@ WHILE (@y < 10)
         SET @y = @y + 1
     END
 
--- PODPUNKT 6 --
+-- PODPUNKT 6. CASE --
 SELECT tytul AS tytulk, cena AS cenak,
        [cena jest]=CASE
                        WHEN cena < 20.00 THEN 'Niska'
@@ -103,17 +104,17 @@ SELECT tytul AS tytulk, cena AS cenak,
            END
 FROM ksiazki
 
--- PODPUNKT 7 --
+-- PODPUNKT 7. NULLIF --
 SELECT avg(nullif(year(getdate()) - year(data_ur), 0)) AS [srednia wiek],
        min(nullif(year(getdate()) - year(data_ur), 0)) AS [wiek minimalny],
        max(nullif(year(getdate()) - year(data_ur), 0)) AS [wiek maksymalny]
 FROM czytelnicy
 
--- PODPUNKT 8 --
+-- PODPUNKT 8. ISNULL --
 SELECT nazwa, ISNULL(telefon, 123 - 456 - 789) AS telefon
 FROM wydawnictwa
 
--- PODPUNKT 9 --
+-- PODPUNKT 9. Komunikaty o błędzie --
 RAISERROR (21000,10,1)
 PRINT @@error
 
@@ -126,7 +127,7 @@ PRINT @@error
 RAISERROR ('Ala ma kota',11,1)
 PRINT @@error
 
--- PODPUNKT 10 --
+-- PODPUNKT 10. Daty --
 DECLARE @d1 DATETIME, @d2 DATETIME
 SET @d1 = '20091020'
 SET @d2 = '20091025'
