@@ -1,3 +1,49 @@
 -- AUTORZY: --
 -- MICHAŁ KIDAWA 216796 --
 -- KAMIL KOWALEWSKI 216806 --
+
+
+-- ZAPYTANIE 1 --
+
+
+-- ZAPYTANIE 2 --
+
+
+-- ZAPYTANIE 3 --
+
+
+-- ZAPYTANIE 4 --
+
+
+-- ZAPYTANIE 5 --
+
+
+-- ZAPYTANIE 6 --
+
+
+-- ZAPYTANIE 7 --
+
+
+-- ZAPYTANIE 8 --
+
+
+-- ZAPYTANIE 9 --
+
+
+-- ZAPYTANIE 10 --
+
+
+-- ZAPYTANIE 11 --
+
+
+-- ZAPYTANIE 12 --
+
+
+-- ZAPYTANIE 13 --
+
+
+-- ZAPYTANIE 14 --
+
+
+-- ZAPYTANIE 15 --
+

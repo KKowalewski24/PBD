@@ -1,0 +1,31 @@
+-- AUTORZY: --
+-- MICHAŁ KIDAWA 216796 --
+-- KAMIL KOWALEWSKI 216806 --
+
+
+-- PROCEDURA 1 --
+
+
+-- PROCEDURA 2 --
+
+
+-- PROCEDURA 3 --
+
+
+-- PROCEDURA 4 --
+
+
+-- PROCEDURA 5 --
+
+
+-- FUNKCJA 1 --
+
+
+-- WYZWALACZ 1 --
+
+
+-- WYZWALACZ 2 --
+
+
+-- WYZWALACZ 3 --
+
