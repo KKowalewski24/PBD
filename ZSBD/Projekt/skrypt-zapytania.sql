@@ -225,47 +225,48 @@ GROUP BY nazwa
 /*
 -- SPIS WYWOLAN PROCEDUR I FUNKCJI
 
--- 1.
--- 2.
--- 3.
--- 4.
--- 5.
--- 6.
--- 7.
--- 8.
+-- 1. przenosi archwailne rezerwacje do tabeli byle_rezerwacje
+-- 2. usuwa konkretnego (wskazanego przez numer przy wywolaniu) pracownika z tabeli pracownicy
+-- 3. poprawia rejestracje, ktore nie byly poprawnie zarejestwoane (zbyt duza liczba osob) oraz
+        drukuje komunikat, które z nich są niepoprawne
+-- 4. najczesciej rezerwowany pokoj na danym pietrze
+-- 5. oplaty dla pracownikow w danym miesiacu z danego roku
+
+-- 1. oblicza cenę danej rezerwacji
+-- 2. sprawdzenie czy pokoj jest wolny w danym czasie
+
  */
 ------------------------------------------------------------
 
--- Proceudra #1 - przenosi archwailne rezerwacje do tabeli byle_rezerwacje
-
+-- PROCEDURA 1 --
 EXEC rezerwacje_archiwalne
 
--- Proceudra #2 - usuwa konkretnego (wskazanego przez numer przy wywolaniu) pracownika z tabeli pracownicy
-
+-- PROCEDURA 2 --
 EXEC usun_pracownika 10
 EXEC usun_pracownika 12
 EXEC usun_pracownika 14
 
--- Procedura #3 - poprawia rejestracje, ktore nie byly poprawnie zarejestwoane (zbyt duza liczba osob) oraz drukuje komunikat, które z nich są niepoprawne
+-- PROCEDURA 3 --
 EXEC poprawnosc_rejestracji_osoby
 
---Procedura #4 - najczesciej rezerwowany pokoj na danym pietrze
+-- PROCEDURA 4 --
 EXEC najczestszy_pokoj 2
 
--- Procedura #5 - oplaty dla pracownikow w danym miesiacu z danego roku
+-- PROCEDURA 5 --
 EXEC oplaty '2018', 'Styczen'
 
 
--- Funkcja #1 - oblicza cenę danej rezerwacji
+-- PROCEDURA 1 --
 SELECT *, dbo.cena_rezerwacji(nr_rezerwacji) AS 'cena_rezerwacji'
 FROM rezerwacje
 
--- Funkcja #2 - sprawdzenie czy pokoj jest wolny w danym czasie
+-- PROCEDURA 2 --
 SELECT nr_pokoju,
        dbo.dostepnosc_pokoju(nr_pokoju, '2018/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2018)'
 FROM pokoje
 WHERE nr_pokoju LIKE '3%'
 
+-- FIXME ADD TRIGGERS CALL
 
 SELECT *
 FROM byli_pracownicy
