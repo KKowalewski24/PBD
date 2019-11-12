@@ -1,12 +1,36 @@
 -- AUTORZY: --
--- MICHAŁ KIDAWA 216796 --
+-- MICHAŁ KIDAWA    216796 --
 -- KAMIL KOWALEWSKI 216806 --
 
+------------------------------------------------------------
+/*
+-- SPIS PROCEDUR I FUNKCJI
+
+-- PROCEDURY
+-- 1. przenosi archwailne rezerwacje do tabeli byle_rezerwacje
+-- 2. usuwa konkretnego (wskazanego przez numer przy wywolaniu) pracownika z tabeli pracownicy
+-- 3. poprawia rejestracje, ktore nie byly poprawnie zarejestwoane (zbyt duza liczba osob)
+        oraz drukuje komunikat, które z nich są niepoprawne
+-- 4. najczesciej rezerwowany pokoj na danym pietrze
+-- 5. oplaty dla pracownikow w danym miesiacu z danego roku
+
+-- FUNKCJE
+-- 1. oblicza cenę danej rezerwacji
+-- 2. sprawdzenie czy pokoj jest wolny w danym czasie
+
+-- WYZWALACZE
+-- 1. po zarchiwizowaniu wypozyczenia sprawdzane jest, czy klient nie awansowal do nowego typu
+-- 2. rozpatrywanie dodawanych rezerwacji i akcetowanie tylko tych o dostepnych pokojach w zadanym czasie
+-- 3. podczas rezerwacji proponuje lepsze pokoje które lepiej spełniają wymagania (posiadają
+        przynajmniej te same cechy,
+
+ */
+------------------------------------------------------------
 
 USE hotel
 GO
 
--- Proceudra #1 - przenosi archwailne rezerwacje do tabeli byle_rezerwacje
+-- PROCEDURA 1 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'rezerwacje_archiwalne')
@@ -27,7 +51,7 @@ END
 GO
 
 
--- Proceudra #2 - usuwa konkretnego (wskazanego przez numer przy wywolaniu) pracownika z tabeli pracownicy
+-- PROCEDURA 2 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'usun_pracownika')
@@ -44,7 +68,7 @@ END
 GO
 
 
--- Procedura #3 - poprawia rejestracje, ktore nie byly poprawnie zarejestwoane (zbyt duza liczba osob) oraz drukuje komunikat, które z nich są niepoprawne
+-- PROCEDURA 3 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'poprawnosc_rejestracji_osoby')
@@ -80,7 +104,7 @@ BEGIN
 END
 GO
 
---Procedura #4 - najczesciej rezerwowany pokoj na danym pietrze
+-- PROCEDURA 4 --
 
 IF exists(SELECT 1
           FROM sysobjects
@@ -112,7 +136,7 @@ BEGIN
 END
 GO
 
--- Procedura #5 - oplaty dla pracownikow w danym miesiacu z danego roku
+-- PROCEDURA 5 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'oplaty')
@@ -164,7 +188,7 @@ END
 GO
 
 
--- Funkcja #1 - oblicza cenę danej rezerwacji
+-- FUNKCJA 1 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'cena_rezerwacji')
@@ -235,7 +259,7 @@ BEGIN
 END
 GO
 
--- Funkcja #2 - sprawdzenie czy pokoj jest wolny w danym czasie
+-- FUNKCJA 2 --
 IF exists(SELECT 1
           FROM sysobjects
           WHERE name = 'dostepnosc_pokoju')
@@ -268,7 +292,7 @@ BEGIN
 END
 GO
 
--- Wyzwalacz #1 - po zarchiwizowaniu wypozyczenia sprawdzane jest, czy klient nie awansowal do nowego typu
+-- WYZWALACZ 1 --
 IF exists(SELECT 1
           FROM sysobjects
           WHERE name = 'awans_klienta')
@@ -314,7 +338,7 @@ END
 GO
 
 
--- Wyzwalacz #2 - rozpatrywanie dodawanych rezerwacji i akcetowanie tylko tych o dostepnych pokojach w zadanym czasie
+-- WYZWALACZ 2 --
 IF exists(SELECT 1
           FROM sysobjects
           WHERE name = 'autoryzacja_rezerwacji')
@@ -356,7 +380,7 @@ END
 GO
 
 
--- Wyzwalacz #3 - podczas rezerwacji proponuje lepsze pokoje które lepiej spełniają wymagania (posiadają przynajmniej te same cechy,
+-- WYZWALACZ 3 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'tansze_pokoje')
