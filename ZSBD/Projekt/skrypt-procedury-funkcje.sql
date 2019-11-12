@@ -7,7 +7,7 @@
 -- SPIS PROCEDUR I FUNKCJI
 
 -- PROCEDURY
--- 1. przenosi archwailne rezerwacje do tabeli byle_rezerwacje
+-- 1. przenosi archwailne rezerwacje do tabeli rezerwacje_hist
 -- 2. usuwa konkretnego (wskazanego przez numer przy wywolaniu) pracownika z tabeli pracownicy
 -- 3. poprawia rejestracje, ktore nie byly poprawnie zarejestwoane (zbyt duza liczba osob)
         oraz drukuje komunikat, które z nich są niepoprawne
@@ -40,13 +40,13 @@ GO
 CREATE PROCEDURE rezerwacje_archiwalne
 AS
 BEGIN
-    INSERT INTO byle_rezerwacje
-    SELECT nr_rezerwacji, nr_klienta, nr_pokoju, ile_osob, poczatek_rezerwacji,
-           DATEADD(DAY, dni, poczatek_rezerwacji)
+    INSERT INTO rezerwacje_hist
+    SELECT rezerwacja_nr, klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji,
+           DATEADD(DAY, liczba_dni, poczatek_rezerwacji)
     FROM rezerwacje
-    WHERE DAY(GETDATE()) > DAY(poczatek_rezerwacji) + dni
+    WHERE DAY(GETDATE()) > DAY(poczatek_rezerwacji) + liczba_dni
 
-    DELETE FROM rezerwacje WHERE DAY(GETDATE()) > DAY(poczatek_rezerwacji) + dni
+    DELETE FROM rezerwacje WHERE DAY(GETDATE()) > DAY(poczatek_rezerwacji) + liczba_dni
 END
 GO
 
@@ -61,9 +61,9 @@ GO
 CREATE PROCEDURE usun_pracownika(@numer INT)
 AS
 BEGIN
-    UPDATE pracownicy SET data_zwolnienia = GETDATE() WHERE nr_pracownika = @numer
-    INSERT INTO byli_pracownicy SELECT * FROM pracownicy WHERE nr_pracownika = @numer
-    DELETE FROM pracownicy WHERE nr_pracownika = @numer
+    UPDATE pracownicy SET data_zwolnienia = GETDATE() WHERE pracownik_nr = @numer
+    INSERT INTO pracownicy_hist SELECT * FROM pracownicy WHERE pracownik_nr = @numer
+    DELETE FROM pracownicy WHERE pracownik_nr = @numer
 END
 GO
 
@@ -78,7 +78,7 @@ GO
 CREATE PROCEDURE poprawnosc_rejestracji_osoby
 AS
 BEGIN
-    DECLARE kursor CURSOR FOR SELECT nr_rezerwacji, nr_pokoju, ile_osob FROM rezerwacje
+    DECLARE kursor CURSOR FOR SELECT rezerwacja_nr, pokoj_nr, liczba_osob FROM rezerwacje
 
     DECLARE @nr_r INT, @nr_p INT, @ile INT, @ilosc INT
 
@@ -87,14 +87,14 @@ BEGIN
 
     WHILE @@FETCH_STATUS = 0
         BEGIN
-            SET @ilosc = (SELECT ilosc_osob FROM pokoje WHERE @nr_p = nr_pokoju)
+            SET @ilosc = (SELECT liczba_osob FROM pokoje WHERE @nr_p = pokoj_nr)
 
             IF (@ile > @ilosc)
                 BEGIN
                     PRINT 'Poprawiam ilosc osob w rezerwacji ' + CONVERT(VARCHAR(4), @nr_r) +
                           '(pokoj ' + CONVERT(VARCHAR(3), @nr_p) + ' z ' +
                           CONVERT(VARCHAR(5), @ile) + ' na ' + CONVERT(VARCHAR(1), @ilosc) + ')'
-                    UPDATE rezerwacje SET ile_osob = @ilosc WHERE nr_rezerwacji = @nr_r
+                    UPDATE rezerwacje SET liczba_osob = @ilosc WHERE rezerwacja_nr = @nr_r
                 END
             FETCH NEXT FROM kursor INTO @nr_r, @nr_p, @ile
         END
@@ -116,18 +116,18 @@ CREATE PROCEDURE najczestszy_pokoj(@pietro INT)
 AS
 BEGIN
     DECLARE @pokoj INT
-    SELECT @pokoj = nr_pokoju
-    FROM byle_rezerwacje
-    WHERE nr_pokoju / 100 = @pietro
-    GROUP BY nr_pokoju
-    HAVING count(nr_pokoju) =
+    SELECT @pokoj = pokoj_nr
+    FROM rezerwacje_hist
+    WHERE pokoj_nr / 100 = @pietro
+    GROUP BY pokoj_nr
+    HAVING count(pokoj_nr) =
            (
                SELECT
                TOP 1
-               count(nr_pokoju) AS 'wystapienia'
-               FROM byle_rezerwacje
-               WHERE nr_pokoju / 100 = @pietro
-               GROUP BY nr_pokoju
+               count(pokoj_nr) AS 'wystapienia'
+               FROM rezerwacje_hist
+               WHERE pokoj_nr / 100 = @pietro
+               GROUP BY pokoj_nr
                ORDER BY wystapienia DESC
            )
 
@@ -165,7 +165,7 @@ BEGIN
     CLOSE kursor
     DEALLOCATE kursor
 
-    DECLARE kursor CURSOR FOR SELECT placa, data_zatrudnienia, data_zwolnienia FROM byli_pracownicy
+    DECLARE kursor CURSOR FOR SELECT placa, data_zatrudnienia, data_zwolnienia FROM pracownicy_hist
     OPEN kursor
     FETCH NEXT FROM kursor INTO @placa, @data_zatrudnienia, @data_zwolnienia
 
@@ -201,28 +201,28 @@ AS
 BEGIN
     DECLARE @suma INT
     SET @suma = 0
-    IF EXISTS(SELECT nr_rezerwacji FROM rezerwacje WHERE nr_rezerwacji = @nr)
+    IF EXISTS(SELECT rezerwacja_nr FROM rezerwacje WHERE rezerwacja_nr = @nr)
         BEGIN
             SET @suma += ((
                               SELECT cena
                               FROM rezerwacje AS r, pokoje AS p
-                              WHERE r.nr_rezerwacji = @nr
-                                AND r.nr_pokoju = p.nr_pokoju
+                              WHERE r.rezerwacja_nr = @nr
+                                AND r.pokoj_nr = p.pokoj_nr
                           ) *
-                          (SELECT dni FROM rezerwacje WHERE nr_rezerwacji = @nr))
+                          (SELECT liczba_dni FROM rezerwacje WHERE rezerwacja_nr = @nr))
 
             IF EXISTS(SELECT typ
                       FROM klienci AS k, rezerwacje AS r
                       WHERE typ = 2
-                        AND r.nr_klienta = k.nr_klienta
-                        AND r.nr_rezerwacji = @nr)
+                        AND r.klient_nr = k.klient_nr
+                        AND r.rezerwacja_nr = @nr)
                 SET @suma = @suma * 0.9
 
             IF EXISTS(SELECT typ
                       FROM klienci AS k, rezerwacje AS r
                       WHERE typ = 3
-                        AND r.nr_klienta = k.nr_klienta
-                        AND r.nr_rezerwacji = @nr)
+                        AND r.klient_nr = k.klient_nr
+                        AND r.rezerwacja_nr = @nr)
                 SET @suma = @suma * 0.8
 
             RETURN @suma
@@ -231,28 +231,28 @@ BEGIN
     ELSE
         SET @suma += ((
                           SELECT cena
-                          FROM byle_rezerwacje AS br, pokoje AS p
-                          WHERE br.nr_rezerwacji = @nr
-                            AND br.nr_pokoju = p.nr_pokoju
+                          FROM rezerwacje_hist AS br, pokoje AS p
+                          WHERE br.rezerwacja_nr = @nr
+                            AND br.pokoj_nr = p.pokoj_nr
                       ) *
                       (
                           SELECT DATEDIFF(DAY, poczatek_rezerwacji, koniec_rezerwacji)
-                          FROM byle_rezerwacje
-                          WHERE nr_rezerwacji = @nr
+                          FROM rezerwacje_hist
+                          WHERE rezerwacja_nr = @nr
                       ))
 
     IF EXISTS(SELECT typ
-              FROM klienci AS k, byle_rezerwacje AS br
+              FROM klienci AS k, rezerwacje_hist AS br
               WHERE typ = 2
-                AND br.nr_klienta = k.nr_klienta
-                AND br.nr_rezerwacji = @nr)
+                AND br.klient_nr = k.klient_nr
+                AND br.rezerwacja_nr = @nr)
         SET @suma = @suma * 0.9
 
     IF EXISTS(SELECT typ
-              FROM klienci AS k, byle_rezerwacje AS br
+              FROM klienci AS k, rezerwacje_hist AS br
               WHERE typ = 3
-                AND br.nr_klienta = k.nr_klienta
-                AND br.nr_rezerwacji = @nr)
+                AND br.klient_nr = k.klient_nr
+                AND br.rezerwacja_nr = @nr)
         SET @suma = @suma * 0.8
 
     RETURN @suma
@@ -274,16 +274,18 @@ BEGIN
         (
             SELECT *
             FROM rezerwacje
-            WHERE @pokoj = nr_pokoju
+            WHERE @pokoj = pokoj_nr
               AND (
                     (@poczatek >= poczatek_rezerwacji AND
-                     @poczatek <= dateadd(DAY, dni, poczatek_rezerwacji))
+                     @poczatek <= dateadd(DAY, liczba_dni, poczatek_rezerwacji))
                     OR
                     (dateadd(DAY, @ile_dni, @poczatek) >= poczatek_rezerwacji AND
-                     dateadd(DAY, @ile_dni, @poczatek) <= dateadd(DAY, dni, poczatek_rezerwacji))
+                     dateadd(DAY, @ile_dni, @poczatek) <=
+                     dateadd(DAY, liczba_dni, poczatek_rezerwacji))
                     OR
                     (@poczatek <= poczatek_rezerwacji AND
-                     dateadd(DAY, @ile_dni, @poczatek) >= dateadd(DAY, dni, poczatek_rezerwacji))
+                     dateadd(DAY, @ile_dni, @poczatek) >=
+                     dateadd(DAY, liczba_dni, poczatek_rezerwacji))
                 )
         )
         RETURN 0
@@ -301,7 +303,7 @@ GO
 
 
 CREATE TRIGGER awans_klienta
-    ON byle_rezerwacje
+    ON rezerwacje_hist
     AFTER INSERT
     AS
 BEGIN
@@ -311,25 +313,25 @@ BEGIN
     -------------------------------------------------------------------------------
 
     DECLARE awans CURSOR FOR
-        SELECT nr_klienta FROM inserted
+        SELECT klient_nr FROM inserted
     DECLARE @id INT, @ilosc_rezerwacji INT
     OPEN awans
     FETCH NEXT FROM awans INTO @id
     WHILE @@FETCH_STATUS = 0
         BEGIN
             SELECT @ilosc_rezerwacji = count(*)
-            FROM byle_rezerwacje
-            WHERE nr_klienta = @id
+            FROM rezerwacje_hist
+            WHERE klient_nr = @id
 
             IF @ilosc_rezerwacji > @gold
                 UPDATE klienci
                 SET typ = 3
-                WHERE nr_klienta = @id
+                WHERE klient_nr = @id
             ELSE
                 IF @ilosc_rezerwacji > @silver
                     UPDATE klienci
                     SET typ = 2
-                    WHERE nr_klienta = @id
+                    WHERE klient_nr = @id
             FETCH NEXT FROM awans INTO @id
         END
     CLOSE awans
@@ -351,28 +353,29 @@ CREATE TRIGGER autoryzacja_rezerwacji
     AS
 BEGIN
     DECLARE autoryzacja CURSOR FOR
-        SELECT nr_klienta, nr_pokoju, ile_osob, poczatek_rezerwacji, dni FROM inserted
-    DECLARE @klient INT, @pokoj INT, @ile_osob INT, @poczatek_rezerwacji DATE, @dni INT
+        SELECT klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni FROM inserted
+    DECLARE @klient INT, @pokoj INT, @liczba_osob INT, @poczatek_rezerwacji DATE, @liczba_dni INT
     OPEN autoryzacja
-    FETCH NEXT FROM autoryzacja INTO @klient, @pokoj, @ile_osob, @poczatek_rezerwacji, @dni
+    FETCH NEXT FROM autoryzacja INTO @klient, @pokoj, @liczba_osob, @poczatek_rezerwacji, @liczba_dni
     WHILE @@FETCH_STATUS = 0
         BEGIN
             BEGIN TRANSACTION
-                IF (dbo.dostepnosc_pokoju(@pokoj, @poczatek_rezerwacji, @dni) = 0)
+                IF (dbo.dostepnosc_pokoju(@pokoj, @poczatek_rezerwacji, @liczba_dni) = 0)
                     BEGIN
                         PRINT 'Err: Pokoj ' + convert(VARCHAR(3), @pokoj) +
                               ' jest zajety w żądanym okresie (od ' +
                               convert(VARCHAR(20), @poczatek_rezerwacji) + ' do ' +
-                              convert(VARCHAR(20), dateadd(DAY, @dni, @poczatek_rezerwacji)) + ')'
+                              convert(VARCHAR(20),
+                                      dateadd(DAY, @liczba_dni, @poczatek_rezerwacji)) + ')'
                         ROLLBACK
                     END
                 ELSE
                     BEGIN
                         INSERT INTO rezerwacje
-                        VALUES (@klient, @pokoj, @ile_osob, @poczatek_rezerwacji, @dni)
+                        VALUES (@klient, @pokoj, @liczba_osob, @poczatek_rezerwacji, @liczba_dni)
                         COMMIT
                     END
-                FETCH NEXT FROM autoryzacja INTO @klient, @pokoj, @ile_osob, @poczatek_rezerwacji, @dni
+                FETCH NEXT FROM autoryzacja INTO @klient, @pokoj, @liczba_osob, @poczatek_rezerwacji, @liczba_dni
         END
     CLOSE autoryzacja
     DEALLOCATE autoryzacja
@@ -392,11 +395,12 @@ CREATE TRIGGER tansze_pokoje
     FOR INSERT
     AS
 BEGIN
-    DECLARE @nr_p INT, @il_o INT, @cena INT, @c_w BIT, @c_s BIT, @nr_r INT = (SELECT i.nr_rezerwacji FROM inserted AS i)
+    DECLARE @nr_p INT, @il_o INT, @cena INT, @c_w BIT, @c_s BIT, @nr_r INT = (SELECT i.rezerwacja_nr FROM inserted AS i)
 
     PRINT ' Rezerwacja ' + CONVERT(VARCHAR(5), @nr_r)
 
-    DECLARE kursor CURSOR FOR SELECT nr_pokoju, ilosc_osob, cena, czy_wanna, czy_sejf FROM pokoje
+    DECLARE kursor CURSOR FOR SELECT pokoj_nr, liczba_osob, cena, czy_jest_wanna, czy_jest_sejf
+                              FROM pokoje
     OPEN kursor
     FETCH NEXT FROM kursor INTO @nr_p, @il_o, @cena, @c_w, @c_s
 
@@ -405,15 +409,15 @@ BEGIN
             DECLARE @cceennaa INT = (
                                         SELECT p.cena
                                         FROM pokoje AS p, inserted AS i
-                                        WHERE i.nr_pokoju = p.nr_pokoju
+                                        WHERE i.pokoj_nr = p.pokoj_nr
                                     )
 
             IF ((@cena <= @cceennaa) AND (@nr_p NOT IN (
-                                                           SELECT r.nr_pokoju
+                                                           SELECT r.pokoj_nr
                                                            FROM rezerwacje AS r, inserted AS i
                                                            WHERE ((i.poczatek_rezerwacji >
-                                                                   DATEADD(DAY, r.dni, r.poczatek_rezerwacji)) OR
-                                                                  (DATEADD(DAY, i.dni, i.poczatek_rezerwacji) <
+                                                                   DATEADD(DAY, r.liczba_dni, r.poczatek_rezerwacji)) OR
+                                                                  (DATEADD(DAY, i.liczba_dni, i.poczatek_rezerwacji) <
                                                                    r.poczatek_rezerwacji))
                                                        )))
                 BEGIN
@@ -424,9 +428,9 @@ BEGIN
                                     CONVERT(VARCHAR(5), (@cceennaa - @cena))
 
                     IF (@il_o < (
-                                    SELECT p.ilosc_osob
+                                    SELECT p.liczba_osob
                                     FROM pokoje AS p, inserted AS i
-                                    WHERE i.nr_pokoju = p.nr_pokoju
+                                    WHERE i.pokoj_nr = p.pokoj_nr
                                 ))
                         BEGIN
                             IF @opis <> ''
@@ -437,9 +441,9 @@ BEGIN
 
 
                     IF (@c_s < (
-                                   SELECT p.czy_sejf
+                                   SELECT p.czy_jest_sejf
                                    FROM pokoje AS p, inserted AS i
-                                   WHERE i.nr_pokoju = p.nr_pokoju
+                                   WHERE i.pokoj_nr = p.pokoj_nr
                                ))
                         BEGIN
                             IF @opis <> ''
@@ -450,9 +454,9 @@ BEGIN
 
 
                     IF (@c_w < (
-                                   SELECT p.czy_wanna
+                                   SELECT p.czy_jest_wanna
                                    FROM pokoje AS p, inserted AS i
-                                   WHERE i.nr_pokoju = p.nr_pokoju
+                                   WHERE i.pokoj_nr = p.pokoj_nr
                                ))
                         BEGIN
                             IF @opis <> ''

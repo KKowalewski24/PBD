@@ -28,28 +28,28 @@ GO
 
 -- TABELA 1 --
 CREATE TABLE baza_hotel.dbo.miasta (
-    nr_miasta INT IDENTITY (1,1),
+    miasto_nr INT IDENTITY (1,1),
     nazwa     VARCHAR(25) NOT NULL,
 
-    CONSTRAINT miasta_kg PRIMARY KEY (nr_miasta)
+    CONSTRAINT miasta_klucz_glowny PRIMARY KEY (miasto_nr)
 );
 GO
 
 -- TABELA 2 --
 CREATE TABLE baza_hotel.dbo.pokoje (
-    nr_pokoju  INT   NOT NULL,
-    ilosc_osob INT   NOT NULL,
-    cena       MONEY NOT NULL,
-    czy_wanna  BIT,
-    czy_sejf   BIT,
+    pokoj_nr       INT   NOT NULL,
+    liczba_osob    INT   NOT NULL,
+    cena           MONEY NOT NULL,
+    czy_jest_wanna BIT,
+    czy_jest_sejf  BIT,
 
-    CONSTRAINT pokoje_kg PRIMARY KEY (nr_pokoju)
+    CONSTRAINT pokoje_klucz_glowny PRIMARY KEY (pokoj_nr)
 );
 GO
 
 -- TABELA 3 --
 CREATE TABLE baza_hotel.dbo.klienci (
-    nr_klienta     INT IDENTITY (1,1),
+    klient_nr      INT IDENTITY (1,1),
     imie           VARCHAR(25) NOT NULL,
     nazwisko       VARCHAR(25) NOT NULL,
     data_urodzenia DATE        NOT NULL,
@@ -58,8 +58,8 @@ CREATE TABLE baza_hotel.dbo.klienci (
     telefon        VARCHAR(15) NOT NULL,
     typ            INT         NOT NULL,
 
-    CONSTRAINT klienci_kg PRIMARY KEY (nr_klienta),
-    CONSTRAINT klienci_ko_miasto FOREIGN KEY (miasto) REFERENCES baza_hotel.dbo.miasta (nr_miasta),
+    CONSTRAINT klienci_klucz_glowny PRIMARY KEY (klient_nr),
+    CONSTRAINT klienci_miasto_klucz_obcy FOREIGN KEY (miasto) REFERENCES baza_hotel.dbo.miasta (miasto_nr),
 
     CONSTRAINT klienci_sprawdz_typ CHECK (typ <= 3 AND typ >= 1)
 );
@@ -67,16 +67,16 @@ GO
 
 -- TABELA 4 --
 CREATE TABLE baza_hotel.dbo.stanowiska (
-    nr_stanowiska   INT IDENTITY (1,1),
+    stanowisko_nr   INT IDENTITY (1,1),
     nazwa           VARCHAR(50) NOT NULL,
     placa_minimalna MONEY       NOT NULL,
 
-    CONSTRAINT stanowisko_kg PRIMARY KEY (nr_stanowiska)
+    CONSTRAINT stanowisko_klucz_glowny PRIMARY KEY (stanowisko_nr)
 )
 GO
 -- TABELA 5 --
 CREATE TABLE baza_hotel.dbo.pracownicy (
-    nr_pracownika     INT IDENTITY (1,1),
+    pracownik_nr      INT IDENTITY (1,1),
     imie              VARCHAR(25) NOT NULL,
     nazwisko          VARCHAR(25) NOT NULL,
     miasto            INT         NOT NULL,
@@ -85,21 +85,21 @@ CREATE TABLE baza_hotel.dbo.pracownicy (
     data_urodzenia    DATE        NOT NULL,
     data_zatrudnienia DATE        NOT NULL,
     data_zwolnienia   DATE,
-    nr_stanowiska     INT         NOT NULL,
+    stanowisko_nr     INT         NOT NULL,
     placa             MONEY       NOT NULL,
 
-    CONSTRAINT pracownicy_kg PRIMARY KEY (nr_pracownika),
-    CONSTRAINT pracownicy_ko_miasto FOREIGN KEY (miasto) REFERENCES baza_hotel.dbo.miasta (nr_miasta),
-    CONSTRAINT pracownicy_ko_stanowisko FOREIGN KEY (nr_stanowiska) REFERENCES baza_hotel.dbo.stanowiska (nr_stanowiska),
+    CONSTRAINT pracownicy_klucz_glowny PRIMARY KEY (pracownik_nr),
+    CONSTRAINT pracownicy_miasto_klucz_obcy FOREIGN KEY (miasto) REFERENCES baza_hotel.dbo.miasta (miasto_nr),
+    CONSTRAINT pracownicy_stanowisko_klucz_obcy FOREIGN KEY (stanowisko_nr) REFERENCES baza_hotel.dbo.stanowiska (stanowisko_nr),
 
     CONSTRAINT pracownicy_sprawdz_daty CHECK (data_urodzenia < data_zatrudnienia),
---	CONSTRAINT pracownicy_sprawdz_placa CHECK (placa >= (SELECT s.placa_minimalna FROM stanowiska AS s WHERE s.nr_stanowiska = nr_stanowiska))
+--	CONSTRAINT pracownicy_sprawdz_placa CHECK (placa >= (SELECT s.placa_minimalna FROM stanowiska AS s WHERE s.stanowisko_nr = stanowisko_nr))
 );
 GO
 
 -- TABELA 6 --
-CREATE TABLE baza_hotel.dbo.byli_pracownicy (
-    nr_pracownika     INT         NOT NULL,
+CREATE TABLE baza_hotel.dbo.pracownicy_hist (
+    pracownik_nr      INT         NOT NULL,
     imie              VARCHAR(25) NOT NULL,
     nazwisko          VARCHAR(25) NOT NULL,
     miasto            INT         NOT NULL,
@@ -108,43 +108,43 @@ CREATE TABLE baza_hotel.dbo.byli_pracownicy (
     data_urodzenia    DATE        NOT NULL,
     data_zatrudnienia DATE        NOT NULL,
     data_zwolnienia   DATE        NOT NULL,
-    nr_stanowiska     INT         NOT NULL,
+    stanowisko_nr     INT         NOT NULL,
     placa             MONEY       NOT NULL,
 
-    CONSTRAINT byli_pracownicy_kg PRIMARY KEY (nr_pracownika),
-    CONSTRAINT byli_pracownicy_ko_miasto FOREIGN KEY (miasto) REFERENCES baza_hotel.dbo.miasta (nr_miasta),
-    CONSTRAINT byli_pracownicy_ko_stanowisko FOREIGN KEY (nr_stanowiska) REFERENCES baza_hotel.dbo.stanowiska (nr_stanowiska)
+    CONSTRAINT pracownicy_hist_klucz_glowny PRIMARY KEY (pracownik_nr),
+    CONSTRAINT pracownicy_hist_miasto_klucz_obcy FOREIGN KEY (miasto) REFERENCES baza_hotel.dbo.miasta (miasto_nr),
+    CONSTRAINT pracownicy_hist_stanowisko_klucz_glowny FOREIGN KEY (stanowisko_nr) REFERENCES baza_hotel.dbo.stanowiska (stanowisko_nr)
 );
 GO
 
 -- TABELA 7 --
 CREATE TABLE baza_hotel.dbo.rezerwacje (
-    nr_rezerwacji       INT IDENTITY (1,1),
-    nr_klienta          INT  NOT NULL,
-    nr_pokoju           INT  NOT NULL,
-    ile_osob            INT  NOT NULL,
+    rezerwacja_nr       INT IDENTITY (1,1),
+    klient_nr           INT  NOT NULL,
+    pokoj_nr            INT  NOT NULL,
+    liczba_osob         INT  NOT NULL,
     poczatek_rezerwacji DATE NOT NULL,
-    dni                 INT  NOT NULL,
+    liczba_dni          INT  NOT NULL,
 
-    CONSTRAINT rezerwacje_kg PRIMARY KEY (nr_rezerwacji),
-    CONSTRAINT rezerwacje_ko_pokoj FOREIGN KEY (nr_pokoju) REFERENCES baza_hotel.dbo.pokoje (nr_pokoju),
-    CONSTRAINT rezerwacje_ko_klient FOREIGN KEY (nr_klienta) REFERENCES baza_hotel.dbo.klienci (nr_klienta),
+    CONSTRAINT rezerwacje_klucz_glowny PRIMARY KEY (rezerwacja_nr),
+    CONSTRAINT rezerwacje_pokoj_klucz_obcy FOREIGN KEY (pokoj_nr) REFERENCES baza_hotel.dbo.pokoje (pokoj_nr),
+    CONSTRAINT rezerwacje_klient_klucz_obcy FOREIGN KEY (klient_nr) REFERENCES baza_hotel.dbo.klienci (klient_nr),
 
---	CONSTRAINT rezerwacje_sprawdz_il_os CHECK (ile_osob <= (SELECT p.ilosc_osob FROM pokoje AS p WHERE p.nr_pokoju = nr_pokoju))
+--	CONSTRAINT rezerwacje_sprawdz_il_os CHECK (liczba_osob <= (SELECT p.liczba_osob FROM pokoje AS p WHERE p.pokoj_nr = pokoj_nr))
 );
 GO
 
 -- TABELA 8 --
-CREATE TABLE baza_hotel.dbo.byle_rezerwacje (
-    nr_rezerwacji       INT,
-    nr_klienta          INT  NOT NULL,
-    nr_pokoju           INT  NOT NULL,
-    ile_osob            INT  NOT NULL,
+CREATE TABLE baza_hotel.dbo.rezerwacje_hist (
+    rezerwacja_nr       INT,
+    klient_nr           INT  NOT NULL,
+    pokoj_nr            INT  NOT NULL,
+    liczba_osob         INT  NOT NULL,
     poczatek_rezerwacji DATE NOT NULL,
     koniec_rezerwacji   DATE NOT NULL,
 
-    CONSTRAINT byle_rezerwacje_kg PRIMARY KEY (nr_rezerwacji),
-    CONSTRAINT byle_rezerwacje_ko_pokoj FOREIGN KEY (nr_pokoju) REFERENCES baza_hotel.dbo.pokoje (nr_pokoju),
-    CONSTRAINT byle_rezerwacje_ko_klient FOREIGN KEY (nr_klienta) REFERENCES baza_hotel.dbo.klienci (nr_klienta),
+    CONSTRAINT rezerwacje_hist_klucz_glowny PRIMARY KEY (rezerwacja_nr),
+    CONSTRAINT rezerwacje_hist_pokoj_klucz_obcy FOREIGN KEY (pokoj_nr) REFERENCES baza_hotel.dbo.pokoje (pokoj_nr),
+    CONSTRAINT rezerwacje_hist_klient_klucz_obcy FOREIGN KEY (klient_nr) REFERENCES baza_hotel.dbo.klienci (klient_nr),
 );
 GO

@@ -38,19 +38,19 @@ GO
 -- ZAPYTANIE 1 --
 SELECT *, DATENAME(DW, poczatek_rezerwacji) AS dzien_rezerwacji,
        DATENAME(DW, koniec_rezerwacji) AS dzien_konca_rezerwacji
-FROM byle_rezerwacje
+FROM rezerwacje_hist
 WHERE (DATENAME(DW, poczatek_rezerwacji) = 'Monday')
   AND (DATENAME(DW, koniec_rezerwacji) = 'Monday' OR DATENAME(DW, koniec_rezerwacji) = 'Tuesday')
 
 -- ZAPYTANIE 2 --
-SELECT p.nr_pokoju,
-       (SELECT COUNT(*) FROM byle_rezerwacje AS br WHERE br.nr_pokoju = p.nr_pokoju) +
-       (SELECT COUNT(*) FROM rezerwacje AS r WHERE r.nr_pokoju = p.nr_pokoju) AS 'ilość rezerwacji'
+SELECT p.pokoj_nr,
+       (SELECT COUNT(*) FROM rezerwacje_hist AS br WHERE br.pokoj_nr = p.pokoj_nr) +
+       (SELECT COUNT(*) FROM rezerwacje AS r WHERE r.pokoj_nr = p.pokoj_nr) AS 'ilość rezerwacji'
 FROM pokoje AS p
-GROUP BY p.nr_pokoju
+GROUP BY p.pokoj_nr
 
 -- ZAPYTANIE 3 --
-SELECT nazwisko, nr_rezerwacji
+SELECT nazwisko, rezerwacja_nr
 FROM klienci AS k, rezerwacje AS r
 WHERE DATENAME(DW, poczatek_rezerwacji) =
       (
@@ -61,83 +61,83 @@ WHERE DATENAME(DW, poczatek_rezerwacji) =
           GROUP BY DATENAME(DW, poczatek_rezerwacji)
           ORDER BY COUNT(*) DESC
       )
-  AND r.nr_klienta = k.nr_klienta
+  AND r.klient_nr = k.klient_nr
 
 -- ZAPYTANIE 4 --
 SELECT DISTINCT x.imie, x.nazwisko, y.nazwisko AS 'współpracownik', s.nazwa AS 'stanowisko'
 FROM pracownicy x, pracownicy y, stanowiska s
-WHERE x.nr_stanowiska = y.nr_stanowiska
-  AND x.nr_pracownika <> y.nr_pracownika
-  AND x.nr_stanowiska = s.nr_stanowiska
-  AND y.nr_stanowiska = s.nr_stanowiska
+WHERE x.stanowisko_nr = y.stanowisko_nr
+  AND x.pracownik_nr <> y.pracownik_nr
+  AND x.stanowisko_nr = s.stanowisko_nr
+  AND y.stanowisko_nr = s.stanowisko_nr
   AND y.nazwisko LIKE '%k'
 
 -- ZAPYTANIE 5 --
 SELECT CONCAT(nazwa, ' liczba pracowników: ', COUNT(*), ' suma pensji: ', SUM(placa))
 FROM pracownicy AS p, stanowiska AS s
-WHERE p.nr_stanowiska = s.nr_stanowiska
+WHERE p.stanowisko_nr = s.stanowisko_nr
   AND ((YEAR(GETDATE()) - YEAR(data_urodzenia))) > 50
 GROUP BY nazwa
 
 
 -- ZAPYTANIE 6 --
-SELECT DISTINCT k.imie, k.nazwisko, k.nr_klienta
+SELECT DISTINCT k.imie, k.nazwisko, k.klient_nr
 FROM klienci AS k, miasta AS m, rezerwacje AS r, pokoje AS p
-WHERE k.miasto = m.nr_miasta
+WHERE k.miasto = m.miasto_nr
   AND (m.nazwa = 'Poznan' OR m.nazwa = 'Gdansk')
-  AND k.nr_klienta = r.nr_klienta
-  AND r.nr_pokoju = p.nr_pokoju
+  AND k.klient_nr = r.klient_nr
+  AND r.pokoj_nr = p.pokoj_nr
   AND p.cena > 800
-  AND k.nr_klienta IN
+  AND k.klient_nr IN
       (
-          SELECT DISTINCT kk.nr_klienta
-          FROM klienci AS kk, byle_rezerwacje AS bb, pokoje AS pp
-          WHERE kk.nr_klienta = bb.nr_klienta
-            AND bb.nr_pokoju = pp.nr_pokoju
+          SELECT DISTINCT kk.klient_nr
+          FROM klienci AS kk, rezerwacje_hist AS bb, pokoje AS pp
+          WHERE kk.klient_nr = bb.klient_nr
+            AND bb.pokoj_nr = pp.pokoj_nr
             AND pp.cena <= 800
       )
 
 -- ZAPYTANIE 7 --
-SELECT DISTINCT b.nr_pokoju
-FROM byle_rezerwacje AS b, klienci AS k
-WHERE b.nr_klienta = k.nr_klienta
+SELECT DISTINCT b.pokoj_nr
+FROM rezerwacje_hist AS b, klienci AS k
+WHERE b.klient_nr = k.klient_nr
   AND (k.typ = 2 OR k.typ = 3)
-  AND b.nr_pokoju NOT IN
-      (SELECT DISTINCT rr.nr_pokoju FROM rezerwacje AS rr)
+  AND b.pokoj_nr NOT IN
+      (SELECT DISTINCT rr.pokoj_nr FROM rezerwacje AS rr)
 
 -- ZAPYTANIE 8 --
-SELECT s.nazwa AS 'stanowisko', p.imie, p.nazwisko, p.nr_pracownika, p.placa
+SELECT s.nazwa AS 'stanowisko', p.imie, p.nazwisko, p.pracownik_nr, p.placa
 FROM pracownicy AS p, stanowiska AS s
-WHERE p.nr_stanowiska = s.nr_stanowiska
-  AND p.nr_pracownika IN
-      (SELECT TOP 1 pp.nr_pracownika FROM pracownicy AS pp WHERE p.nr_stanowiska = pp.nr_stanowiska)
+WHERE p.stanowisko_nr = s.stanowisko_nr
+  AND p.pracownik_nr IN
+      (SELECT TOP 1 pp.pracownik_nr FROM pracownicy AS pp WHERE p.stanowisko_nr = pp.stanowisko_nr)
 ORDER BY s.nazwa
 
 -- ZAPYTANIE 9 --
-SELECT DISTINCT k.imie, k.nazwisko, k.nr_klienta, m.nazwa AS 'miasto'
-FROM klienci AS k, miasta AS m, rezerwacje AS r, pokoje AS p, byle_rezerwacje AS b
-WHERE ((k.nr_klienta = r.nr_klienta AND r.nr_pokoju = p.nr_pokoju AND p.czy_sejf = 1 AND
-        p.czy_wanna = 0)
-    OR (k.nr_klienta = b.nr_klienta AND b.nr_pokoju = p.nr_pokoju AND p.czy_sejf = 1 AND
-        p.czy_wanna = 0))
-  AND k.miasto NOT IN (SELECT DISTINCT miasto FROM byli_pracownicy)
-  AND k.miasto = m.nr_miasta
+SELECT DISTINCT k.imie, k.nazwisko, k.klient_nr, m.nazwa AS 'miasto'
+FROM klienci AS k, miasta AS m, rezerwacje AS r, pokoje AS p, rezerwacje_hist AS b
+WHERE ((k.klient_nr = r.klient_nr AND r.pokoj_nr = p.pokoj_nr AND p.czy_jest_sejf = 1 AND
+        p.czy_jest_wanna = 0)
+    OR (k.klient_nr = b.klient_nr AND b.pokoj_nr = p.pokoj_nr AND p.czy_jest_sejf = 1 AND
+        p.czy_jest_wanna = 0))
+  AND k.miasto NOT IN (SELECT DISTINCT miasto FROM pracownicy_hist)
+  AND k.miasto = m.miasto_nr
 
 -- ZAPYTANIE 10 --
-SELECT DISTINCT r.nr_pokoju, COUNT(*) AS 'ilosc_rezerwacji'
+SELECT DISTINCT r.pokoj_nr, COUNT(*) AS 'ilosc_rezerwacji'
 FROM rezerwacje AS r, klienci AS k
-WHERE r.nr_klienta = k.nr_klienta
+WHERE r.klient_nr = k.klient_nr
   AND k.miasto <> 1
   AND k.miasto <> 2
-  AND r.nr_pokoju IN
+  AND r.pokoj_nr IN
       (
-          SELECT DISTINCT bb.nr_pokoju
-          FROM byle_rezerwacje AS bb, klienci AS kk, miasta AS mm
-          WHERE bb.nr_klienta = kk.nr_klienta
-            AND kk.miasto = mm.nr_miasta
-            AND (mm.nr_miasta = 1 OR mm.nr_miasta = 2)
+          SELECT DISTINCT bb.pokoj_nr
+          FROM rezerwacje_hist AS bb, klienci AS kk, miasta AS mm
+          WHERE bb.klient_nr = kk.klient_nr
+            AND kk.miasto = mm.miasto_nr
+            AND (mm.miasto_nr = 1 OR mm.miasto_nr = 2)
       )
-GROUP BY r.nr_pokoju
+GROUP BY r.pokoj_nr
 HAVING COUNT(*) = 1
 
 
@@ -149,35 +149,35 @@ GROUP BY typ
 -- ZAPYTANIE 12 --
 SELECT
 TOP 1
-nr_klienta
+klient_nr
 ,
 klienci.imie
 ,
 klienci.nazwisko
 ,
-klienci.nr_klienta
+klienci.klient_nr
 ,
 klienci.typ
 ,
 (
-    SELECT sum(dbo.cena_rezerwacji(nr_rezerwacji))
-    FROM byle_rezerwacje
-    WHERE byle_rezerwacje.nr_klienta = klienci.nr_klienta
+    SELECT sum(dbo.cena_rezerwacji(rezerwacja_nr))
+    FROM rezerwacje_hist
+    WHERE rezerwacje_hist.klient_nr = klienci.klient_nr
 ) AS 'suma należności'
 ,
 (
-    SELECT nr_pokoju
-    FROM byle_rezerwacje
-    WHERE nr_klienta = 2
-    GROUP BY nr_pokoju
-    HAVING count(nr_pokoju) =
+    SELECT pokoj_nr
+    FROM rezerwacje_hist
+    WHERE klient_nr = 2
+    GROUP BY pokoj_nr
+    HAVING count(pokoj_nr) =
            (
                SELECT
                TOP 1
-               count(nr_pokoju)
-               FROM byle_rezerwacje
-               WHERE nr_klienta = 2
-               GROUP BY nr_pokoju
+               count(pokoj_nr)
+               FROM rezerwacje_hist
+               WHERE klient_nr = 2
+               GROUP BY pokoj_nr
            )
 ) AS 'ulubiony pokoj'
 FROM klienci
@@ -186,46 +186,46 @@ ORDER BY [suma należności] DESC
 -- ZAPYTANIE 13 --
 SELECT
 TOP 1
-nr_pokoju
+pokoj_nr
 ,
 cena
 FROM pokoje
-WHERE nr_pokoju / 100 =
+WHERE pokoj_nr / 100 =
       (
-          SELECT nr_pokoju / 100 AS 'pietro'
-          FROM byle_rezerwacje
-          GROUP BY nr_pokoju / 100
-          HAVING count(nr_pokoju) =
+          SELECT pokoj_nr / 100 AS 'pietro'
+          FROM rezerwacje_hist
+          GROUP BY pokoj_nr / 100
+          HAVING count(pokoj_nr) =
                  (
                      SELECT
                      TOP 1
-                     count(nr_pokoju) AS 'liczba pokoi'
-                     FROM byle_rezerwacje
-                     GROUP BY nr_pokoju / 100
+                     count(pokoj_nr) AS 'liczba pokoi'
+                     FROM rezerwacje_hist
+                     GROUP BY pokoj_nr / 100
                      ORDER BY [liczba pokoi] DESC
                  )
       )
 
 
 -- ZAPYTANIE 14 --
-SELECT nr_pracownika, imie, nazwisko, nazwa
+SELECT pracownik_nr, imie, nazwisko, nazwa
 FROM pracownicy AS p, stanowiska AS s
-WHERE p.nr_stanowiska = s.nr_stanowiska
+WHERE p.stanowisko_nr = s.stanowisko_nr
   AND p.placa > (SELECT AVG(placa) FROM pracownicy)
-GROUP BY nr_pracownika, imie, nazwisko, nazwa, placa
+GROUP BY pracownik_nr, imie, nazwisko, nazwa, placa
 
 
 -- ZAPYTANIE 15 --
 SELECT nazwa, COUNT(*) AS 'ilość pracowników'
 FROM pracownicy AS p, stanowiska AS s
-WHERE p.nr_stanowiska = s.nr_stanowiska
+WHERE p.stanowisko_nr = s.stanowisko_nr
 GROUP BY nazwa
 
 ------------------------------------------------------------
 /*
 -- SPIS WYWOLAN PROCEDUR I FUNKCJI
 
--- 1. przenosi archwailne rezerwacje do tabeli byle_rezerwacje
+-- 1. przenosi archwailne rezerwacje do tabeli rezerwacje_hist
 -- 2. usuwa konkretnego (wskazanego przez numer przy wywolaniu) pracownika z tabeli pracownicy
 -- 3. poprawia rejestracje, ktore nie byly poprawnie zarejestwoane (zbyt duza liczba osob) oraz
         drukuje komunikat, które z nich są niepoprawne
@@ -257,15 +257,15 @@ EXEC oplaty '2018', 'Styczen'
 
 
 -- PROCEDURA 1 --
-SELECT *, dbo.cena_rezerwacji(nr_rezerwacji) AS 'cena_rezerwacji'
+SELECT *, dbo.cena_rezerwacji(rezerwacja_nr) AS 'cena_rezerwacji'
 FROM rezerwacje
 
 -- PROCEDURA 2 --
-SELECT nr_pokoju,
-       dbo.dostepnosc_pokoju(nr_pokoju, '2018/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2018)'
+SELECT pokoj_nr,
+       dbo.dostepnosc_pokoju(pokoj_nr, '2018/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2018)'
 FROM pokoje
-WHERE nr_pokoju LIKE '3%'
+WHERE pokoj_nr LIKE '3%'
 
 SELECT *
-FROM byli_pracownicy
+FROM pracownicy_hist
 GO
