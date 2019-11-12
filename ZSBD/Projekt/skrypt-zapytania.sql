@@ -32,7 +32,7 @@
 */
 ------------------------------------------------------------
 
-USE hotel
+USE baza_hotel
 GO
 
 -- ZAPYTANIE 1 --
@@ -265,8 +265,6 @@ SELECT nr_pokoju,
        dbo.dostepnosc_pokoju(nr_pokoju, '2018/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2018)'
 FROM pokoje
 WHERE nr_pokoju LIKE '3%'
-
--- FIXME ADD TRIGGERS CALL
 
 SELECT *
 FROM byli_pracownicy
