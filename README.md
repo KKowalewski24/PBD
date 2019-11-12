@@ -1,7 +1,9 @@
 # Microsoft SQL Server
 
 Zainstaluj SQL server 2017 developer - sam command line
+
 https://blog.jetbrains.com/datagrip/2016/06/21/connecting-datagrip-to-ms-sql-server/
+
 Musi zostać skonfigurowane w sqlserver configuration w sqlserver services wszystko running i automatic
 sqlserver network connection/protocols for mssqlserver -> tcp/ip enabled
 
