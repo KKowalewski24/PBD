@@ -179,7 +179,6 @@ FROM pracownicy
 GO
 
 
-
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
 VALUES ('12', '304', '3', '2019/7/28', '19');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)

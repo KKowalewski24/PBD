@@ -96,7 +96,6 @@ CREATE TABLE baza_hotel.dbo.pracownicy (
         REFERENCES baza_hotel.dbo.stanowiska (stanowisko_nr),
 
     CONSTRAINT pracownicy_sprawdz_daty CHECK (data_urodzenia < data_zatrudnienia),
---	CONSTRAINT pracownicy_sprawdz_placa CHECK (placa >= (SELECT s.placa_minimalna FROM stanowiska AS s WHERE s.stanowisko_nr = stanowisko_nr))
 );
 GO
 
@@ -136,8 +135,6 @@ CREATE TABLE baza_hotel.dbo.rezerwacje (
         REFERENCES baza_hotel.dbo.pokoje (pokoj_nr),
     CONSTRAINT rezerwacje_klient_klucz_obcy FOREIGN KEY (klient_nr)
         REFERENCES baza_hotel.dbo.klienci (klient_nr),
-
---	CONSTRAINT rezerwacje_sprawdz_il_os CHECK (liczba_osob <= (SELECT p.liczba_osob FROM pokoje AS p WHERE p.pokoj_nr = pokoj_nr))
 );
 GO
 
