@@ -181,305 +181,305 @@ GO
 
 
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('12', '304', '3', '2018/7/28', '19');
+VALUES ('12', '304', '3', '2019/7/28', '19');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('1', '107', '1', '2018/11/19', '16');
+VALUES ('1', '107', '1', '2019/11/19', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('14', '302', '4', '2018/6/23', '8');
+VALUES ('14', '302', '4', '2019/6/23', '8');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('15', '205', '2', '2018/5/29', '15');
+VALUES ('15', '205', '2', '2019/5/29', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('15', '303', '1', '2018/8/15', '12');
+VALUES ('15', '303', '1', '2019/8/15', '12');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('19', '200', '2', '2018/9/11', '5');
+VALUES ('19', '200', '2', '2019/9/11', '5');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('9', '109', '2', '2018/11/21', '18');
+VALUES ('9', '109', '2', '2019/11/21', '18');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('9', '200', '2', '2018/11/3', '14');
+VALUES ('9', '200', '2', '2019/11/3', '14');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('2', '300', '3', '2018/5/18', '5');
+VALUES ('2', '300', '3', '2019/5/18', '5');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('36', '305', '4', '2018/5/4', '18');
+VALUES ('36', '305', '4', '2019/5/4', '18');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('36', '203', '4', '2018/5/27', '9');
+VALUES ('36', '203', '4', '2019/5/27', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('17', '207', '1', '2018/11/10', '15');
+VALUES ('17', '207', '1', '2019/11/10', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('4', '108', '1', '2018/7/8', '6');
+VALUES ('4', '108', '1', '2019/7/8', '6');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('32', '109', '1', '2018/6/23', '9');
+VALUES ('32', '109', '1', '2019/6/23', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('38', '207', '3', '2018/5/12', '7');
+VALUES ('38', '207', '3', '2019/5/12', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('21', '202', '4', '2018/6/24', '5');
+VALUES ('21', '202', '4', '2019/6/24', '5');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('17', '100', '2', '2018/9/20', '10');
+VALUES ('17', '100', '2', '2019/9/20', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('16', '107', '4', '2018/4/21', '16');
+VALUES ('16', '107', '4', '2019/4/21', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('2', '301', '2', '2018/12/3', '15');
+VALUES ('2', '301', '2', '2019/12/3', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('10', '208', '3', '2018/2/12', '20');
+VALUES ('10', '208', '3', '2019/2/12', '20');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('29', '304', '4', '2018/12/27', '2');
+VALUES ('29', '304', '4', '2019/12/27', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('24', '200', '2', '2018/2/4', '10');
+VALUES ('24', '200', '2', '2019/2/4', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('23', '208', '1', '2018/8/23', '6');
+VALUES ('23', '208', '1', '2019/8/23', '6');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('19', '301', '4', '2018/8/17', '7');
+VALUES ('19', '301', '4', '2019/8/17', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('25', '204', '2', '2018/10/13', '11');
+VALUES ('25', '204', '2', '2019/10/13', '11');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('40', '204', '4', '2018/12/25', '7');
+VALUES ('40', '204', '4', '2019/12/25', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('36', '307', '3', '2018/8/26', '3');
+VALUES ('36', '307', '3', '2019/8/26', '3');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('38', '203', '1', '2018/8/29', '17');
+VALUES ('38', '203', '1', '2019/8/29', '17');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('5', '107', '2', '2018/5/22', '15');
+VALUES ('5', '107', '2', '2019/5/22', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('23', '205', '2', '2018/6/7', '15');
+VALUES ('23', '205', '2', '2019/6/7', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('15', '107', '1', '2018/9/2', '2');
+VALUES ('15', '107', '1', '2019/9/2', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('18', '203', '3', '2018/12/22', '11');
+VALUES ('18', '203', '3', '2019/12/22', '11');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('29', '209', '4', '2018/8/9', '8');
+VALUES ('29', '209', '4', '2019/8/9', '8');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('25', '109', '4', '2018/12/14', '7');
+VALUES ('25', '109', '4', '2019/12/14', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('9', '305', '3', '2018/12/12', '20');
+VALUES ('9', '305', '3', '2019/12/12', '20');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('17', '308', '1', '2018/7/10', '18');
+VALUES ('17', '308', '1', '2019/7/10', '18');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('8', '103', '4', '2018/11/5', '2');
+VALUES ('8', '103', '4', '2019/11/5', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('20', '204', '4', '2018/1/5', '8');
+VALUES ('20', '204', '4', '2019/1/5', '8');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('27', '102', '1', '2018/1/7', '14');
+VALUES ('27', '102', '1', '2019/1/7', '14');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('30', '100', '3', '2018/3/10', '16');
+VALUES ('30', '100', '3', '2019/3/10', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('4', '207', '1', '2018/2/26', '10');
+VALUES ('4', '207', '1', '2019/2/26', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('14', '301', '4', '2018/3/19', '16');
+VALUES ('14', '301', '4', '2019/3/19', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('10', '208', '2', '2018/2/22', '8');
+VALUES ('10', '208', '2', '2019/2/22', '8');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('16', '205', '2', '2018/8/12', '9');
+VALUES ('16', '205', '2', '2019/8/12', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('36', '302', '3', '2018/3/19', '16');
+VALUES ('36', '302', '3', '2019/3/19', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('20', '201', '3', '2018/8/10', '16');
+VALUES ('20', '201', '3', '2019/8/10', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('38', '200', '4', '2018/8/18', '7');
+VALUES ('38', '200', '4', '2019/8/18', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('28', '202', '4', '2018/4/22', '6');
+VALUES ('28', '202', '4', '2019/4/22', '6');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('27', '208', '2', '2018/3/6', '1');
+VALUES ('27', '208', '2', '2019/3/6', '1');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('32', '305', '4', '2018/2/3', '6');
+VALUES ('32', '305', '4', '2019/2/3', '6');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('1', '208', '3', '2018/7/17', '10');
+VALUES ('1', '208', '3', '2019/7/17', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('33', '201', '1', '2018/5/18', '7');
+VALUES ('33', '201', '1', '2019/5/18', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('24', '307', '2', '2018/8/29', '17');
+VALUES ('24', '307', '2', '2019/8/29', '17');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('5', '309', '1', '2018/11/30', '9');
+VALUES ('5', '309', '1', '2019/11/30', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('27', '307', '4', '2018/9/5', '17');
+VALUES ('27', '307', '4', '2019/9/5', '17');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('20', '301', '3', '2018/10/23', '20');
+VALUES ('20', '301', '3', '2019/10/23', '20');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('12', '200', '1', '2018/8/25', '19');
+VALUES ('12', '200', '1', '2019/8/25', '19');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('33', '101', '3', '2018/8/23', '4');
+VALUES ('33', '101', '3', '2019/8/23', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('2', '301', '2', '2018/7/20', '11');
+VALUES ('2', '301', '2', '2019/7/20', '11');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('22', '200', '1', '2018/5/3', '10');
+VALUES ('22', '200', '1', '2019/5/3', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('31', '209', '1', '2018/5/14', '16');
+VALUES ('31', '209', '1', '2019/5/14', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('40', '208', '3', '2018/5/25', '8');
+VALUES ('40', '208', '3', '2019/5/25', '8');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('11', '308', '3', '2018/1/3', '2');
+VALUES ('11', '308', '3', '2019/1/3', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('4', '205', '2', '2018/8/26', '9');
+VALUES ('4', '205', '2', '2019/8/26', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('2', '204', '1', '2018/10/20', '1');
+VALUES ('2', '204', '1', '2019/10/20', '1');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('3', '201', '1', '2018/7/29', '20');
+VALUES ('3', '201', '1', '2019/7/29', '20');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('19', '108', '4', '2018/5/17', '3');
+VALUES ('19', '108', '4', '2019/5/17', '3');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('31', '205', '4', '2018/11/9', '9');
+VALUES ('31', '205', '4', '2019/11/9', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('29', '307', '2', '2018/7/26', '9');
+VALUES ('29', '307', '2', '2019/7/26', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('36', '108', '4', '2018/2/7', '10');
+VALUES ('36', '108', '4', '2019/2/7', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('16', '102', '4', '2018/9/21', '10');
+VALUES ('16', '102', '4', '2019/9/21', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('11', '200', '4', '2018/11/29', '18');
+VALUES ('11', '200', '4', '2019/11/29', '18');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('23', '108', '4', '2018/10/13', '1');
+VALUES ('23', '108', '4', '2019/10/13', '1');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('10', '202', '4', '2018/7/14', '9');
+VALUES ('10', '202', '4', '2019/7/14', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('17', '303', '1', '2018/12/14', '3');
+VALUES ('17', '303', '1', '2019/12/14', '3');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('19', '203', '4', '2018/10/5', '20');
+VALUES ('19', '203', '4', '2019/10/5', '20');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('29', '109', '2', '2018/9/28', '19');
+VALUES ('29', '109', '2', '2019/9/28', '19');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('1', '107', '3', '2018/4/11', '4');
+VALUES ('1', '107', '3', '2019/4/11', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('2', '200', '2', '2018/2/4', '3');
+VALUES ('2', '200', '2', '2019/2/4', '3');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('5', '104', '2', '2018/5/20', '16');
+VALUES ('5', '104', '2', '2019/5/20', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('11', '209', '2', '2018/3/17', '4');
+VALUES ('11', '209', '2', '2019/3/17', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('19', '205', '1', '2018/5/14', '11');
+VALUES ('19', '205', '1', '2019/5/14', '11');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('31', '101', '2', '2018/9/15', '9');
+VALUES ('31', '101', '2', '2019/9/15', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('30', '109', '2', '2018/2/13', '18');
+VALUES ('30', '109', '2', '2019/2/13', '18');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('37', '203', '4', '2018/9/25', '21');
+VALUES ('37', '203', '4', '2019/9/25', '21');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('40', '306', '2', '2018/5/21', '4');
+VALUES ('40', '306', '2', '2019/5/21', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('2', '200', '3', '2018/1/8', '4');
+VALUES ('2', '200', '3', '2019/1/8', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('21', '308', '3', '2018/11/12', '1');
+VALUES ('21', '308', '3', '2019/11/12', '1');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('29', '102', '2', '2018/7/26', '16');
+VALUES ('29', '102', '2', '2019/7/26', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('20', '204', '3', '2018/8/13', '20');
+VALUES ('20', '204', '3', '2019/8/13', '20');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('19', '108', '3', '2018/6/5', '15');
+VALUES ('19', '108', '3', '2019/6/5', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('25', '205', '4', '2018/11/10', '7');
+VALUES ('25', '205', '4', '2019/11/10', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('24', '206', '4', '2018/5/15', '13');
+VALUES ('24', '206', '4', '2019/5/15', '13');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('24', '200', '1', '2018/1/17', '2');
+VALUES ('24', '200', '1', '2019/1/17', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('36', '201', '1', '2018/11/17', '20');
+VALUES ('36', '201', '1', '2019/11/17', '20');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('5', '307', '3', '2018/1/4', '17');
+VALUES ('5', '307', '3', '2019/1/4', '17');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('39', '206', '2', '2018/5/5', '15');
+VALUES ('39', '206', '2', '2019/5/5', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('24', '102', '4', '2018/6/10', '6');
+VALUES ('24', '102', '4', '2019/6/10', '6');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('34', '306', '4', '2018/10/4', '12');
+VALUES ('34', '306', '4', '2019/10/4', '12');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('14', '109', '3', '2018/7/11', '21');
+VALUES ('14', '109', '3', '2019/7/11', '21');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('12', '200', '1', '2018/12/7', '12');
+VALUES ('12', '200', '1', '2019/12/7', '12');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('15', '305', '2', '2018/2/21', '14');
+VALUES ('15', '305', '2', '2019/2/21', '14');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('26', '100', '4', '2018/5/21', '6');
+VALUES ('26', '100', '4', '2019/5/21', '6');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('7', '302', '3', '2018/3/17', '2');
+VALUES ('7', '302', '3', '2019/3/17', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('33', '207', '2', '2018/6/20', '12');
+VALUES ('33', '207', '2', '2019/6/20', '12');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('13', '307', '1', '2018/12/16', '2');
+VALUES ('13', '307', '1', '2019/12/16', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('23', '308', '3', '2018/8/11', '14');
+VALUES ('23', '308', '3', '2019/8/11', '14');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('8', '100', '2', '2018/8/18', '5');
+VALUES ('8', '100', '2', '2019/8/18', '5');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('39', '306', '3', '2018/12/2', '17');
+VALUES ('39', '306', '3', '2019/12/2', '17');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('3', '304', '3', '2018/9/6', '10');
+VALUES ('3', '304', '3', '2019/9/6', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('18', '205', '3', '2018/4/25', '7');
+VALUES ('18', '205', '3', '2019/4/25', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('4', '301', '4', '2018/2/29', '15');
+VALUES ('4', '301', '4', '2019/2/29', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('33', '204', '1', '2018/3/4', '11');
+VALUES ('33', '204', '1', '2019/3/4', '11');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('22', '106', '2', '2018/2/18', '10');
+VALUES ('22', '106', '2', '2019/2/18', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('32', '300', '1', '2018/7/4', '4');
+VALUES ('32', '300', '1', '2019/7/4', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('12', '104', '2', '2018/10/17', '3');
+VALUES ('12', '104', '2', '2019/10/17', '3');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('24', '306', '4', '2018/8/4', '21');
+VALUES ('24', '306', '4', '2019/8/4', '21');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('22', '207', '3', '2018/3/2', '5');
+VALUES ('22', '207', '3', '2019/3/2', '5');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('38', '200', '2', '2018/1/15', '10');
+VALUES ('38', '200', '2', '2019/1/15', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('4', '208', '3', '2018/7/19', '14');
+VALUES ('4', '208', '3', '2019/7/19', '14');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('39', '104', '3', '2018/12/26', '6');
+VALUES ('39', '104', '3', '2019/12/26', '6');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('12', '205', '1', '2018/3/14', '15');
+VALUES ('12', '205', '1', '2019/3/14', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('26', '108', '4', '2018/1/5', '10');
+VALUES ('26', '108', '4', '2019/1/5', '10');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('36', '303', '4', '2018/8/29', '9');
+VALUES ('36', '303', '4', '2019/8/29', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('26', '207', '1', '2018/8/28', '9');
+VALUES ('26', '207', '1', '2019/8/28', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('8', '109', '1', '2018/3/12', '12');
+VALUES ('8', '109', '1', '2019/3/12', '12');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('38', '102', '1', '2018/3/10', '2');
+VALUES ('38', '102', '1', '2019/3/10', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('40', '205', '4', '2018/5/13', '17');
+VALUES ('40', '205', '4', '2019/5/13', '17');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('8', '206', '4', '2018/11/15', '2');
+VALUES ('8', '206', '4', '2019/11/15', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('8', '105', '1', '2018/11/9', '16');
+VALUES ('8', '105', '1', '2019/11/9', '16');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('19', '309', '4', '2018/5/9', '5');
+VALUES ('19', '309', '4', '2019/5/9', '5');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('17', '100', '4', '2018/3/2', '15');
+VALUES ('17', '100', '4', '2019/3/2', '15');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('21', '109', '2', '2018/11/12', '13');
+VALUES ('21', '109', '2', '2019/11/12', '13');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('21', '308', '4', '2018/2/28', '13');
+VALUES ('21', '308', '4', '2019/2/28', '13');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('14', '303', '2', '2018/3/20', '13');
+VALUES ('14', '303', '2', '2019/3/20', '13');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('8', '303', '4', '2018/10/22', '1');
+VALUES ('8', '303', '4', '2019/10/22', '1');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('8', '303', '1', '2018/10/15', '19');
+VALUES ('8', '303', '1', '2019/10/15', '19');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('18', '200', '2', '2018/1/19', '4');
+VALUES ('18', '200', '2', '2019/1/19', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('31', '103', '2', '2018/8/24', '13');
+VALUES ('31', '103', '2', '2019/8/24', '13');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('40', '102', '2', '2018/8/14', '17');
+VALUES ('40', '102', '2', '2019/8/14', '17');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('11', '306', '3', '2018/12/24', '2');
+VALUES ('11', '306', '3', '2019/12/24', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('34', '300', '2', '2018/3/2', '4');
+VALUES ('34', '300', '2', '2019/3/2', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('39', '203', '4', '2018/7/17', '6');
+VALUES ('39', '203', '4', '2019/7/17', '6');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('29', '105', '1', '2018/7/19', '7');
+VALUES ('29', '105', '1', '2019/7/19', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('20', '209', '4', '2018/11/21', '7');
+VALUES ('20', '209', '4', '2019/11/21', '7');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('29', '304', '4', '2018/11/22', '4');
+VALUES ('29', '304', '4', '2019/11/22', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('6', '103', '2', '2018/1/5', '9');
+VALUES ('6', '103', '2', '2019/1/5', '9');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('26', '208', '4', '2018/7/3', '4');
+VALUES ('26', '208', '4', '2019/7/3', '4');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('28', '302', '2', '2018/11/13', '2');
+VALUES ('28', '302', '2', '2019/11/13', '2');
 INSERT INTO rezerwacje (klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji, liczba_dni)
-VALUES ('36', '108', '4', '2018/8/16', '6');
+VALUES ('36', '108', '4', '2019/8/16', '6');
 
 SELECT *
 FROM rezerwacje

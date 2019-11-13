@@ -261,16 +261,16 @@ EXEC popraw_bledna_liczbe_osob_w_rejestracji
 EXEC archiwizuj_rezerwacje
 
 -- PROCEDURA 4 --
-EXEC oplaty_dla_pracownikow '2018', 'Styczen'
+EXEC oplaty_dla_pracownikow '2019', 'Luty'
 
 -- PROCEDURA 5 --
-EXEC usun_pracownika_po_numerze 10
-EXEC usun_pracownika_po_numerze 12
-EXEC usun_pracownika_po_numerze 14
+EXEC usun_pracownika_po_numerze 6
+EXEC usun_pracownika_po_numerze 7
+EXEC usun_pracownika_po_numerze 8
 
 -- FUNKCJA 1 --
 SELECT pokoj_nr,
-       dbo.sprawdz_dostepnosc_pokoju(pokoj_nr, '2018/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2018)'
+       dbo.sprawdz_dostepnosc_pokoju(pokoj_nr, '2019/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2019)'
 FROM pokoje
 WHERE pokoj_nr LIKE '3%'
 
