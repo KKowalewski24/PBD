@@ -111,24 +111,13 @@ WHERE p.stanowisko_nr = s.stanowisko_nr
 ORDER BY s.nazwa
 
 -- ZAPYTANIE 8 --
-SELECT
-TOP 1
-klient_nr
-,
-klienci.imie
-,
-klienci.nazwisko
-,
-klienci.klient_nr
-,
-klienci.typ
-,
+SELECT TOP 1
+klient_nr, klienci.imie, klienci.nazwisko, klienci.klient_nr, klienci.typ,
 (
     SELECT sum(dbo.wylicz_cene_rezerwacji_po_numerze(rezerwacja_nr))
     FROM rezerwacje_hist
     WHERE rezerwacje_hist.klient_nr = klienci.klient_nr
-) AS 'suma należności'
-,
+) AS 'suma należności',
 (
     SELECT pokoj_nr
     FROM rezerwacje_hist
@@ -165,11 +154,8 @@ WHERE ((k.klient_nr = r.klient_nr AND r.pokoj_nr = p.pokoj_nr AND p.czy_jest_sej
   AND k.miasto = m.miasto_nr
 
 -- ZAPYTANIE 11 --
-SELECT
-TOP 1
-pokoj_nr
-,
-cena
+SELECT TOP 1
+pokoj_nr, cena
 FROM pokoje
 WHERE pokoj_nr / 100 =
       (
