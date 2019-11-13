@@ -160,7 +160,7 @@ klienci.klient_nr
 klienci.typ
 ,
 (
-    SELECT sum(dbo.cena_rezerwacji(rezerwacja_nr))
+    SELECT sum(dbo.wylicz_cene_rezerwacji_po_numerze(rezerwacja_nr))
     FROM rezerwacje_hist
     WHERE rezerwacje_hist.klient_nr = klienci.klient_nr
 ) AS 'suma należności'
@@ -230,7 +230,7 @@ GROUP BY nazwa
 -- 3. poprawia rejestracje, ktore nie byly poprawnie zarejestwoane (zbyt duza liczba osob) oraz
         drukuje komunikat, które z nich są niepoprawne
 -- 4. najczesciej rezerwowany pokoj na danym pietrze
--- 5. oplaty dla pracownikow w danym miesiacu z danego roku
+-- 5. oplaty_dla_pracownikow dla pracownikow w danym miesiacu z danego roku
 
 -- 1. oblicza cenę danej rezerwacji
 -- 2. sprawdzenie czy pokoj jest wolny w danym czasie
@@ -239,30 +239,30 @@ GROUP BY nazwa
 ------------------------------------------------------------
 
 -- PROCEDURA 1 --
-EXEC rezerwacje_archiwalne
+EXEC archiwizuj_rezerwacje
 
 -- PROCEDURA 2 --
-EXEC usun_pracownika 10
-EXEC usun_pracownika 12
-EXEC usun_pracownika 14
+EXEC usun_pracownika_po_numerze 10
+EXEC usun_pracownika_po_numerze 12
+EXEC usun_pracownika_po_numerze 14
 
 -- PROCEDURA 3 --
-EXEC poprawnosc_rejestracji_osoby
+EXEC popraw_bledna_liczbe_osob_w_rejestracji
 
 -- PROCEDURA 4 --
-EXEC najczestszy_pokoj 2
+EXEC najpopularniejszy_pokoj_na_pietrze 2
 
 -- PROCEDURA 5 --
-EXEC oplaty '2018', 'Styczen'
+EXEC oplaty_dla_pracownikow '2018', 'Styczen'
 
 
--- PROCEDURA 1 --
-SELECT *, dbo.cena_rezerwacji(rezerwacja_nr) AS 'cena_rezerwacji'
+-- FUNKCJA 1 --
+SELECT *, dbo.wylicz_cene_rezerwacji_po_numerze(rezerwacja_nr) AS 'wylicz_cene_rezerwacji_po_numerze'
 FROM rezerwacje
 
--- PROCEDURA 2 --
+-- FUNKCJA 2 --
 SELECT pokoj_nr,
-       dbo.dostepnosc_pokoju(pokoj_nr, '2018/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2018)'
+       dbo.sprawdz_dostepnosc_pokoju(pokoj_nr, '2018/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2018)'
 FROM pokoje
 WHERE pokoj_nr LIKE '3%'
 

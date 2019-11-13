@@ -7,22 +7,33 @@
 -- SPIS PROCEDUR I FUNKCJI
 
 -- PROCEDURY
--- 1. przenosi archwailne rezerwacje do tabeli rezerwacje_hist
--- 2. usuwa konkretnego (wskazanego przez numer przy wywolaniu) pracownika z tabeli pracownicy
--- 3. poprawia rejestracje, ktore nie byly poprawnie zarejestwoane (zbyt duza liczba osob)
-        oraz drukuje komunikat, które z nich są niepoprawne
--- 4. najczesciej rezerwowany pokoj na danym pietrze
--- 5. oplaty dla pracownikow w danym miesiacu z danego roku
+-- 1. [archiwizuj_rezerwacje] - przenosi archiwalne rezerwacje do tabeli rezerwacje_hist
+
+-- 2. [usun_pracownika_po_numerze] - usuwa konkretnego (wskazanego przez numer przy wywolaniu)
+        pracownika z tabeli pracownicy
+
+-- 3. [popraw_bledna_liczbe_osob_w_rejestracji] - poprawia rejestracje, ktore nie byly poprawnie
+        zarejestwoane (zbyt duza liczba osob) oraz drukuje komunikat, które z nich są niepoprawne
+
+-- 4. [najpopularniejszy_pokoj_na_pietrze] - najczesciej rezerwowany pokoj na danym pietrze
+
+-- 5. [oplaty_dla_pracownikow] - dla pracownikow w danym miesiacu z danego roku
 
 -- FUNKCJE
--- 1. oblicza cenę danej rezerwacji
--- 2. sprawdzenie czy pokoj jest wolny w danym czasie
+-- 1. [wylicz_cene_rezerwacji_po_numerze] - wylicza cenę danej rezerwacji, jako parametr jej numer
+
+-- 2. [sprawdz_dostepnosc_pokoju] - sprawdza czy pokoj o podanym numerze jest wolny od podanej daty
+        przez podana liczbe dni
 
 -- WYZWALACZE
--- 1. po zarchiwizowaniu wypozyczenia sprawdzane jest, czy klient nie awansowal do nowego typu
--- 2. rozpatrywanie dodawanych rezerwacji i akcetowanie tylko tych o dostepnych pokojach w zadanym czasie
--- 3. podczas rezerwacji proponuje lepsze pokoje które lepiej spełniają wymagania (posiadają
-        przynajmniej te same cechy,
+-- 1. [sprawdz_awans_klienta] - sprawdza czy klient nie awansował na wyzszy typ gdy wypożyczenie
+        pokoju zostanie przeniesione do archiwalnych
+
+-- 2. [zatwierdz_rezerwacje] - sprawdzanie poprawnosci dodawanych rezerwacji na podstawie funkcji
+        sprawdz_dostepnosc_pokoju i akceptacja tylko poprawnych - wolnym pokoj w wybranych czasie
+
+-- 3. [proponuj_lepsze_pokoje] - w czasie tworzenie rezerwacji proponuje lepsze pokoje
+        (posiadaja przynajmniej te same cechy)
 
  */
 ------------------------------------------------------------
@@ -33,11 +44,11 @@ GO
 -- PROCEDURA 1 --
 IF EXISTS(SELECT 1
           FROM sysobjects
-          WHERE name = 'rezerwacje_archiwalne')
-    DROP PROCEDURE rezerwacje_archiwalne
+          WHERE name = 'archiwizuj_rezerwacje')
+    DROP PROCEDURE archiwizuj_rezerwacje
 GO
 
-CREATE PROCEDURE rezerwacje_archiwalne
+CREATE PROCEDURE archiwizuj_rezerwacje
 AS
 BEGIN
     INSERT INTO rezerwacje_hist
@@ -54,11 +65,11 @@ GO
 -- PROCEDURA 2 --
 IF EXISTS(SELECT 1
           FROM sysobjects
-          WHERE name = 'usun_pracownika')
-    DROP PROCEDURE usun_pracownika
+          WHERE name = 'usun_pracownika_po_numerze')
+    DROP PROCEDURE usun_pracownika_po_numerze
 GO
 
-CREATE PROCEDURE usun_pracownika(@numer INT)
+CREATE PROCEDURE usun_pracownika_po_numerze(@numer INT)
 AS
 BEGIN
     UPDATE pracownicy SET data_zwolnienia = GETDATE() WHERE pracownik_nr = @numer
@@ -71,11 +82,11 @@ GO
 -- PROCEDURA 3 --
 IF EXISTS(SELECT 1
           FROM sysobjects
-          WHERE name = 'poprawnosc_rejestracji_osoby')
-    DROP PROCEDURE poprawnosc_rejestracji_osoby
+          WHERE name = 'popraw_bledna_liczbe_osob_w_rejestracji')
+    DROP PROCEDURE popraw_bledna_liczbe_osob_w_rejestracji
 GO
 
-CREATE PROCEDURE poprawnosc_rejestracji_osoby
+CREATE PROCEDURE popraw_bledna_liczbe_osob_w_rejestracji
 AS
 BEGIN
     DECLARE kursor CURSOR FOR SELECT rezerwacja_nr, pokoj_nr, liczba_osob FROM rezerwacje
@@ -91,7 +102,7 @@ BEGIN
 
             IF (@ile > @ilosc)
                 BEGIN
-                    PRINT 'Poprawiam ilosc osob w rezerwacji ' + CONVERT(VARCHAR(4), @nr_r) +
+                    PRINT 'Poprawiam liczbe osob w rezerwacji ' + CONVERT(VARCHAR(4), @nr_r) +
                           '(pokoj ' + CONVERT(VARCHAR(3), @nr_p) + ' z ' +
                           CONVERT(VARCHAR(5), @ile) + ' na ' + CONVERT(VARCHAR(1), @ilosc) + ')'
                     UPDATE rezerwacje SET liczba_osob = @ilosc WHERE rezerwacja_nr = @nr_r
@@ -105,14 +116,13 @@ END
 GO
 
 -- PROCEDURA 4 --
-
 IF exists(SELECT 1
           FROM sysobjects
-          WHERE name = 'najczestszy_pokoj')
-    DROP PROCEDURE najczestszy_pokoj
+          WHERE name = 'najpopularniejszy_pokoj_na_pietrze')
+    DROP PROCEDURE najpopularniejszy_pokoj_na_pietrze
 GO
 
-CREATE PROCEDURE najczestszy_pokoj(@pietro INT)
+CREATE PROCEDURE najpopularniejszy_pokoj_na_pietrze(@pietro INT)
 AS
 BEGIN
     DECLARE @pokoj INT
@@ -139,11 +149,11 @@ GO
 -- PROCEDURA 5 --
 IF EXISTS(SELECT 1
           FROM sysobjects
-          WHERE name = 'oplaty')
-    DROP PROCEDURE oplaty
+          WHERE name = 'oplaty_dla_pracownikow')
+    DROP PROCEDURE oplaty_dla_pracownikow
 GO
 
-CREATE PROCEDURE oplaty(@rok VARCHAR(4), @miesiac VARCHAR(20))
+CREATE PROCEDURE oplaty_dla_pracownikow(@rok VARCHAR(4), @miesiac VARCHAR(20))
 AS
 BEGIN
     DECLARE @zysk INT = 0
@@ -187,15 +197,16 @@ BEGIN
 END
 GO
 
+----------------------------------------------------------------------------------------------------
 
 -- FUNKCJA 1 --
 IF EXISTS(SELECT 1
           FROM sysobjects
-          WHERE name = 'cena_rezerwacji')
-    DROP FUNCTION cena_rezerwacji
+          WHERE name = 'wylicz_cene_rezerwacji_po_numerze')
+    DROP FUNCTION wylicz_cene_rezerwacji_po_numerze
 GO
 
-CREATE FUNCTION cena_rezerwacji(@nr INT)
+CREATE FUNCTION wylicz_cene_rezerwacji_po_numerze(@nr INT)
     RETURNS INT
 AS
 BEGIN
@@ -262,11 +273,11 @@ GO
 -- FUNKCJA 2 --
 IF exists(SELECT 1
           FROM sysobjects
-          WHERE name = 'dostepnosc_pokoju')
-    DROP FUNCTION dostepnosc_pokoju
+          WHERE name = 'sprawdz_dostepnosc_pokoju')
+    DROP FUNCTION sprawdz_dostepnosc_pokoju
 GO
 
-CREATE FUNCTION dostepnosc_pokoju(@pokoj INT, @poczatek DATE, @ile_dni INT)
+CREATE FUNCTION sprawdz_dostepnosc_pokoju(@pokoj INT, @poczatek DATE, @ile_dni INT)
     RETURNS BIT
 AS
 BEGIN
@@ -294,23 +305,25 @@ BEGIN
 END
 GO
 
+----------------------------------------------------------------------------------------------------
+
 -- WYZWALACZ 1 --
 IF exists(SELECT 1
           FROM sysobjects
-          WHERE name = 'awans_klienta')
-    DROP TRIGGER awans_klienta
+          WHERE name = 'sprawdz_awans_klienta')
+    DROP TRIGGER sprawdz_awans_klienta
 GO
 
 
-CREATE TRIGGER awans_klienta
+CREATE TRIGGER sprawdz_awans_klienta
     ON rezerwacje_hist
     AFTER INSERT
     AS
 BEGIN
-    --------------tu mozna zmienic ilosc rezerwacji potrzebnych na awans-----------
+    -- STALE ODPOWIEDZIALNE ZA LICZBE REZERWACJI POTRZEBNE DO AWANSU --
     DECLARE @silver INT = 5
     DECLARE @gold INT = 10
-    -------------------------------------------------------------------------------
+    -------------------------------------------------------------------
 
     DECLARE awans CURSOR FOR
         SELECT klient_nr FROM inserted
@@ -343,11 +356,11 @@ GO
 -- WYZWALACZ 2 --
 IF exists(SELECT 1
           FROM sysobjects
-          WHERE name = 'autoryzacja_rezerwacji')
-    DROP TRIGGER autoryzacja_rezerwacji
+          WHERE name = 'zatwierdz_rezerwacje')
+    DROP TRIGGER zatwierdz_rezerwacje
 GO
 
-CREATE TRIGGER autoryzacja_rezerwacji
+CREATE TRIGGER zatwierdz_rezerwacje
     ON rezerwacje
     INSTEAD OF INSERT
     AS
@@ -360,7 +373,7 @@ BEGIN
     WHILE @@FETCH_STATUS = 0
         BEGIN
             BEGIN TRANSACTION
-                IF (dbo.dostepnosc_pokoju(@pokoj, @poczatek_rezerwacji, @liczba_dni) = 0)
+                IF (dbo.sprawdz_dostepnosc_pokoju(@pokoj, @poczatek_rezerwacji, @liczba_dni) = 0)
                     BEGIN
                         PRINT 'Err: Pokoj ' + convert(VARCHAR(3), @pokoj) +
                               ' jest zajety w żądanym okresie (od ' +
@@ -386,11 +399,11 @@ GO
 -- WYZWALACZ 3 --
 IF EXISTS(SELECT 1
           FROM sysobjects
-          WHERE name = 'tansze_pokoje')
-    DROP TRIGGER tansze_pokoje
+          WHERE name = 'proponuj_lepsze_pokoje')
+    DROP TRIGGER proponuj_lepsze_pokoje
 GO
 
-CREATE TRIGGER tansze_pokoje
+CREATE TRIGGER proponuj_lepsze_pokoje
     ON rezerwacje
     FOR INSERT
     AS
