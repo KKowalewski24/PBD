@@ -251,35 +251,34 @@ GROUP BY nazwa
 
  */
 ------------------------------------------------------------
-
 -- PROCEDURA 1 --
-EXEC archiwizuj_rezerwacje
+EXEC najpopularniejszy_pokoj_na_pietrze 2
 
 -- PROCEDURA 2 --
+EXEC popraw_bledna_liczbe_osob_w_rejestracji
+
+-- PROCEDURA 3 --
+EXEC archiwizuj_rezerwacje
+
+-- PROCEDURA 4 --
+EXEC oplaty_dla_pracownikow '2018', 'Styczen'
+
+-- PROCEDURA 5 --
 EXEC usun_pracownika_po_numerze 10
 EXEC usun_pracownika_po_numerze 12
 EXEC usun_pracownika_po_numerze 14
 
--- PROCEDURA 3 --
-EXEC popraw_bledna_liczbe_osob_w_rejestracji
-
--- PROCEDURA 4 --
-EXEC najpopularniejszy_pokoj_na_pietrze 2
-
--- PROCEDURA 5 --
-EXEC oplaty_dla_pracownikow '2018', 'Styczen'
-
-
 -- FUNKCJA 1 --
-SELECT *,
-       dbo.wylicz_cene_rezerwacji_po_numerze(rezerwacja_nr) AS 'wylicz_cene_rezerwacji_po_numerze'
-FROM rezerwacje
-
--- FUNKCJA 2 --
 SELECT pokoj_nr,
        dbo.sprawdz_dostepnosc_pokoju(pokoj_nr, '2018/8/8', 15) AS 'czy dostepny w terminie 08-23.08.2018)'
 FROM pokoje
 WHERE pokoj_nr LIKE '3%'
+
+-- FUNKCJA 2 --
+SELECT *,
+       dbo.wylicz_cene_rezerwacji_po_numerze(rezerwacja_nr) AS 'wylicz_cene_rezerwacji_po_numerze'
+FROM rezerwacje
+
 
 SELECT *
 FROM pracownicy_hist

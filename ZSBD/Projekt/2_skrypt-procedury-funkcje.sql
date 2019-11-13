@@ -7,34 +7,33 @@
 -- SPIS PROCEDUR I FUNKCJI
 
 -- PROCEDURY
--- 1. [archiwizuj_rezerwacje] - przenosi archiwalne rezerwacje do tabeli rezerwacje_hist
+-- 1. [najpopularniejszy_pokoj_na_pietrze] - najczesciej rezerwowany pokoj na danym pietrze
 
--- 2. [usun_pracownika_po_numerze] - usuwa konkretnego (wskazanego przez numer przy wywolaniu)
-        pracownika z tabeli pracownicy
-
--- 3. [popraw_bledna_liczbe_osob_w_rejestracji] - poprawia rejestracje, ktore nie byly poprawnie
+-- 2. [popraw_bledna_liczbe_osob_w_rejestracji] - poprawia rejestracje, ktore nie byly poprawnie
         zarejestwoane (zbyt duza liczba osob) oraz drukuje komunikat, które z nich są niepoprawne
 
--- 4. [najpopularniejszy_pokoj_na_pietrze] - najczesciej rezerwowany pokoj na danym pietrze
+-- 3. [archiwizuj_rezerwacje] - przenosi archiwalne rezerwacje do tabeli rezerwacje_hist
 
--- 5. [oplaty_dla_pracownikow] - dla pracownikow w danym miesiacu z danego roku
+-- 4. [oplaty_dla_pracownikow] - dla pracownikow w danym miesiacu z danego roku
+
+-- 5. [usun_pracownika_po_numerze] - usuwa konkretnego (wskazanego przez numer przy wywolaniu)
+        pracownika z tabeli pracownicy
 
 -- FUNKCJE
--- 1. [wylicz_cene_rezerwacji_po_numerze] - wylicza cenę danej rezerwacji, jako parametr jej numer
-
--- 2. [sprawdz_dostepnosc_pokoju] - sprawdza czy pokoj o podanym numerze jest wolny od podanej daty
+-- 1. [sprawdz_dostepnosc_pokoju] - sprawdza czy pokoj o podanym numerze jest wolny od podanej daty
         przez podana liczbe dni
 
--- WYZWALACZE
--- 1. [sprawdz_awans_klienta] - sprawdza czy klient nie awansował na wyzszy typ gdy wypożyczenie
-        pokoju zostanie przeniesione do archiwalnych
+-- 2. [wylicz_cene_rezerwacji_po_numerze] - wylicza cenę danej rezerwacji, jako parametr jej numer
 
--- 2. [zatwierdz_rezerwacje] - sprawdzanie poprawnosci dodawanych rezerwacji na podstawie funkcji
+-- WYZWALACZE
+-- 1. [zatwierdz_rezerwacje] - sprawdzanie poprawnosci dodawanych rezerwacji na podstawie funkcji
         sprawdz_dostepnosc_pokoju i akceptacja tylko poprawnych - wolnym pokoj w wybranych czasie
 
--- 3. [proponuj_lepsze_pokoje] - w czasie tworzenie rezerwacji proponuje lepsze pokoje
+-- 2. [proponuj_lepsze_pokoje] - w czasie tworzenie rezerwacji proponuje lepsze pokoje
         (posiadaja przynajmniej te same cechy)
 
+-- 3. [sprawdz_awans_klienta] - sprawdza czy klient nie awansował na wyzszy typ gdy wypożyczenie
+        pokoju zostanie przeniesione do archiwalnych
  */
 ------------------------------------------------------------
 
@@ -42,44 +41,37 @@ USE baza_hotel
 GO
 
 -- PROCEDURA 1 --
-IF EXISTS(SELECT 1
+IF exists(SELECT 1
           FROM sysobjects
-          WHERE name = 'archiwizuj_rezerwacje')
-    DROP PROCEDURE archiwizuj_rezerwacje
+          WHERE name = 'najpopularniejszy_pokoj_na_pietrze')
+    DROP PROCEDURE najpopularniejszy_pokoj_na_pietrze
 GO
 
-CREATE PROCEDURE archiwizuj_rezerwacje
+CREATE PROCEDURE najpopularniejszy_pokoj_na_pietrze(@pietro INT)
 AS
 BEGIN
-    INSERT INTO rezerwacje_hist
-    SELECT rezerwacja_nr, klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji,
-           DATEADD(DAY, liczba_dni, poczatek_rezerwacji)
-    FROM rezerwacje
-    WHERE DAY(GETDATE()) > DAY(poczatek_rezerwacji) + liczba_dni
+    DECLARE @pokoj INT
+    SELECT @pokoj = pokoj_nr
+    FROM rezerwacje_hist
+    WHERE pokoj_nr / 100 = @pietro
+    GROUP BY pokoj_nr
+    HAVING count(pokoj_nr) =
+           (
+               SELECT
+               TOP 1
+               count(pokoj_nr) AS 'wystapienia'
+               FROM rezerwacje_hist
+               WHERE pokoj_nr / 100 = @pietro
+               GROUP BY pokoj_nr
+               ORDER BY wystapienia DESC
+           )
 
-    DELETE FROM rezerwacje WHERE DAY(GETDATE()) > DAY(poczatek_rezerwacji) + liczba_dni
+    PRINT 'Na piętrze ' + convert(CHAR(1), @pietro) +
+          ' najczesciej rezerwowanym pokojem jest pokoj o numerze ' + convert(CHAR(3), @pokoj)
 END
 GO
-
 
 -- PROCEDURA 2 --
-IF EXISTS(SELECT 1
-          FROM sysobjects
-          WHERE name = 'usun_pracownika_po_numerze')
-    DROP PROCEDURE usun_pracownika_po_numerze
-GO
-
-CREATE PROCEDURE usun_pracownika_po_numerze(@numer INT)
-AS
-BEGIN
-    UPDATE pracownicy SET data_zwolnienia = GETDATE() WHERE pracownik_nr = @numer
-    INSERT INTO pracownicy_hist SELECT * FROM pracownicy WHERE pracownik_nr = @numer
-    DELETE FROM pracownicy WHERE pracownik_nr = @numer
-END
-GO
-
-
--- PROCEDURA 3 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'popraw_bledna_liczbe_osob_w_rejestracji')
@@ -115,38 +107,27 @@ BEGIN
 END
 GO
 
--- PROCEDURA 4 --
-IF exists(SELECT 1
+-- PROCEDURA 3 --
+IF EXISTS(SELECT 1
           FROM sysobjects
-          WHERE name = 'najpopularniejszy_pokoj_na_pietrze')
-    DROP PROCEDURE najpopularniejszy_pokoj_na_pietrze
+          WHERE name = 'archiwizuj_rezerwacje')
+    DROP PROCEDURE archiwizuj_rezerwacje
 GO
 
-CREATE PROCEDURE najpopularniejszy_pokoj_na_pietrze(@pietro INT)
+CREATE PROCEDURE archiwizuj_rezerwacje
 AS
 BEGIN
-    DECLARE @pokoj INT
-    SELECT @pokoj = pokoj_nr
-    FROM rezerwacje_hist
-    WHERE pokoj_nr / 100 = @pietro
-    GROUP BY pokoj_nr
-    HAVING count(pokoj_nr) =
-           (
-               SELECT
-               TOP 1
-               count(pokoj_nr) AS 'wystapienia'
-               FROM rezerwacje_hist
-               WHERE pokoj_nr / 100 = @pietro
-               GROUP BY pokoj_nr
-               ORDER BY wystapienia DESC
-           )
+    INSERT INTO rezerwacje_hist
+    SELECT rezerwacja_nr, klient_nr, pokoj_nr, liczba_osob, poczatek_rezerwacji,
+           DATEADD(DAY, liczba_dni, poczatek_rezerwacji)
+    FROM rezerwacje
+    WHERE DAY(GETDATE()) > DAY(poczatek_rezerwacji) + liczba_dni
 
-    PRINT 'Na piętrze ' + convert(CHAR(1), @pietro) +
-          ' najczesciej rezerwowanym pokojem jest pokoj o numerze ' + convert(CHAR(3), @pokoj)
+    DELETE FROM rezerwacje WHERE DAY(GETDATE()) > DAY(poczatek_rezerwacji) + liczba_dni
 END
 GO
 
--- PROCEDURA 5 --
+-- PROCEDURA 4 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'oplaty_dla_pracownikow')
@@ -197,9 +178,60 @@ BEGIN
 END
 GO
 
+-- PROCEDURA 5 --
+IF EXISTS(SELECT 1
+          FROM sysobjects
+          WHERE name = 'usun_pracownika_po_numerze')
+    DROP PROCEDURE usun_pracownika_po_numerze
+GO
+
+CREATE PROCEDURE usun_pracownika_po_numerze(@numer INT)
+AS
+BEGIN
+    UPDATE pracownicy SET data_zwolnienia = GETDATE() WHERE pracownik_nr = @numer
+    INSERT INTO pracownicy_hist SELECT * FROM pracownicy WHERE pracownik_nr = @numer
+    DELETE FROM pracownicy WHERE pracownik_nr = @numer
+END
+GO
+
 ----------------------------------------------------------------------------------------------------
 
 -- FUNKCJA 1 --
+IF exists(SELECT 1
+          FROM sysobjects
+          WHERE name = 'sprawdz_dostepnosc_pokoju')
+    DROP FUNCTION sprawdz_dostepnosc_pokoju
+GO
+
+CREATE FUNCTION sprawdz_dostepnosc_pokoju(@pokoj INT, @poczatek DATE, @ile_dni INT)
+    RETURNS BIT
+AS
+BEGIN
+    IF exists
+        (
+            SELECT *
+            FROM rezerwacje
+            WHERE @pokoj = pokoj_nr
+              AND (
+                    (@poczatek >= poczatek_rezerwacji AND
+                     @poczatek <= dateadd(DAY, liczba_dni, poczatek_rezerwacji))
+                    OR
+                    (dateadd(DAY, @ile_dni, @poczatek) >= poczatek_rezerwacji AND
+                     dateadd(DAY, @ile_dni, @poczatek) <=
+                     dateadd(DAY, liczba_dni, poczatek_rezerwacji))
+                    OR
+                    (@poczatek <= poczatek_rezerwacji AND
+                     dateadd(DAY, @ile_dni, @poczatek) >=
+                     dateadd(DAY, liczba_dni, poczatek_rezerwacji))
+                )
+        )
+        RETURN 0
+
+    RETURN 1
+END
+GO
+
+-- FUNKCJA 2 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'wylicz_cene_rezerwacji_po_numerze')
@@ -270,90 +302,9 @@ BEGIN
 END
 GO
 
--- FUNKCJA 2 --
-IF exists(SELECT 1
-          FROM sysobjects
-          WHERE name = 'sprawdz_dostepnosc_pokoju')
-    DROP FUNCTION sprawdz_dostepnosc_pokoju
-GO
-
-CREATE FUNCTION sprawdz_dostepnosc_pokoju(@pokoj INT, @poczatek DATE, @ile_dni INT)
-    RETURNS BIT
-AS
-BEGIN
-    IF exists
-        (
-            SELECT *
-            FROM rezerwacje
-            WHERE @pokoj = pokoj_nr
-              AND (
-                    (@poczatek >= poczatek_rezerwacji AND
-                     @poczatek <= dateadd(DAY, liczba_dni, poczatek_rezerwacji))
-                    OR
-                    (dateadd(DAY, @ile_dni, @poczatek) >= poczatek_rezerwacji AND
-                     dateadd(DAY, @ile_dni, @poczatek) <=
-                     dateadd(DAY, liczba_dni, poczatek_rezerwacji))
-                    OR
-                    (@poczatek <= poczatek_rezerwacji AND
-                     dateadd(DAY, @ile_dni, @poczatek) >=
-                     dateadd(DAY, liczba_dni, poczatek_rezerwacji))
-                )
-        )
-        RETURN 0
-
-    RETURN 1
-END
-GO
-
 ----------------------------------------------------------------------------------------------------
 
 -- WYZWALACZ 1 --
-IF exists(SELECT 1
-          FROM sysobjects
-          WHERE name = 'sprawdz_awans_klienta')
-    DROP TRIGGER sprawdz_awans_klienta
-GO
-
-
-CREATE TRIGGER sprawdz_awans_klienta
-    ON rezerwacje_hist
-    AFTER INSERT
-    AS
-BEGIN
-    -- STALE ODPOWIEDZIALNE ZA LICZBE REZERWACJI POTRZEBNE DO AWANSU --
-    DECLARE @silver INT = 5
-    DECLARE @gold INT = 10
-    -------------------------------------------------------------------
-
-    DECLARE awans CURSOR FOR
-        SELECT klient_nr FROM inserted
-    DECLARE @id INT, @ilosc_rezerwacji INT
-    OPEN awans
-    FETCH NEXT FROM awans INTO @id
-    WHILE @@FETCH_STATUS = 0
-        BEGIN
-            SELECT @ilosc_rezerwacji = count(*)
-            FROM rezerwacje_hist
-            WHERE klient_nr = @id
-
-            IF @ilosc_rezerwacji > @gold
-                UPDATE klienci
-                SET typ = 3
-                WHERE klient_nr = @id
-            ELSE
-                IF @ilosc_rezerwacji > @silver
-                    UPDATE klienci
-                    SET typ = 2
-                    WHERE klient_nr = @id
-            FETCH NEXT FROM awans INTO @id
-        END
-    CLOSE awans
-    DEALLOCATE awans
-END
-GO
-
-
--- WYZWALACZ 2 --
 IF exists(SELECT 1
           FROM sysobjects
           WHERE name = 'zatwierdz_rezerwacje')
@@ -396,7 +347,7 @@ END
 GO
 
 
--- WYZWALACZ 3 --
+-- WYZWALACZ 2 --
 IF EXISTS(SELECT 1
           FROM sysobjects
           WHERE name = 'proponuj_lepsze_pokoje')
@@ -488,5 +439,51 @@ BEGIN
         END
     CLOSE kursor
     DEALLOCATE kursor
+END
+GO
+
+
+-- WYZWALACZ 3 --
+IF exists(SELECT 1
+          FROM sysobjects
+          WHERE name = 'sprawdz_awans_klienta')
+    DROP TRIGGER sprawdz_awans_klienta
+GO
+
+
+CREATE TRIGGER sprawdz_awans_klienta
+    ON rezerwacje_hist
+    AFTER INSERT
+    AS
+BEGIN
+    -- STALE ODPOWIEDZIALNE ZA LICZBE REZERWACJI POTRZEBNE DO AWANSU --
+    DECLARE @silver INT = 5
+    DECLARE @gold INT = 10
+    -------------------------------------------------------------------
+
+    DECLARE awans CURSOR FOR
+        SELECT klient_nr FROM inserted
+    DECLARE @id INT, @ilosc_rezerwacji INT
+    OPEN awans
+    FETCH NEXT FROM awans INTO @id
+    WHILE @@FETCH_STATUS = 0
+        BEGIN
+            SELECT @ilosc_rezerwacji = count(*)
+            FROM rezerwacje_hist
+            WHERE klient_nr = @id
+
+            IF @ilosc_rezerwacji > @gold
+                UPDATE klienci
+                SET typ = 3
+                WHERE klient_nr = @id
+            ELSE
+                IF @ilosc_rezerwacji > @silver
+                    UPDATE klienci
+                    SET typ = 2
+                    WHERE klient_nr = @id
+            FETCH NEXT FROM awans INTO @id
+        END
+    CLOSE awans
+    DEALLOCATE awans
 END
 GO
