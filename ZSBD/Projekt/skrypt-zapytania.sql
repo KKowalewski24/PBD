@@ -7,27 +7,41 @@
 -- SPIS ZAPYTAN
 
 -- 1. Wyświetl rezerwacje, które zaczęły się w poniedziałek, a skończyły w poniedziałek lub wtorek.
+
 -- 2. Wyświetl ile razy był wynajmowany każdy pokój.
+
 -- 3. Wyświetl nazwiska klientów i numery ich rezerwacji, które zostały zrealizowane w dniu tygodnia,
         w którym było najwięcej rezerwacji.
+
 -- 4. Wyświetl imie, nazwisko pracowników zatrudnionych w hotelu oraz nazwiska wszystkich jego
         współpracowników kończących się na 'k'.
+
 -- 5. Dla każdego stanowiska wyświetl liczbę pracowników mających więcej niż 50 lat oraz sumę ich pensji.
         Rezultat zapytania umieść w jednym ciągu.
+
 -- 6. Wybierz klientów, którzy pochodzą z Poznania bądź Gdanska, a pokoje które będą wynajmowali
         kosztują więcej niż 900, mimo, że wcześniej nie wynajmowali takich pokojów
+
 -- 7. Wybierz pokoje, które były wynajmowane tylko przez klientów 2 bądź 3 typu, ale nikt nie
         planuje wynajmować ich później
+
 -- 8. Wybierz pracowników, którzy zarabiają najwięcej na swoim stanowisku, posortuj ich alfabetycznie
         po stanowiskach
+
 -- 9. Wybierz klientów, którzy zawsze rezerwowali pokoje z sejfem bez wanny i pochodzą z miast,
         z których nie pochodzą byli pracownicy
+
 -- 10.Wybierz pokoje, które są zarezerowane tylko raz przez klientów niepochodzących z Łodzi bądź
         Warszawy, jednak wcześniej były wynajęte chociaż raz właśnie przez klientów z tych miast
+
 -- 11. liczba klientow danego typu
+
 -- 12. dane klienta ktory najwiecej zaplacil oraz jego ulubiony pokoj
+
 -- 13. cena najdrozszego pokoju na najczesciej wybieranym pietrze
+
 -- 14. Wyświetl pracowników zarabiających powyżej średniej płacy w hotelu.
+
 -- 15. Dla każdego stanowiska wyświetl liczbę pracowników.
 */
 ------------------------------------------------------------
@@ -257,7 +271,8 @@ EXEC oplaty_dla_pracownikow '2018', 'Styczen'
 
 
 -- FUNKCJA 1 --
-SELECT *, dbo.wylicz_cene_rezerwacji_po_numerze(rezerwacja_nr) AS 'wylicz_cene_rezerwacji_po_numerze'
+SELECT *,
+       dbo.wylicz_cene_rezerwacji_po_numerze(rezerwacja_nr) AS 'wylicz_cene_rezerwacji_po_numerze'
 FROM rezerwacje
 
 -- FUNKCJA 2 --
