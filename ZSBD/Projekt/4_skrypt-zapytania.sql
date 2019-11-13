@@ -8,41 +8,41 @@
 
 -- 1. Wyświetl ile razy był wynajmowany każdy pokój.
 
--- 2.Wybierz pokoje, które są zarezerowane tylko raz przez klientów niepochodzących z Łodzi bądź
-        Warszawy, jednak wcześniej były wynajęte chociaż raz właśnie przez klientów z tych miast
+-- 2. Wyświetl pokoje, które są zarezerowane tylko raz przez klientów niepochodzących z Krakowa lub
+        Wroclawia, jednak wcześniej były wynajęte chociaż raz właśnie przez klientów z tych miast
 
 -- 3. Wyświetl imie, nazwisko pracowników zatrudnionych w hotelu oraz nazwiska wszystkich jego
-        współpracowników kończących się na 'k'.
+        współpracowników zaczynajacych się na litere 'm'.
 
--- 4. Wybierz pokoje, które były wynajmowane tylko przez klientów 2 bądź 3 typu, ale nikt nie
+-- 4. Wyświetl pokoje, które były wynajmowane tylko przez klientów 1 lub 2 typu, ale nikt nie
         planuje wynajmować ich później
 
--- 5. liczba klientow danego typu
+-- 5. Wyświetl liczba klientow danego typu
 
--- 6. Wyświetl pracowników zarabiających powyżej średniej płacy w hotelu.
+-- 6. Wyświetl pracowników zarabiających ponizej lub tyle co wartosc średniej płacy w hotelu.
 
--- 7. Wybierz pracowników, którzy zarabiają najwięcej na swoim stanowisku, posortuj ich alfabetycznie
+-- 7. Wyświetl pracowników, którzy zarabiają najwięcej na swoim stanowisku, posortuj ich alfabetycznie
         po stanowiskach
 
--- 8. dane klienta ktory najwiecej zaplacil oraz jego ulubiony pokoj
+-- 8. Wyświetl dane klienta ktory najwiecej zaplacil oraz jego ulubiony pokoj
 
--- 9. Dla każdego stanowiska wyświetl liczbę pracowników mających więcej niż 50 lat oraz sumę ich pensji.
+-- 9. Wyświetl dla każdego stanowiska liczbę pracowników mających mniej niż 60 lat oraz sumę ich pensji.
         Rezultat zapytania umieść w jednym ciągu.
 
--- 10. Wybierz klientów, którzy zawsze rezerwowali pokoje z sejfem bez wanny i pochodzą z miast,
+-- 10. Wyświetl klientów, którzy zawsze rezerwowali pokoje z wanna bez sejfu i pochodzą z miast,
         z których nie pochodzą byli pracownicy
 
--- 11. cena najdrozszego pokoju na najczesciej wybieranym pietrze
+-- 11. Wyświetl cena najdrozszego pokoju na najczesciej wybieranym pietrze
 
--- 12. Wyświetl nazwiska klientów i numery ich rezerwacji, które zostały zrealizowane w dniu tygodnia,
-        w którym było najwięcej rezerwacji.
+-- 12. Wyświetl imiona, nazwiska, adresy, numery telefonow klientów i numery ich rezerwacji,
+        które zostały zrealizowane w dniu tygodnia, w którym było najmniej rezerwacji.
 
--- 13. Dla każdego stanowiska wyświetl liczbę pracowników.
+-- 13. Wyświetl dla każdego stanowiska liczbę pracowników.
 
--- 14. Wybierz klientów, którzy pochodzą z Poznania bądź Gdanska, a pokoje które będą wynajmowali
-        kosztują więcej niż 900, mimo, że wcześniej nie wynajmowali takich pokojów
+-- 14. Wyświetl klientów, którzy pochodzą z Zamosciu bądź Szczecinie, a pokoje które będą wynajmowali
+        kosztują więcej niż 800, mimo, że wcześniej nie wynajmowali takich pokoi
 
--- 15. Wyświetl rezerwacje, które zaczęły się w poniedziałek, a skończyły w poniedziałek lub wtorek.
+-- 15. Wyświetl rezerwacje, które zaczęły się w piatek, a skończyły w sobote lub niedziele.
 */
 ------------------------------------------------------------
 
@@ -60,8 +60,8 @@ GROUP BY p.pokoj_nr
 SELECT DISTINCT r.pokoj_nr, COUNT(*) AS 'ilosc_rezerwacji'
 FROM rezerwacje AS r, klienci AS k
 WHERE r.klient_nr = k.klient_nr
-  AND k.miasto <> 1
-  AND k.miasto <> 2
+  AND k.miasto <> 3
+  AND k.miasto <> 6
   AND r.pokoj_nr IN
       (
           SELECT DISTINCT bb.pokoj_nr
@@ -80,13 +80,13 @@ WHERE x.stanowisko_nr = y.stanowisko_nr
   AND x.pracownik_nr <> y.pracownik_nr
   AND x.stanowisko_nr = s.stanowisko_nr
   AND y.stanowisko_nr = s.stanowisko_nr
-  AND y.nazwisko LIKE '%k'
+  AND y.nazwisko LIKE 'm%'
 
 -- ZAPYTANIE 4 --
 SELECT DISTINCT b.pokoj_nr
 FROM rezerwacje_hist AS b, klienci AS k
 WHERE b.klient_nr = k.klient_nr
-  AND (k.typ = 2 OR k.typ = 3)
+  AND (k.typ = 1 OR k.typ = 2)
   AND b.pokoj_nr NOT IN
       (SELECT DISTINCT rr.pokoj_nr FROM rezerwacje AS rr)
 
@@ -99,7 +99,7 @@ GROUP BY typ
 SELECT pracownik_nr, imie, nazwisko, nazwa
 FROM pracownicy AS p, stanowiska AS s
 WHERE p.stanowisko_nr = s.stanowisko_nr
-  AND p.placa > (SELECT AVG(placa) FROM pracownicy)
+  AND p.placa <= (SELECT AVG(placa) FROM pracownicy)
 GROUP BY pracownik_nr, imie, nazwisko, nazwa, placa
 
 -- ZAPYTANIE 7 --
@@ -151,16 +151,16 @@ ORDER BY [suma należności] DESC
 SELECT CONCAT(nazwa, ' liczba pracowników: ', COUNT(*), ' suma pensji: ', SUM(placa))
 FROM pracownicy AS p, stanowiska AS s
 WHERE p.stanowisko_nr = s.stanowisko_nr
-  AND ((YEAR(GETDATE()) - YEAR(data_urodzenia))) > 50
+  AND ((YEAR(GETDATE()) - YEAR(data_urodzenia))) < 60
 GROUP BY nazwa
 
 -- ZAPYTANIE 10 --
 SELECT DISTINCT k.imie, k.nazwisko, k.klient_nr, m.nazwa AS 'miasto'
 FROM klienci AS k, miasta AS m, rezerwacje AS r, pokoje AS p, rezerwacje_hist AS b
-WHERE ((k.klient_nr = r.klient_nr AND r.pokoj_nr = p.pokoj_nr AND p.czy_jest_sejf = 1 AND
-        p.czy_jest_wanna = 0)
-    OR (k.klient_nr = b.klient_nr AND b.pokoj_nr = p.pokoj_nr AND p.czy_jest_sejf = 1 AND
-        p.czy_jest_wanna = 0))
+WHERE ((k.klient_nr = r.klient_nr AND r.pokoj_nr = p.pokoj_nr AND p.czy_jest_sejf = 0 AND
+        p.czy_jest_wanna = 1)
+    OR (k.klient_nr = b.klient_nr AND b.pokoj_nr = p.pokoj_nr AND p.czy_jest_sejf = 0 AND
+        p.czy_jest_wanna = 1))
   AND k.miasto NOT IN (SELECT DISTINCT miasto FROM pracownicy_hist)
   AND k.miasto = m.miasto_nr
 
@@ -188,7 +188,7 @@ WHERE pokoj_nr / 100 =
       )
 
 -- ZAPYTANIE 12 --
-SELECT nazwisko, rezerwacja_nr
+SELECT imie, nazwisko, adres, telefon, rezerwacja_nr
 FROM klienci AS k, rezerwacje AS r
 WHERE DATENAME(DW, poczatek_rezerwacji) =
       (
@@ -197,7 +197,7 @@ WHERE DATENAME(DW, poczatek_rezerwacji) =
           DATENAME(DW, poczatek_rezerwacji)
           FROM rezerwacje
           GROUP BY DATENAME(DW, poczatek_rezerwacji)
-          ORDER BY COUNT(*) DESC
+          ORDER BY COUNT(*) ASC
       )
   AND r.klient_nr = k.klient_nr
 
@@ -211,7 +211,7 @@ GROUP BY nazwa
 SELECT DISTINCT k.imie, k.nazwisko, k.klient_nr
 FROM klienci AS k, miasta AS m, rezerwacje AS r, pokoje AS p
 WHERE k.miasto = m.miasto_nr
-  AND (m.nazwa = 'Poznan' OR m.nazwa = 'Gdansk')
+  AND (m.nazwa = 'Zamosc' OR m.nazwa = 'Szczecin')
   AND k.klient_nr = r.klient_nr
   AND r.pokoj_nr = p.pokoj_nr
   AND p.cena > 800
@@ -228,8 +228,8 @@ WHERE k.miasto = m.miasto_nr
 SELECT *, DATENAME(DW, poczatek_rezerwacji) AS dzien_rezerwacji,
        DATENAME(DW, koniec_rezerwacji) AS dzien_konca_rezerwacji
 FROM rezerwacje_hist
-WHERE (DATENAME(DW, poczatek_rezerwacji) = 'Monday')
-  AND (DATENAME(DW, koniec_rezerwacji) = 'Monday' OR DATENAME(DW, koniec_rezerwacji) = 'Tuesday')
+WHERE (DATENAME(DW, poczatek_rezerwacji) = 'Friday')
+  AND (DATENAME(DW, koniec_rezerwacji) = 'Saturday' OR DATENAME(DW, koniec_rezerwacji) = 'Sunday')
 
 ------------------------------------------------------------
 /*

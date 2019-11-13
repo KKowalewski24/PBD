@@ -6,16 +6,16 @@ USE baza_hotel
 GO
 
 INSERT INTO miasta (nazwa)
-VALUES ('Warszawa'),
-       ('Lodz'),
-       ('Krakow'),
-       ('Poznan'),
-       ('Gdansk'),
-       ('Wroclaw'),
-       ('Torun'),
-       ('Zamosc'),
-       ('Lublin'),
-       ('Szczecin');
+VALUES ('Warszawa'),    --id=1
+       ('Lodz'),        --id=2
+       ('Krakow'),      --id=3
+       ('Poznan'),      --id=4
+       ('Gdansk'),      --id=5
+       ('Wroclaw'),     --id=6
+       ('Torun'),       --id=7
+       ('Zamosc'),      --id=8
+       ('Lublin'),      --id=9
+       ('Szczecin');    --id=10
 
 SELECT *
 FROM miasta
