@@ -1,3 +1,29 @@
+USE hr
+GO
+
+-- PODPUNKT 1 --
+SELECT dep.department_id, dep.department_name, count(*) AS liczba_pracownikow
+FROM departments dep, employees emp
+WHERE dep.department_id = emp.department_id
+GROUP BY dep.department_id, dep.department_name
+HAVING count(*) < 3
+ORDER BY liczba_pracownikow
+
+-- PODPUNKT 2 --
+SELECT dep.department_name, round(avg(emp.salary), 1) AS srednie_wynagrodzenie
+FROM departments dep, employees emp
+WHERE dep.department_id = emp.department_id
+GROUP BY dep.department_name
+ORDER BY srednie_wynagrodzenie DESC
+
+-- PODPUNKT 3 --
+
+
+-- PODPUNKT 4 --
+
+
+-- PODPUNKT 5 --
+
 
 --------------------------------------------------------------------------
 /*

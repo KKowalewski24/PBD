@@ -1,3 +1,29 @@
+USE hr
+GO
+
+-- PODPUNKT 1 --
+SELECT emp.last_name, emp.first_name, emp.salary, jo.job_title
+FROM employees emp, jobs jo
+WHERE emp.job_id = jo.job_id
+  AND emp.salary = jo.min_salary
+
+-- PODPUNKT 2 --
+SELECT dep.department_id, dep.department_name, count(*) AS liczba_pracownikow
+FROM departments dep, employees emp
+WHERE dep.department_id = emp.department_id
+GROUP BY dep.department_id, dep.department_name
+HAVING count(*) < 3
+ORDER BY liczba_pracownikow
+
+-- PODPUNKT 3 --
+
+
+-- PODPUNKT 4 --
+
+
+-- PODPUNKT 5 --
+
+
 
 --------------------------------------------------------------------------
 /*
