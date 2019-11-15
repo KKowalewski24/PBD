@@ -49,7 +49,33 @@ CLOSE @kursor
 DEALLOCATE @kursor
 
 -- PODPUNKT 4 --
+IF EXISTS(SELECT 1
+          FROM sys.objects
+          WHERE type = 'FN'
+            AND name = 'procent_pracownikow')
+    DROP FUNCTION procent_pracownikow
+GO
+CREATE FUNCTION procent_pracownikow(@id INT) RETURNS DECIMAL(10, 2)
+AS
+BEGIN
+    DECLARE @liczba_pracownikow FLOAT, @wybrani FLOAT
+    SET @liczba_pracownikow = (
+                                  SELECT count(employee_id)
+                                  FROM employees
+                              )
+    SET @wybrani = (
+                       SELECT count(employee_id)
+                       FROM employees
+                       WHERE department_id = @id
+                   )
 
+    RETURN (@wybrani / @liczba_pracownikow) * 100
+END
+GO
+
+SELECT DISTINCT department_id, dbo.procent_pracownikow(department_id) AS 'procent'
+FROM employees
+WHERE department_id IS NOT NULL
 
 -- PODPUNKT 5 --
 
@@ -69,6 +95,9 @@ DEALLOCATE @kursor
     b) wypisujacy na koniec komunikat: Wiecej zarabia sie na ..[liczba] stanowiskach
         lub na zadnym stanowisku nie zarabia sie tak duzo.
 
-4.
+ 4. Napisz funkcje podajaca dla kazdego oddzialu, ile procent wszystkich pracownikow
+    znajduja sie w tym oddziale. Wywolaj ja wewnatrz zapytania dajacego wynik w postaci
+    dwoch kolumn: department_id, nazwa_funkcji
+
 */
 --------------------------------------------------------------------------
