@@ -36,16 +36,49 @@ WHILE @@fetch_status = 0
         PRINT @id_stanowiska
         FETCH NEXT FROM @kursor INTO @id_stanowiska
     END
-CLOSE @kursor
-DEALLOCATE @kursor
+
 IF (@licznik < 1)
     PRINT 'Na zadnym stanowisku nie zarabia sie tak duzo'
 ELSE
     PRINT 'Wiecej zarabia sie na ' + convert(VARCHAR(10), @licznik) + ' stanowiskach'
 
+CLOSE @kursor
+DEALLOCATE @kursor
 
 -- PODPUNKT 4 --
+IF EXISTS(SELECT 1
+          FROM sys.objects
+          WHERE type = 'FN'
+            AND name = 'procent_oddzialow')
+    DROP FUNCTION procent_oddzialow
+GO
 
+CREATE FUNCTION procent_oddzialow(@id VARCHAR(2)) RETURNS DECIMAL(10, 2)
+AS
+BEGIN
+    DECLARE @liczba_oddzialow FLOAT, @wybrany FLOAT
+    SET @liczba_oddzialow = (
+                                SELECT COUNT(cou.country_id)
+                                FROM countries cou, locations loc, departments dep
+                                WHERE cou.country_id = loc.country_id
+                                  AND loc.location_id = dep.location_id
+                            )
+
+    SET @wybrany = (
+                       SELECT COUNT(cou.country_id)
+                       FROM countries cou, locations loc, departments dep
+                       WHERE cou.country_id = loc.country_id
+                         AND loc.location_id = dep.location_id
+                         AND cou.country_id = @id
+                   )
+    RETURN (@wybrany / @liczba_oddzialow) * 100
+END
+GO
+
+SELECT DISTINCT cou.country_name, dbo.procent_oddzialow(cou.country_id)
+FROM countries cou, locations loc, departments dep
+WHERE cou.country_id = loc.country_id
+  AND loc.location_id = dep.location_id
 
 -- PODPUNKT 5 --
 

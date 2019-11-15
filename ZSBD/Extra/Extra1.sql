@@ -55,7 +55,25 @@ DEALLOCATE @kursor
 GO
 
 -- PODPUNKT 4 --
+IF EXISTS(SELECT 1
+          FROM sys.objects
+          WHERE type = 'FN'
+            AND name = 'trzy_razy_wynag')
+    DROP FUNCTION trzy_razy_wynag
+GO
 
+CREATE FUNCTION trzy_razy_wynag(@id INT) RETURNS MONEY
+AS
+BEGIN
+    DECLARE @nowe_wynag MONEY
+    SET @nowe_wynag = (SELECT salary * 3 FROM employees WHERE employee_id = @id)
+    RETURN @nowe_wynag
+END
+GO
+
+SELECT employee_id, first_name + ' ' + last_name, salary,
+       dbo.trzy_razy_wynag(employee_id) as 'trzy razy'
+FROM employees
 GO
 
 -- PODPUNKT 5 --
