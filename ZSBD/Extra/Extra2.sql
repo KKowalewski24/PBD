@@ -17,6 +17,31 @@ GROUP BY dep.department_name
 ORDER BY srednie_wynagrodzenie DESC
 
 -- PODPUNKT 3 --
+DECLARE @kursor CURSOR,
+    @id_stanowiska VARCHAR(10),
+    @okreslona_stawka MONEY=5000,
+    @licznik INT=0
+
+SET @kursor = CURSOR FOR
+    SELECT DISTINCT job_id
+    FROM employees
+    WHERE salary > @okreslona_stawka
+
+OPEN @kursor
+FETCH NEXT FROM @kursor INTO @id_stanowiska
+
+WHILE @@fetch_status = 0
+    BEGIN
+        SET @licznik = @licznik + 1
+        PRINT @id_stanowiska
+        FETCH NEXT FROM @kursor INTO @id_stanowiska
+    END
+CLOSE @kursor
+DEALLOCATE @kursor
+IF (@licznik < 1)
+    PRINT 'Na zadnym stanowisku nie zarabia sie tak duzo'
+ELSE
+    PRINT 'Wiecej zarabia sie na ' + convert(VARCHAR(10), @licznik) + ' stanowiskach'
 
 
 -- PODPUNKT 4 --
