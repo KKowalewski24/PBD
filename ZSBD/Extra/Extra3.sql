@@ -78,7 +78,65 @@ FROM employees
 WHERE department_id IS NOT NULL
 
 -- PODPUNKT 5 --
+IF EXISTS(SELECT *
+          FROM sys.objects
+          WHERE type = 'TR'
+            AND name = 'wyzwalacz')
+    DROP TRIGGER wyzwalacz
 
+CREATE TRIGGER wyzwalacz
+    ON employees
+    FOR UPDATE
+    AS
+BEGIN
+    DECLARE @minimalna INT=(
+                               SELECT min_salary
+                               FROM jobs
+                               WHERE job_id = (SELECT job_id FROM inserted)
+                           )
+    DECLARE @maxymalna INT=(
+                               SELECT max_salary
+                               FROM jobs
+                               WHERE job_id = (SELECT job_id FROM inserted)
+                           )
+    DECLARE @nowapensja INT=(
+                                SELECT salary
+                                FROM inserted
+                            )
+    DECLARE @id_osoby INT=(
+                              SELECT employee_id
+                              FROM inserted
+                          )
+    DECLARE @stanowisko VARCHAR(10)=(SELECT job_id FROM inserted)
+
+    IF (@nowapensja > @maxymalna)
+        BEGIN
+            UPDATE employees
+            SET salary=@maxymalna
+            WHERE job_id = @stanowisko
+            PRINT 'Zmodyfikowano wynagrodzenie do wartości maksymalnej dla pracownika '
+                + convert(VARCHAR(5), @id_osoby)
+        END
+    ELSE
+        IF (@nowapensja < @minimalna)
+            BEGIN
+                UPDATE employees
+                SET salary=@minimalna
+                WHERE job_id = @stanowisko
+                PRINT 'Zmodyfikowano wynagrodzenie do wartości minimalnej dla pracownika'
+                    + convert(VARCHAR(5), @id_osoby)
+            END
+END
+GO
+
+UPDATE employees
+SET salary=7000
+WHERE employee_id = 120
+
+SELECT emp.last_name, emp.salary, jb.min_salary, jb.max_salary
+FROM employees emp, jobs jb
+WHERE employee_id = 120
+  AND emp.job_id = jb.job_id
 
 --------------------------------------------------------------------------
 /*

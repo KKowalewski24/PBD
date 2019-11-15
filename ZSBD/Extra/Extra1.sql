@@ -72,13 +72,59 @@ END
 GO
 
 SELECT employee_id, first_name + ' ' + last_name, salary,
-       dbo.trzy_razy_wynag(employee_id) as 'trzy razy'
+       dbo.trzy_razy_wynag(employee_id) AS 'trzy razy'
 FROM employees
 GO
 
 -- PODPUNKT 5 --
-
+IF EXISTS(SELECT *
+          FROM sys.objects
+          WHERE type = 'TR'
+            AND name = 'placa_mod')
+    DROP TRIGGER placa_mod
 GO
+
+CREATE TRIGGER placa_mod
+    ON jobs
+    INSTEAD OF UPDATE
+    AS
+BEGIN
+    DECLARE @job_id VARCHAR(10) =(
+                                     SELECT job_id
+                                     FROM inserted
+                                 )
+    DECLARE @currentmin MONEY=(
+                                  SELECT min_salary
+                                  FROM jobs
+                                  WHERE job_id = @job_id
+                              )
+    DECLARE @newmin MONEY=(
+                              SELECT min_salary
+                              FROM inserted
+                          )
+    DECLARE @diffrence MONEY=@newmin - @currentmin
+
+    UPDATE employees
+    SET salary+=@diffrence
+    WHERE job_id = @job_id
+
+    UPDATE jobs
+    SET min_salary=@newmin
+    WHERE job_id = @job_id
+END
+GO
+
+SELECT last_name, salary
+FROM employees
+WHERE job_id = 'SA_MAN'
+
+UPDATE jobs
+SET min_salary=12000
+WHERE job_id = 'SA_MAN'
+
+SELECT last_name, salary
+FROM employees
+WHERE job_id = 'SA_MAN'
 
 --------------------------------------------------------------------------
 /*

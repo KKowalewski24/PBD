@@ -81,8 +81,40 @@ WHERE cou.country_id = loc.country_id
   AND loc.location_id = dep.location_id
 
 -- PODPUNKT 5 --
+IF EXISTS(SELECT *
+          FROM sys.objects
+          WHERE type = 'TR'
+            AND name = 'bledna_nazwa')
+    DROP TRIGGER bledna_nazwa
+GO
 
+CREATE TRIGGER bledna_nazwa
+    ON countries
+    FOR INSERT
+    AS
+BEGIN
+    IF ((SELECT country_name FROM countries) IS NULL)
+        BEGIN
+            INSERT INTO countries
+            SELECT country_id, 'Nowa nazwa', region_id
+            FROM countries
+        END
+END
+GO
 
+DELETE
+FROM countries
+
+WHERE country_id = 'PL'
+SELECT *
+FROM countries
+
+INSERT INTO countries
+VALUES ('PL', NULL, 1)
+
+SELECT *
+FROM countries
+WHERE country_id = 'PL'
 --------------------------------------------------------------------------
 /*
 1. Wyswietl identyfikatory oddzialow (department_id), nazwy oddzialow (department_name)
