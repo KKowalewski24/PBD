@@ -21,3 +21,6 @@ odpal po kolei i wybierz connection local -> DESKTOP-... I Connect
 Najłatwiej jest to zrobić w SSMS
 
 https://www.isunshare.com/sql-server/how-to-change-sql-server-authentication-mode.html#method1
+
+
+# Oracle Database
