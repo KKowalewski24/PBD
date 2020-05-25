@@ -24,3 +24,23 @@ https://www.isunshare.com/sql-server/how-to-change-sql-server-authentication-mod
 
 
 # Oracle Database
+
+#### SQLPlus
+
+logowanie do maszyny [oracle,oracle]
+
+Uruchamianie: sqlplus i pozniej trzeba podać dane tzn [hr,oracle] lub [sys/as sysdba,oracle]
+i wtedy jestesmy podlaczeni do bazy jest chcemy się rozłączyć to robimy disconn i gdy chcemy ponownie się połączyć to robimy conn i podajemy dane.
+
+wychodzenie z otwartej sesji - disconn a później exit zeby wyjść z SQLPlus
+
+wyświetlanie struktury tabeli: desc nazwa_tabeli
+wyświetlanie wszystkich użytkowników: SELECT * FROM all_users;
+
+#### Oracle SQLDeveloper
+Tworzenie połączenie - prawy górny róg connections - podajemy nazwę, login i hasło oraz poniżej wybieramy role (default albo sysdba) oraz ustawiamy SID - orcl
+
+#### Enterprise Manager
+Trzeba włączyć proces: emctl start dbconsole
+sprawdzanie statusu: emctl status dbconsole
+I pozniej trzeba w przeglądarce odpalic tzn: https://localhost:1158/em/console/
