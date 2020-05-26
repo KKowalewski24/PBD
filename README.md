@@ -37,6 +37,9 @@ wychodzenie z otwartej sesji - disconn a później exit zeby wyjść z SQLPlus
 wyświetlanie struktury tabeli: desc nazwa_tabeli
 wyświetlanie wszystkich użytkowników: SELECT * FROM all_users;
 
+#### IntelliJ IDEA
+W VirtualBox trzeba ustawić siec->karta1->mostkowanie(bridged)
+
 #### Oracle SQLDeveloper
 Tworzenie połączenie - prawy górny róg connections - podajemy nazwę, login i hasło oraz poniżej wybieramy role (default albo sysdba) oraz ustawiamy SID - orcl
 
