@@ -38,7 +38,27 @@ wyświetlanie struktury tabeli: desc nazwa_tabeli
 wyświetlanie wszystkich użytkowników: SELECT * FROM all_users;
 
 #### IntelliJ IDEA
-W VirtualBox trzeba ustawić siec->karta1->mostkowanie(bridged)
+W VirtualBox trzeba ustawić 
+siec->karta2->mostkowanie(bridged)
+Karta1 nie ruszać ma być na NAT ustawiona
+Włączyć maszynę i w terminalu wyświetli się adres IP<br/>
+```
+inet addr:10.0.2.15  Bcast:10.0.2.255  Mask:255.255.255.0
+inet addr:10.7.218.73  Bcast:10.7.223.255  Mask:255.255.248.0
+inet addr:127.0.0.1  Mask:255.0.0.0
+```
+To wybieramy `10.7.218.73` bo to jest karta numer2, która ustawilismy na mostokowanie
+
+W IntelliJ otwieramy projekt -> Database->datasource->Oracle
+* Host - adres IP `10.7.218.73`
+* SID - orcl
+* User - hr
+* Password - oracle
+
+Test connection - jak jest git to apply i pozniej w danym skrypcie select datasource
+i ten nasz utworzony datasource i console <br/>
+Uruchamienie poprzez ctrl+enter
+
 
 #### Oracle SQLDeveloper
 Tworzenie połączenie - prawy górny róg connections - podajemy nazwę, login i hasło oraz poniżej wybieramy role (default albo sysdba) oraz ustawiamy SID - orcl
