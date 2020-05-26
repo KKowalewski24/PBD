@@ -9,19 +9,27 @@ SET SERVEROUTPUT ON;
 DECLARE
     CURSOR kursor_1 IS
         SELECT
-        FROM
-        where;
+        FROM where;
 --     zmienne
-        var
+    var
 BEGIN
     OPEN kursor_1;
--- todo
+    LOOP
+        FETCH kursor_1 INTO /*vars*/;
+        IF kursor_1%NOTFOUND
+        THEN
+            EXIT;
+        END IF;
+        dbms_output.put_line();
+    END LOOP;
     CLOSE kursor_1;
 END;
 
 
 -- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
-CREATE OR REPLACE PROCEDURE procedura_2(param_/*todo*/) IS
+CREATE
+    OR
+    REPLACE PROCEDURE procedura_2(param_/*todo*/) IS
     -- todo wyjatek
 -- todo zmienna
     var;
@@ -48,9 +56,9 @@ BEGIN
     RETURN /*TODO*/;
 EXCEPTION
     WHEN /*todo*/
-    THEN;
+        then;
 
-    return /*todo*/;
+RETURN /*todo*/;
 END;
 
 -- wywolanie
@@ -60,6 +68,45 @@ EXECUTE DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
 ROLLBACK;
 
 -- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
--- todo add trigger
+CREATE TABLE /*TODO*/ AS
+SELECT *
+FROM /*TODO*/;
+DELETE
+FROM /*TODO*/;
+
+CREATE OR REPLACE TRIGGER wyzwalacz_4
+    BEFORE UPDATE OR DELETE
+    ON /*TODO*/
+    FOR EACH ROW
+BEGIN
+    INSERT INTO /*TODO*/
+    VALUES (:old.
+            :OLD.
+            :OLD.
+            :OLD.
+            :OLD.
+            :OLD.
+            :OLD.
+            :OLD.
+            :OLD.
+            :OLD.
+    );
+END;
+
+SELECT /*TODO*/
+FROM /*TODO*/
+WHERE /*TODO*/;
+
+UPDATE /*TODO*/
+SET /*TODO*/
+WHERE /*TODO*/;
+
+SELECT /*TODO*/
+FROM /*TODO*/
+    WHERE ;
+
+SELECT /*TODO*/
+FROM /*TODO*/_archiwum
+    WHERE /*TODO*/;
 
 ROLLBACK;

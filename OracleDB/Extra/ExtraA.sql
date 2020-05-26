@@ -32,7 +32,7 @@ SET SERVEROUTPUT ON;
 -- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
 DECLARE
     CURSOR kursor_1 IS
-        SELECT prac.nazwisko, dzia.nazwa
+        SELECT pra.nazwisko, dzia.nazwa
         FROM pracownicy pra, dzialy dzia
         WHERE pra.id_dzialu = dzia.id_dzialu;
     nazwisko_1    pracownicy.nazwisko%TYPE;
@@ -43,6 +43,8 @@ BEGIN
         FETCH kursor_1 INTO nazwisko_1, dzial_nazwa_1;
         IF kursor_1%NOTFOUND
         THEN
+            dbms_output.put_line('abc');
+
             EXIT;
         END IF;
         dbms_output.put_line(
@@ -52,7 +54,8 @@ BEGIN
 END;
 
 -- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
-CREATE OR REPLACE PROCEDURE procedura_1(nazwisko_param pracownicy.NAZWISKO) IS
+
+CREATE OR REPLACE PROCEDURE procedura_1(nazwisko_param pracownicy.nazwisko%TYPE) IS
     wyjatek_2 EXCEPTION;
     licznik NUMBER;
 BEGIN
@@ -67,12 +70,12 @@ BEGIN
         UPDATE pracownicy
         SET placa=1.1 * placa
         WHERE nazwisko = nazwisko_param;
-        dbms_output.put_line('Pracownik ' || nazwisko_param || ' mial zwiekszona pensje o 10%.')
+        dbms_output.put_line('Pracownik ' || nazwisko_param || ' mial zwiekszona pensje o 10%.');
     END IF;
 EXCEPTION
     WHEN wyjatek_2
         THEN
-            dbms_output.put_line('Pracownik ' || nazwisko || ' nie zostal odnaleziony.');
+            dbms_output.put_line('Pracownik ' || nazwisko_param || ' nie zostal odnaleziony.');
 END;
 
 EXECUTE procedura_1('MALYSZ');
@@ -90,7 +93,7 @@ CREATE OR REPLACE FUNCTION funkcja_3(dzial_nazwa_param dzialy.nazwa%TYPE)
 BEGIN
     SELECT id_dzialu INTO var_nr_dzialu FROM dzialy WHERE nazwa = dzial_nazwa_param;
     SELECT sum(placa) INTO var_suma FROM pracownicy WHERE id_dzialu = var_nr_dzialu;
-    dbms_output.put_line('Suma zarobkow oddzialu ' || nazwa_dzialu || ' wynosi ' || var_suma);
+    dbms_output.put_line('Suma zarobkow oddzialu ' || dzial_nazwa_param || ' wynosi ' || var_suma);
     RETURN var_suma;
 EXCEPTION
     WHEN no_data_found

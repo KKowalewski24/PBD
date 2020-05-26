@@ -39,8 +39,8 @@ wyświetlanie wszystkich użytkowników: SELECT * FROM all_users;
 
 #### IntelliJ IDEA
 W VirtualBox trzeba ustawić 
-siec->karta2->mostkowanie(bridged)
-Karta1 nie ruszać ma być na NAT ustawiona
+* Siec->karta2->mostkowanie(bridged)
+* Karta1 nie ruszać ma być na NAT ustawiona<br/>
 Włączyć maszynę i w terminalu wyświetli się adres IP<br/>
 ```
 inet addr:10.0.2.15  Bcast:10.0.2.255  Mask:255.255.255.0
