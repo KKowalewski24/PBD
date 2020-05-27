@@ -12,24 +12,24 @@ SET SERVEROUTPUT ON;
 
 -- 1 ---------------------------------------------------------------------------------------------- --
 
-/*DECLARE
-    CURSOR kursor_1 IS
-        SELECT
-        FROM where;
+-- DECLARE
+--     CURSOR kursor_1 IS
+--         SELECT
+--         FROM where;
 --     zmienne
-    var ;
-BEGIN
-    OPEN kursor_1;
-    LOOP
-        FETCH kursor_1 INTO *//*vars*//*;
-        IF kursor_1%NOTFOUND
-        THEN
-            EXIT;
-        END IF;
-        dbms_output.put_line();
-    END LOOP;
-    CLOSE kursor_1;
-END;*/
+--     var ;
+-- BEGIN
+--     OPEN kursor_1;
+--     LOOP
+--         FETCH kursor_1 INTO /*vars*/;
+--         IF kursor_1%NOTFOUND
+--         THEN
+--             EXIT;
+--         END IF;
+--         dbms_output.put_line();
+--     END LOOP;
+--     CLOSE kursor_1;
+-- END;
 
 
 -- 2 ---------------------------------------------------------------------------------------------- --
@@ -108,3 +108,8 @@ END;*/
 -- WHERE /*TODO*/;
 --
 -- ROLLBACK;
+
+
+DROP TABLE hr.pracownicy;
+DROP TABLE hr.stanowiska;
+DROP TABLE dzialy;
