@@ -91,8 +91,28 @@ ROLLBACK;
 
 
 -- ---------------------------------------------------------------------------------------------- --
+CREATE OR REPLACE FUNCTION funkcja_5(param_id_dzialu pracownicy.id_dzialu%TYPE)
+    RETURN NUMBER IS
+    var_min_placa pracownicy.placa%TYPE;
+    var_max_placa pracownicy.placa%TYPE;
+BEGIN
+    SELECT min(placa) INTO var_min_placa FROM pracownicy WHERE id_dzialu = param_id_dzialu;
+    SELECT max(placa) INTO var_max_placa FROM pracownicy WHERE id_dzialu = param_id_dzialu;
+
+    RETURN var_max_placa - var_min_placa;
+EXCEPTION
+    WHEN no_data_found
+        THEN
+            dbms_output.PUT_LINE('Dzial ' || param_id_dzialu || ' nie zostal odnaleziony.');
+            RETURN 0;
+END;
 
 
+SELECT DISTINCT id_dzialu, funkcja_5(id_dzialu)
+FROM pracownicy
+ORDER BY id_dzialu;
+
+ROLLBACK;
 
 -- ---------------------------------------------------------------------------------------------- --
 CREATE OR REPLACE TRIGGER wyzwalacz_4_c
