@@ -1,10 +1,9 @@
 -- Kamil Kowalewski 216806 --
 -- Wtorek 2.06.2020r Kolokwium ABDO
 
-DESC DBMS_OUTPUT;
 SET SERVEROUTPUT ON;
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
 
 DECLARE
     CURSOR kursor_1 IS
@@ -26,10 +25,11 @@ BEGIN
 END;
 
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
+
 CREATE
     OR
-    REPLACE PROCEDURE procedura_2(param_/*todo*/) IS
+    REPLACE PROCEDURE procedura_2(param_ %TYPE/*todo*/) IS
     -- todo wyjatek
 -- todo zmienna
     var;
@@ -45,8 +45,9 @@ EXECUTE procedura_2(/*todo*/)
 ROLLBACK;
 
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
-CREATE OR REPLACE FUNCTION funkcja_3(param_/*todo*/)
+-- ---------------------------------------------------------------------------------------------- --
+
+CREATE OR REPLACE FUNCTION funkcja_3(param_ %TYPE/*todo*/)
     RETURN /*todo eg. number*/ IS
 --     ZMIENNE
     var;
@@ -67,7 +68,8 @@ EXECUTE DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
 
 ROLLBACK;
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
+
 CREATE TABLE /*TODO*/ AS
 SELECT *
 FROM /*TODO*/;

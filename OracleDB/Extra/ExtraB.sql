@@ -24,35 +24,35 @@
 -- CREATE TABLE STANOWISKA_ARCHIWUM AS SELECT * FROM HR.jobs;
 -- DELETE FROM STANOWISKA_ARCHIWUM;
 
-DESC DBMS_OUTPUT;
 SET SERVEROUTPUT ON;
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
+
 DECLARE
-    CURSOR kursor_1 IS
+    CURSOR kursor_1_b IS
         SELECT nazwisko, stanowisko
         FROM pracownicy;
 --     zmienne
     var_nazwisko   pracownicy.nazwisko%TYPE;
     var_stanowisko pracownicy.stanowisko%TYPE;
 BEGIN
-    OPEN kursor_1;
+    OPEN kursor_1_b;
     LOOP
-        FETCH kursor_1 INTO var_nazwisko, var_stanowisko;
-        IF kursor_1%NOTFOUND
+        FETCH kursor_1_b INTO var_nazwisko, var_stanowisko;
+        IF kursor_1_b%NOTFOUND
         THEN
             EXIT;
         END IF;
         dbms_output.put_line(
-                    'Pracownik ' || var_nazwisko || 'pracuje na stanowisku ' || var_stanowisko);
+                    'Pracownik ' || var_nazwisko || ' pracuje na stanowisku ' || var_stanowisko);
     END LOOP;
-    CLOSE kursor_1;
+    CLOSE kursor_1_b;
 END;
 
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
 
-CREATE OR REPLACE PROCEDURE procedura_2(param_nazwa dzialy.nazwa%TYPE) IS
+CREATE OR REPLACE PROCEDURE procedura_2_b(param_nazwa dzialy.nazwa%TYPE) IS
     wyjatek EXCEPTION;
     var_licznik   NUMBER;
     var_id_dzialu NUMBER;
@@ -77,7 +77,8 @@ FROM pracownicy, dzialy
 WHERE pracownicy.id_dzialu = dzialy.id_dzialu
   AND dzialy.nazwa = 'ZARZAD';
 
-CALL procedura_2('ZARZAD');
+-- TODO EXECUTE procedura_2('ZARZAD');
+CALL procedura_2_b('ZARZAD');
 
 SELECT placa
 FROM pracownicy, dzialy
@@ -87,36 +88,53 @@ WHERE pracownicy.id_dzialu = dzialy.id_dzialu
 ROLLBACK;
 
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
--- CREATE OR REPLACE FUNCTION funkcja_3(param_/*todo*/)
---     RETURN /*todo eg. number*/ IS
--- --     ZMIENNE
---     var;
--- BEGIN
---
---
---     RETURN /*TODO*/;
--- EXCEPTION
---     WHEN /*todo*/
---         then;
---
--- RETURN /*todo*/;
--- END;
---
--- -- wywolanie
--- EXECUTE DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
--- EXECUTE DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
---
--- ROLLBACK;
+-- ---------------------------------------------------------------------------------------------- --
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+CREATE OR REPLACE FUNCTION funkcja_3_b(param_nazwa dzialy.nazwa%TYPE)
+    RETURN NUMBER IS
+    wyjatek EXCEPTION;
+    var_id_dzial NUMBER;
+    var_maximum  NUMBER;
+BEGIN
+    SELECT id_dzialu
+    INTO var_id_dzial
+    FROM dzialy
+    WHERE dzialy.nazwa = param_nazwa;
+
+    SELECT max(placa)
+    INTO var_maximum
+    FROM pracownicy
+    WHERE id_dzialu = var_id_dzial;
+
+    dbms_output.PUT_LINE(
+            'Dzial ' || param_nazwa || ' max pensja: ' || var_maximum);
+
+    RETURN var_maximum;
+EXCEPTION
+    WHEN no_data_found
+        THEN
+            dbms_output.PUT_LINE('Dzial ' || param_nazwa || ' nie zostal odnaleziony.');
+            RETURN 0;
+END;
+
+-- wywolanie
+-- EXECUTE funkcja_3_b('abc');
+-- EXECUTE funkcja_3_b('ZARZAD');
+
+CALL funkcja_3_b('abc');
+CALL funkcja_3_b('ZARZAD');
+
+ROLLBACK;
+
+-- ---------------------------------------------------------------------------------------------- --
+
 CREATE TABLE stanowiska_archiwum AS
 SELECT *
 FROM stanowiska;
 DELETE
 FROM stanowiska_archiwum;
 
-CREATE OR REPLACE TRIGGER wyzwalacz_4
+CREATE OR REPLACE TRIGGER wyzwalacz_4_b
     BEFORE UPDATE OR DELETE
     ON stanowiska
     FOR EACH ROW

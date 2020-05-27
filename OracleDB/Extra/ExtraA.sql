@@ -26,10 +26,10 @@
 -- CREATE TABLE PRACOWNICY_ARCHIWUM AS SELECT * FROM HR.employees;
 -- DELETE FROM PRACOWNICY_ARCHIWUM;
 
-DESC DBMS_OUTPUT;
 SET SERVEROUTPUT ON;
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
+
 DECLARE
     CURSOR kursor_1 IS
         SELECT pra.nazwisko, dzia.nazwa
@@ -43,17 +43,15 @@ BEGIN
         FETCH kursor_1 INTO nazwisko_1, dzial_nazwa_1;
         IF kursor_1%NOTFOUND
         THEN
-            dbms_output.put_line('abc');
-
             EXIT;
         END IF;
         dbms_output.put_line(
-                    'Pracownik ' || nazwisko_1 || 'pracuje w dziale ' || dzial_nazwa_1);
+                    'Pracownik ' || nazwisko_1 || ' pracuje w dziale ' || dzial_nazwa_1);
     END LOOP;
     CLOSE kursor_1;
 END;
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
 
 CREATE OR REPLACE PROCEDURE procedura_1(nazwisko_param pracownicy.nazwisko%TYPE) IS
     wyjatek_2 EXCEPTION;
@@ -70,7 +68,7 @@ BEGIN
         UPDATE pracownicy
         SET placa=1.1 * placa
         WHERE nazwisko = nazwisko_param;
-        dbms_output.put_line('Pracownik ' || nazwisko_param || ' mial zwiekszona pensje o 10%.');
+        dbms_output.put_line('Pracownik ' || nazwisko_param || ' ma zwiekszona pensje o 10%.');
     END IF;
 EXCEPTION
     WHEN wyjatek_2
@@ -78,14 +76,17 @@ EXCEPTION
             dbms_output.put_line('Pracownik ' || nazwisko_param || ' nie zostal odnaleziony.');
 END;
 
-EXECUTE procedura_1('MALYSZ');
+-- TODO EXECUTE procedura_1('MALYSZ');
+CALL procedura_1('MALYSZ');
+
 SELECT placa
 FROM pracownicy
 WHERE nazwisko = 'MALYSZ';
 
 ROLLBACK;
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
+
 CREATE OR REPLACE FUNCTION funkcja_3(dzial_nazwa_param dzialy.nazwa%TYPE)
     RETURN NUMBER IS
     var_nr_dzialu dzialy.id_dzialu%TYPE;
@@ -101,12 +102,15 @@ EXCEPTION
         RETURN 0;
 END;
 
-EXECUTE dbms_output.put_line(funkcja_3("ABCDE"));
-EXECUTE dbms_output.put_line(funkcja_3('IT'));
+-- EXECUTE dbms_output.put_line(funkcja_3('ABCDE'));
+-- EXECUTE dbms_output.put_line(funkcja_3('ZARZAD'));
+CALL dbms_output.put_line(funkcja_3('ABCDE'));
+CALL dbms_output.put_line(funkcja_3('ZARZAD'));
 
 ROLLBACK;
 
--- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ --
+-- ---------------------------------------------------------------------------------------------- --
+
 CREATE TABLE pracownicy_archiwum AS
 SELECT *
 FROM pracownicy;
@@ -133,18 +137,18 @@ END;
 
 SELECT nr_akt, nazwisko
 FROM pracownicy
-WHERE nr_akt = 197;
+WHERE nr_akt = 9121;
 
 UPDATE pracownicy
 SET nazwisko='abc'
-WHERE nr_akt = 197;
+WHERE nr_akt = 9121;
 
 SELECT nr_akt, nazwisko
 FROM pracownicy
-WHERE nr_akt = 197;
+WHERE nr_akt = 9121;
 
 SELECT nr_akt, nazwisko
 FROM pracownicy_archiwum
-WHERE nr_akt = 197;
+WHERE nr_akt = 9121;
 
 ROLLBACK;
