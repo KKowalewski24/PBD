@@ -16,7 +16,7 @@ SET SERVEROUTPUT ON;
 --     CURSOR kursor_1 IS
 --         SELECT
 --         FROM where;
---     zmienne
+-- --    zmienne
 --     var ;
 -- BEGIN
 --     OPEN kursor_1;
@@ -54,7 +54,7 @@ SET SERVEROUTPUT ON;
 
 -- CREATE OR REPLACE FUNCTION funkcja_3(param_ /*todo*/)
 --     RETURN /*todo eg. number*/ IS
--- ZMIENNE
+-- -- ZMIENNE
 --     var;
 -- BEGIN
 --
@@ -67,7 +67,7 @@ SET SERVEROUTPUT ON;
 -- RETURN /*todo*/;
 -- END;
 --
--- wywolanie
+-- -- wywolanie
 -- CALL DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
 -- CALL DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
 --
