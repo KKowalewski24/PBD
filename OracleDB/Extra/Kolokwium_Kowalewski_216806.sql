@@ -35,11 +35,20 @@ SET SERVEROUTPUT ON;
 -- 2 ---------------------------------------------------------------------------------------------- --
 
 -- CREATE OR REPLACE PROCEDURE procedura_2(param_ /*todo*/) IS
---     -- todo wyjatek
+--     wyjatek EXCEPTION;
 -- -- todo zmienna
---     var;
+--     var_licznik NUMBER;
 -- BEGIN
+--     IF var_licznik = 0
+--     THEN
+--         RAISE wyjatek;
+--     ELSE
 --
+--     END IF;
+-- EXCEPTION
+--     WHEN wyjatek
+--         THEN
+--             dbms_output.put_line('');
 -- END;
 --
 -- -- wywolanie
@@ -61,9 +70,9 @@ SET SERVEROUTPUT ON;
 --
 --     RETURN /*TODO*/;
 -- EXCEPTION
---     WHEN /*todo*/
+--     WHEN no_data_found
 --         then
---
+--dbms_output.put_line('');
 -- RETURN /*todo*/;
 -- END;
 --
@@ -110,6 +119,6 @@ SET SERVEROUTPUT ON;
 -- ROLLBACK;
 
 
-DROP TABLE hr.pracownicy;
-DROP TABLE hr.stanowiska;
-DROP TABLE dzialy;
+-- DROP TABLE pracownicy;
+-- DROP TABLE stanowiska;
+-- DROP TABLE dzialy;
