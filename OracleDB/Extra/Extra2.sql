@@ -34,114 +34,110 @@
 SET SERVEROUTPUT ON;
 
 -- 1 ---------------------------------------------------------------------------------------------- --
-
--- DECLARE
---     CURSOR kursor_1 IS
---         SELECT
---         FROM where;
--- --    zmienne
---     var ;
--- BEGIN
---     OPEN kursor_1;
---     LOOP
---         FETCH kursor_1 INTO /*vars*/;
---         IF kursor_1%NOTFOUND
---         THEN
---             EXIT;
---         END IF;
---         dbms_output.put_line();
---     END LOOP;
---     CLOSE kursor_1;
--- END;
+DECLARE
+    nazw_kier pracownicy.nazwisko%TYPE;
+BEGIN
+    FOR c1 IN (SELECT * FROM pracownicy WHERE kierownik IS NOT NULL)
+        LOOP
+            SELECT p.nazwisko
+            INTO nazw_kier
+            FROM pracownicy p
+            WHERE p.nr_akt = c1.kierownik;
+            dbms_output.put_line(
+                        'Szefem pracownika ' || c1.nazwisko || ' jest pracownik ' || nazw_kier);
+        END LOOP;
+END;
 
 
 -- 2 ---------------------------------------------------------------------------------------------- --
 
--- CREATE OR REPLACE PROCEDURE procedura_2(param_ /*todo*/) IS
---     wyjatek EXCEPTION;
--- -- todo zmienna
---     var_licznik NUMBER;
--- BEGIN
---     IF var_licznik = 0
---     THEN
---         RAISE wyjatek;
---     ELSE
---
---     END IF;
--- EXCEPTION
---     WHEN wyjatek
---         THEN
---             dbms_output.put_line('');
--- END;
---
--- -- wywolanie
--- --     select
--- CALL procedura_2(/*todo*/)
--- --     select
---
--- ROLLBACK;
+CREATE OR REPLACE PROCEDURE procedura_2(param_nazwisko pracownicy.nazwisko%TYPE) IS
+    wyjatek EXCEPTION;
+-- todo zmienna
+    var_licznik    NUMBER;
+    var_stanowisko stanowiska.stanowisko%TYPE;
+BEGIN
+    SELECT count(*) INTO var_licznik FROM pracownicy WHERE nazwisko = param_nazwisko;
+    SELECT stanowisko INTO var_stanowisko FROM pracownicy WHERE nazwisko = param_nazwisko;
+    IF var_licznik = 0
+    THEN
+        RAISE wyjatek;
+    ELSE
+        UPDATE stanowiska SET placa_max = placa_max * 1.1 WHERE stanowisko = var_stanowisko;
+        dbms_output.put_line(
+                    'Placa max na stanowisku ' || var_stanowisko || ' zostala podsniesona o 10%');
+    END IF;
+EXCEPTION
+    WHEN wyjatek
+        THEN
+            dbms_output.put_line('Nazwisko ' || param_nazwisko || ' nie zostalo znalezione ');
+END;
+
+-- wywolanie
+SELECT a.nazwisko, b.stanowisko, b.placa_max
+FROM pracownicy a, stanowiska b
+WHERE a.stanowisko = b.stanowisko
+  AND a.nazwisko = 'KROL';
+
+CALL procedura_2('KROL');
+
+SELECT a.nazwisko, b.stanowisko, b.placa_max
+FROM pracownicy a, stanowiska b
+WHERE a.stanowisko = b.stanowisko
+  AND a.nazwisko = 'KROL';
+
+ROLLBACK;
 
 
 -- 3 ---------------------------------------------------------------------------------------------- --
 
--- CREATE OR REPLACE FUNCTION funkcja_3(param_ /*todo*/)
---     RETURN /*todo eg. number*/ IS
--- -- ZMIENNE
---     var;
--- BEGIN
---
---
---     RETURN /*TODO*/;
--- EXCEPTION
---     WHEN no_data_found
---         then
---dbms_output.put_line('');
--- RETURN /*todo*/;
--- END;
---
--- -- wywolanie
--- CALL DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
--- CALL DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
---
--- ROLLBACK;
+-- DUPLIKAT EXTRA1.SQL
 
 -- 4 ---------------------------------------------------------------------------------------------- --
 
--- CREATE TABLE /*TODO*/ as
--- SELECT *
--- FROM /*TODO*/;
--- DELETE
--- FROM /*TODO*/;
---
--- CREATE OR REPLACE TRIGGER wyzwalacz_4
---     BEFORE UPDATE OR DELETE
---     ON /*TODO*/
---         for EACH ROW
--- BEGIN
---     INSERT INTO /*TODO*/
---         values (:old.
---     );
--- END;
---
--- SELECT /*TODO*/
--- FROM /*TODO*/
---     where /*TODO*/;
---
--- UPDATE /*TODO*/
---     set /*TODO*/
--- WHERE /*TODO*/;
---
--- SELECT /*TODO*/
--- FROM /*TODO*/
---     where;
---
--- SELECT /*TODO*/
--- FROM /*TODO*/_archiwum
--- WHERE /*TODO*/;
---
--- ROLLBACK;
+CREATE TABLE pracownicy_archiwum AS
+SELECT *
+FROM pracownicy;
+DELETE
+FROM pracownicy_archiwum;
 
+CREATE OR REPLACE TRIGGER wyzwalacz_4
+    BEFORE UPDATE OR DELETE
+    ON pracownicy
+    FOR EACH ROW
+BEGIN
+    INSERT INTO pracownicy_archiwum
+    VALUES (:old.nr_akt,
+            :old.nazwisko,
+            :old.stanowisko,
+            :old.kierownik,
+            :old.data_zatr,
+            :old.data_zwol,
+            :old.placa,
+            :old.dod_funkcyjny,
+            :old.prowizja,
+            :old.id_dzialu);
+END;
 
+SELECT nazwisko, placa
+FROM pracownicy
+WHERE nazwisko = 'KROL';
+
+UPDATE pracownicy
+SET placa=10
+WHERE nazwisko = 'KROL';
+
+SELECT nazwisko, placa
+FROM pracownicy
+WHERE nazwisko = 'KROL';
+
+SELECT nazwisko, placa
+FROM pracownicy_archiwum
+WHERE nazwisko = 'KROL';
+
+ROLLBACK;
+--
+--
 -- DROP TABLE pracownicy;
 -- DROP TABLE stanowiska;
 -- DROP TABLE dzialy;
