@@ -48,6 +48,67 @@ BEGIN
         END LOOP;
 END;
 
+DECLARE
+    CURSOR kursorzad1 IS
+        SELECT nazwisko, kierownik
+        FROM pracownicy;
+    nazwiskopracownikavar pracownicy.nazwisko%TYPE;
+    idkierownikavar       pracownicy.nazwisko%TYPE;
+    kierownikcount        NUMBER := 0;
+    nazwiskoszefavar      pracownicy.nazwisko%TYPE;
+BEGIN
+    OPEN kursorzad1;
+    LOOP
+        FETCH kursorzad1 INTO nazwiskopracownikavar, idkierownikavar;
+        IF kursorzad1%NOTFOUND
+        THEN
+            EXIT ;
+        END IF;
+
+        SELECT count(*) INTO kierownikcount FROM pracownicy WHERE nr_akt = idkierownikavar;
+        IF kierownikcount = 0
+        THEN
+            dbms_output.put_line('Pracownik ' || nazwiskopracownikavar || ' nie ma szefa');
+        ELSE
+            SELECT nazwisko INTO nazwiskoszefavar FROM pracownicy WHERE nr_akt = idkierownikavar;
+            dbms_output.put_line('SZEFEM PRACOWNIKA ' || nazwiskopracownikavar || ' JEST ' ||
+                                 nazwiskoszefavar);
+        END IF;
+
+    END LOOP;
+    CLOSE kursorzad1;
+END;
+
+DECLARE
+    CURSOR kursor_1 IS
+        SELECT nazwisko, kierownik
+        FROM pracownicy;
+--    zmienne
+    var_licznik            NUMBER := 0 ;
+    var_pracownik_nazwisko pracownicy.nazwisko%TYPE;
+    var_szef_nazwisko      pracownicy.nazwisko%TYPE;
+    var_szef_id            pracownicy.nr_akt%TYPE;
+BEGIN
+    OPEN kursor_1;
+    LOOP
+        FETCH kursor_1 INTO var_pracownik_nazwisko, var_szef_id;
+        IF kursor_1%NOTFOUND
+        THEN
+            EXIT;
+        END IF;
+        SELECT count(*) INTO var_licznik FROM pracownicy WHERE nr_akt = var_szef_id;
+
+        IF var_licznik = 0
+        THEN
+            dbms_output.put_line('Pracownik ' || var_pracownik_nazwisko || ' nie ma szefa');
+        ELSE
+            SELECT nazwisko INTO var_szef_nazwisko FROM pracownicy WHERE nr_akt = var_szef_id;
+            dbms_output.put_line('SZEFEM PRACOWNIKA ' || var_pracownik_nazwisko || ' JEST ' ||
+                                 var_szef_nazwisko);
+        END IF;
+    END LOOP;
+    CLOSE kursor_1;
+END;
 
 -- 2 ---------------------------------------------------------------------------------------------- --
 
