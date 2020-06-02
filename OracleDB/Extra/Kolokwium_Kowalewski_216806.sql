@@ -31,9 +31,6 @@
 -- DELETE FROM PRACOWNICY_ARCHIWUM;
 
 -- ---------------------------------------------------------------------------------------------- --
--- SELECT * FROM pracownicy;
--- SELECT * FROM stanowiska;
--- SELECT * FROM dzialy;
 
 SET SERVEROUTPUT ON;
 
@@ -60,10 +57,10 @@ BEGIN
 
         IF var_licznik = 0
         THEN
-            dbms_output.put_line('PRACOWNIK ' || var_pracownik_nazwisko || ' NIE MA SZEFA');
+            dbms_output.put_line('pracownik ' || var_pracownik_nazwisko || ' nie ma szefa');
         ELSE
             SELECT nazwisko INTO var_szef_nazwisko FROM pracownicy WHERE nr_akt = var_szef_id;
-            dbms_output.put_line('SZEFEM PRACOWNIKA ' || var_pracownik_nazwisko || ' JEST ' ||
+            dbms_output.put_line('szefem pracownika ' || var_pracownik_nazwisko || ' jest ' ||
                                  var_szef_nazwisko);
         END IF;
     END LOOP;
@@ -73,53 +70,67 @@ END;
 
 -- 2 ---------------------------------------------------------------------------------------------- --
 
--- CREATE OR REPLACE PROCEDURE procedura_2(param_ /*todo*/) IS
---     wyjatek EXCEPTION;
--- -- todo zmienna
---     var_licznik NUMBER;
--- BEGIN
---     IF var_licznik = 0
---     THEN
---         RAISE wyjatek;
---     ELSE
---
---     END IF;
--- EXCEPTION
---     WHEN wyjatek
---         THEN
---             dbms_output.put_line('');
--- END;
---
--- -- wywolanie
--- --     select
--- CALL procedura_2(/*todo*/)
--- --     select
---
--- ROLLBACK;
+CREATE OR REPLACE PROCEDURE procedura_2(param_nazwisko pracownicy.nazwisko%TYPE) IS
+    wyjatek EXCEPTION;
+    var_licznik    NUMBER := 0;
+    var_stanowisko stanowiska.stanowisko%TYPE;
+BEGIN
+    SELECT count(*) INTO var_licznik FROM pracownicy WHERE nazwisko = param_nazwisko;
+
+    IF var_licznik = 0
+    THEN
+        RAISE wyjatek;
+    ELSE
+        SELECT stanowisko INTO var_stanowisko FROM pracownicy WHERE nazwisko = param_nazwisko;
+        UPDATE stanowiska SET placa_min = placa_min * 1.1 WHERE stanowisko = var_stanowisko;
+        dbms_output.put_line(
+                    'Placa min na stanowisku ' || var_stanowisko || ' zostala podsniesona o 10%');
+    END IF;
+EXCEPTION
+    WHEN wyjatek
+        THEN
+            dbms_output.put_line('Nazwisko ' || param_nazwisko || ' nie zostalo znalezione ');
+END;
+
+-- wywolanie
+SELECT a.nazwisko, b.stanowisko, b.placa_min
+FROM pracownicy a, stanowiska b
+WHERE a.stanowisko = b.stanowisko
+  AND a.nazwisko = 'KROL';
+
+CALL procedura_2('KROL');
+CALL procedura_2('ABC');
+
+SELECT a.nazwisko, b.stanowisko, b.placa_min
+FROM pracownicy a, stanowiska b
+WHERE a.stanowisko = b.stanowisko
+  AND a.nazwisko = 'KROL';
 
 
 -- 3 ---------------------------------------------------------------------------------------------- --
 
--- CREATE OR REPLACE FUNCTION funkcja_3(param_ /*todo*/)
---     RETURN /*todo eg. number*/ IS
--- -- ZMIENNE
---     var;
--- BEGIN
---
---
---     RETURN /*TODO*/;
--- EXCEPTION
---     WHEN no_data_found
---         then
---dbms_output.put_line('');
--- RETURN /*todo*/;
--- END;
---
--- -- wywolanie
--- CALL DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
--- CALL DBMS_OUTPUT.put_line(funkcja_3(/*todo*/));
---
--- ROLLBACK;
+CREATE OR REPLACE FUNCTION funkcja_3(param_nazwa dzialy.nazwa%TYPE)
+    RETURN NUMBER IS
+-- ZMIENNE
+    var_id_dzialu dzialy.id_dzialu%TYPE ;
+    var_minimum   NUMBER;
+BEGIN
+    SELECT id_dzialu INTO var_id_dzialu FROM dzialy WHERE nazwa = param_nazwa;
+    SELECT min(placa) INTO var_minimum FROM pracownicy WHERE id_dzialu = var_id_dzialu;
+    dbms_output.put_line('Placa minimalna dla dzialu ' || param_nazwa || ' to ' || var_minimum);
+    RETURN var_minimum;
+EXCEPTION
+    WHEN no_data_found
+        THEN
+            dbms_output.put_line('Dzial ' || param_nazwa || ' nie zostal znaleziony');
+            RETURN 0;
+END;
+
+-- wywolanie
+CALL dbms_output.put_line(funkcja_3('ZARZAD'));
+CALL dbms_output.put_line(funkcja_3('abc'));
+
+ROLLBACK;
 
 -- 4 ---------------------------------------------------------------------------------------------- --
 
@@ -152,7 +163,7 @@ FROM pracownicy
 WHERE nazwisko = 'MALYSZ';
 
 UPDATE pracownicy
-SET placa=10
+SET placa=20
 WHERE nazwisko = 'MALYSZ';
 
 SELECT placa
@@ -164,8 +175,3 @@ FROM pracownicy_archiwum
 WHERE nazwisko = 'MALYSZ';
 
 ROLLBACK;
-
-
--- DROP TABLE pracownicy;
--- DROP TABLE stanowiska;
--- DROP TABLE dzialy;
